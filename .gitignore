@@ -1,0 +1,15 @@
+# Because OSX
+.DS_Store
+
+# Ignore Sublime project files.
+*.sublime*
+
+# Ignore PHPStorm project files.
+/.idea
+
+# Ignore Vagrant's runtime files.
+/.vagrant
+
+# Ignore Web files pulled into the mapped www directory.
+/www/*
+!www/.gitshow

@@ -34,12 +34,13 @@ machine_exists = File.file?(machines_file)
 
 #the sub projects
 projects = []
-Dir.glob(vagrant_dir + '/www').each do |f|
-    if f.to_s == 'html'
-        projects << f.to_s
+Dir.glob(vagrant_dir + '/www/*/').each do |f|
+    parts=f.split("/")
+    puts parts.last
+    if parts.last != 'html'
+        projects << parts.last
     end
 end
-#Dir.entries().select {|f| File.directory? !( f.to_s == 'html' ) }.collect { |p| p.to_s }
 
 
 Vagrant.configure("2") do |config|
@@ -123,7 +124,6 @@ Vagrant.configure("2") do |config|
         salt.run_highstate = true
     end
 
-    
     projects.each do |project|
         config.vm.synced_folder "www/#{project}/provision/salt", "/srv/#{project}/salt"
         config.vm.provision :salt do |salt|

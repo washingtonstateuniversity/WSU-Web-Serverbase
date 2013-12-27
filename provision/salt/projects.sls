@@ -1,10 +1,12 @@
-#We set up projects based on what is set up in the config
+# We set up projects based on what is set up in the pillar data
+# find settings in pillar/projects.sls
 
-{% for user, user_arg in pillar.get('projects',{}).items() %}
-wp-add-user-{{ user }}:
-  cmd.run:
-    - name: wp user get {{ user_arg['login'] }} || wp user create {{ user_arg['login'] }} {{ user_arg['email'] }} --role={{ user_arg['role'] }} --user_pass={{ user_arg['pass'] }} --display_name="{{ user_arg['name'] }}"
-    - cwd: /var/www/wsuwp-platform/wordpress/
-    - require:
-      - cmd: wsuwp-install-network
+{% for project, project_arg in pillar.get('projects',{}).items() %}
+load-project-{{ project }}:
+  git.latest:
+    - name: {{ project_arg['name'] }}
+    {% if project_arg['rev'] != '' %}- rev: {{ project_arg['rev'] }}{%- endif %}
+    - target: /var/www/{{ project_arg['target'] }}
+    - unless: cd /var/www/{{ project_arg['target'] }}
+    #- submodules:True
 {% endfor %}

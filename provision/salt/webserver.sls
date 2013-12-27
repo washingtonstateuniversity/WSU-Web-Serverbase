@@ -134,13 +134,8 @@ php-fpm:
       - php-common
       - php-mysql
       - php-pear
-      - php-pecl
       - php-pdo
       - php-mcrypt
-      - php-imap
-      - php-ldap
-      - php-gd
-      - php-xml
       - php-pecl-zendopcache
       - php-pecl-xdebug
       - php-pecl-memcached
@@ -163,11 +158,7 @@ ImageMagick:
     - pkgs:
       - php-pecl-imagick
       - ImageMagick
-apc:
-  pkg.installed:
-    - pkgs:
-      - php-pecl-apc
-      - apc
+
       
 #***************************************      
 # php-fpm files & configs

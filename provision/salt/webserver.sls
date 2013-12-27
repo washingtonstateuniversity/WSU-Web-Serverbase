@@ -23,7 +23,8 @@ user-www-data:
     - user: root
     - group: root
     - mode: 644
-    
+
+###########################################################
 ###########################################################
 # nginx
 ###########################################################
@@ -92,7 +93,7 @@ nginx:
       - file: /etc/nginx/sites-enabled/store.mage.dev.conf
       
 #***************************************      
-# files & configs
+# nginx files & configs
 #***************************************         
 /etc/nginx/nginx.conf:
   file.managed:
@@ -121,7 +122,7 @@ nginx:
     - require:
       - cmd: nginx-init
 
-    
+###########################################################  
 ###########################################################
 # php-fpm
 ###########################################################
@@ -133,9 +134,13 @@ php-fpm:
       - php-common
       - php-mysql
       - php-pear
+      - php-pecl
       - php-pdo
       - php-mcrypt
       - php-imap
+      - php-ldap
+      - php-gd
+      - php-xml
       - php-pecl-zendopcache
       - php-pecl-xdebug
       - php-pecl-memcached
@@ -158,9 +163,14 @@ ImageMagick:
     - pkgs:
       - php-pecl-imagick
       - ImageMagick
+apc:
+  pkg.installed:
+    - pkgs:
+      - php-pecl-apc
+      - apc
       
 #***************************************      
-# files & configs
+# php-fpm files & configs
 #***************************************    
 /etc/php-fpm.d/www.conf:
   file.managed:
@@ -180,59 +190,23 @@ ImageMagick:
     - require:
       - pkg: php-fpm
 
-    
 ###########################################################
-# security
 ###########################################################
-iptables:
-  pkg.installed:
-    - name: iptables
-  service.running:
+# composer
+###########################################################    
+get-composer:
+  cmd.run:
+    - name: 'CURL=`which curl`; $CURL -sS https://getcomposer.org/installer | php'
+    - unless: test -f /usr/local/bin/composer
+    - cwd: /root/
+ 
+install-composer:
+  cmd.wait:
+    - name: mv /root/composer.phar /usr/local/bin/composer
+    - cwd: /root/
     - watch:
-      - file: /etc/sysconfig/iptables
-
-/etc/sysconfig/iptables:
-  file.managed:
-    - source: salt://config/iptables/iptables
-    - user: root
-    - group: root
-    - mode: 600
-
-fail2ban:
-  pkg.installed:
-    - name: fail2ban
+      - cmd: get-composer
+    
 
 
-/etc/fail2ban/jail.local:
-  file.managed:
-    - source: salt://config/fail2ban/jail.local
-    - user: root
-    - group: root
-    - mode: 600
-    
-/etc/fail2ban/filter.d/spam-log.conf:
-  file.managed:
-    - source: salt://config/fail2ban/filter.d/spam-log.conf
-    - user: root
-    - group: root
-    - mode: 600
-    
-/etc/fail2ban/actions.d/mail.-nmap.conf:
-  file.managed:
-    - source: salt://config/fail2ban/actions.d/mail.-nmap.conf
-    - user: root
-    - group: root
-    - mode: 600
-    
-    
-    
-    
-###########################################################
-# performance and tunning
-###########################################################
 
-monit:
-  pkg.installed:
-    - name: monit
-    #make configs and com back to apply them
-    

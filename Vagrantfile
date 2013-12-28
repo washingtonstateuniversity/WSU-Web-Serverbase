@@ -18,6 +18,7 @@ hostname="wsumage"
 memory=512
 cores=2
 host_64bit=true
+install_type='testing'
 #~end-salt-values
 
 
@@ -32,11 +33,11 @@ host_64bit=true
     machines_file = vagrant_dir + '/.vagrant/machines/default/virtualbox/id'
     machine_exists = File.file?(machines_file)
     
-    #the sub projects
     projects = []
+    #the sub projects        
     Dir.glob(vagrant_dir + '/www/*/').each do |f|
         parts=f.split("/")
-        if parts.last != 'html'
+        if parts.last != 'html' #ignore html setting as default
             projects << parts.last
         end
     end
@@ -117,20 +118,31 @@ host_64bit=true
         #the base
         config.vm.provision :salt do |salt|
             salt.bootstrap_script = 'provision/bootstrap_salt.sh'
-            salt.install_type = 'testing'
+            salt.install_type = install_type
             salt.verbose = true
             salt.minion_config = 'provision/salt/minions/vagrant.conf'
             salt.run_highstate = true
         end
         
+        #provision the projects to install them
         projects.each do |project|
             config.vm.synced_folder "www/#{project}/provision/salt", "/srv/#{project}/salt"
-            config.vm.provision :salt do |salt|
-                salt.bootstrap_script = 'provision/bootstrap_salt.sh'
-                salt.install_type = 'testing'
-                salt.verbose = true
-                salt.minion_config = "www/#{project}/provision/salt/minions/vagrant.conf"
-                salt.run_highstate = true
+            config.vm.provision :salt do |saltproject|
+                saltproject.bootstrap_script = 'provision/bootstrap_salt.sh'
+                saltproject.install_type = install_type
+                saltproject.verbose = true
+                saltproject.minion_config = "www/#{project}/provision/salt/minions/vagrant.conf"
+                saltproject.run_highstate = true
             end
         end
+ 
+        #reset and finalize the server
+        config.vm.provision :salt do |finalsalt|
+            finalsalt.bootstrap_script = 'provision/bootstrap_salt.sh'
+            finalsalt.install_type = install_type
+            finalsalt.verbose = true
+            finalsalt.minion_config = 'provision/salt/minions/finalize.conf'
+            finalsalt.run_highstate = true
+        end
+ 
     end

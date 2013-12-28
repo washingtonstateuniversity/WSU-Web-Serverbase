@@ -1,10 +1,11 @@
 base:
   '*':
+    - git           # must have this for projects
+    - projects      # loaded first processed last
     - server
     - webserver
     - cacheserver
     - dbserver
-    - projects
   'env:vagrant':
     - match: grain
     - devserver

@@ -1,5 +1,5 @@
 projects:
   store.wsu.edu:
-    name: git://github.com/washingtonstateuniversity/WSUWP-Platform.git
+    name: git://github.com/jeremyBass/WSUMAGE-base.git
     rev: master
     target: store.wsu.edu

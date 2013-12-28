@@ -8,5 +8,5 @@ load-project-{{ project }}:
     {% if project_arg['rev'] != '' %}- rev: {{ project_arg['rev'] }}{%- endif %}
     - target: /var/www/{{ project_arg['target'] }}
     - unless: cd /var/www/{{ project_arg['target'] }}
-    #- submodules:True
+    #- submodules:True    
 {% endfor %}

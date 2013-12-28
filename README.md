@@ -3,33 +3,7 @@ WSU-serverbase-centos
 Stuff to be said later
 
 
-##Install
 
-1. install the base apps
-    
-    > 1. GITHUB ([win](http://windows.github.com/)|[mac](http://mac.github.com/)) 
-    > 1. [Vagrant](http://www.vagrantup.com/) (for [help installing see wiki](https://github.com/washingtonstateuniversity/WSUMAGE-vagrant/wiki/Installing-Vagrant))
-    > 1. [VirtualBox](https://www.virtualbox.org/) (for [help installing see wiki](https://github.com/washingtonstateuniversity/WSUMAGE-vagrant/wiki/Installing-Vagrant))
-    
-1. run in powershell/command line 
-        
-        > git clone git://github.com/jeremyBass/WSU-serverbase-centos.git devserver
-
-1. move to the new directory 
-        
-        > cd devserver
-
-1. (optional) add a project to be included in the `pillar/projects.sls`
-
-        > projects:
-        >   store.wsu.edu:
-        >     name: git://github.com/jeremyBass/WSUMAGE-base.git
-        >     rev: master
-        >     target: store.wsu.edu
-
-1. run in powershell/command line/terminal 
-        
-        > vargant up
 
 #Server base
 A very reactive base is loaded where you are able to add a project like `Wordpress`, `Magento`, `elasticsearch` and really anything that would run on a typical LEMP set up.  This project lets us use one server base that can be augmented by a project.  All that needs to be done is to define the projects that are loaded from a git repository in the `pillar/projects.sls`.   Nothing else needs to be done.  An example is:
@@ -42,8 +16,38 @@ A very reactive base is loaded where you are able to add a project like `Wordpre
         
 This `projects.sls` says that we should be calling for a sub project and putting it in the `/www/store.wsu.edu/` directory.  This base server will look for the `store.wsu.edu` projects provisionor set up and run it after this servers own provisioning.  This lets us keep the server environment clean of the web applications stuff.  
 
+
+##Install
+
+1. install the base apps
+    
+    > 1. GITHUB ([win](http://windows.github.com/)|[mac](http://mac.github.com/)) 
+    > 1. [Vagrant](http://www.vagrantup.com/) (for [help installing see wiki](https://github.com/washingtonstateuniversity/WSUMAGE-vagrant/wiki/Installing-Vagrant))
+    > 1. [VirtualBox](https://www.virtualbox.org/) (for [help installing see wiki](https://github.com/washingtonstateuniversity/WSUMAGE-vagrant/wiki/Installing-Vagrant))
+    
+1. run in powershell/command line 
+        
+        $ git clone git://github.com/jeremyBass/WSU-serverbase-centos.git devserver
+
+1. move to the new directory 
+        
+        $ cd devserver
+
+1. (optional) add a project to be included in the `pillar/projects.sls`
+
+        projects:
+          store.wsu.edu:
+            name: git://github.com/jeremyBass/WSUMAGE-base.git
+            rev: master
+            target: store.wsu.edu
+
+1. run in powershell/command line/terminal 
+        
+        $ vargant up
+
+
 ##File structure
-The project it's self will just set up the server base that a recipe is based off(ie:file server/ proxy/ database server)
+The project it's self will just set up the server base that a recipe is based off(ie:file server/ proxy/ database server).
 
 
 ###Sub projects

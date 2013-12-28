@@ -8,7 +8,7 @@ www-umount-initial:
       #- sls: webserver
       - git: wsuwp-dev-initial
     - require_in:
-      - cmd: wsuwp-www-mount-initial
+      - cmd: www-mount-initial
 
 www-mount-initial:
   cmd.run:

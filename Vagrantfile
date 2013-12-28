@@ -13,19 +13,22 @@
 # CONFIGS
 #####################
 #~salt-values
-ip="10.10.30.30"
-hostname="wsumage"
-memory=512
-cores=2
-host_64bit=true
-install_type='testing'
+ip="10.10.30.30"        # (str) default:10.10.30.30
+hostname="wsumage"      # (str) default:WSUBASE
+memory=512              # (int) default:512
+cores=2                 # (int) default:1
+host_64bit=true         # (bol) default:false
+install_type='testing'  # (testing) default:testing
+minion='vagrant'        # (vagrant/production) default:vagrant
 #~end-salt-values
-
-
 
 #######################
 # Setup
 ######################
+    
+    # Setup value defaults
+    ###########################################
+    
     #base
     vagrant_dir = File.expand_path(File.dirname(__FILE__))
         
@@ -34,7 +37,7 @@ install_type='testing'
     machine_exists = File.file?(machines_file)
     
     projects = []
-    #the sub projects        
+    #the sub projects :: will not load any projects if they are not in the www folder       
     Dir.glob(vagrant_dir + '/www/*/').each do |f|
         parts=f.split("/")
         if parts.last != 'html' #ignore html setting as default
@@ -42,9 +45,21 @@ install_type='testing'
         end
     end
 
+    minion = minion.to_s.empty? ? 'vagrant' : minion
+    ip = ip.to_s.empty? ? '10.10.30.30' : ip
+    memory = memory.to_s.empty? ? 512 : memory
+    cores = cores.to_s.empty? ? 1 : cores
+    hostname = hostname.to_s.empty? ? "WSUBASE" : hostname
+    install_type = install_type.to_s.empty? ? "testing" : install_type
+    host_64bit = host_64bit.to_s.empty? ? false : host_64bit
+
     
+    # Start Vagrant
+    ###########################################    
     Vagrant.configure("2") do |config|
+
         # Virtualbox specific setting to allocate 512MB of memory to the virtual machine.
+        ###########################################  
         config.vm.provider :virtualbox do |v|
             v.gui = false
             v.name = hostname
@@ -57,27 +72,19 @@ install_type='testing'
             end
         end
         
+
         # CentOS 6.4, 64 bit release
-        #
-        # Provides a fairly bare-bones CentOS box created by Puppet Labs.
+        ###########################################  
         config.vm.box     = "centos-64-x64-puppetlabs"
         config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box"
         
-        
+        # Set networking
+        ###########################################          
         if !(hostname.nil? || !hostname.empty?)
             config.vm.hostname = hostname
         end
         config.vm.network :private_network, ip: ip
-        
-        # Mount the local project's www/ directory as /var/www inside the virtual machine. This will
-        # be mounted as the 'vagrant' user at first, then unmounted and mounted again as 'www-data'
-        # during provisioning.
-        if machine_exists
-            config.vm.synced_folder "www", "/var/www", owner: 'www-data', group: 'www-data', :mount_options => [ "dmode=775", "fmode=774" ]
-        else
-            config.vm.synced_folder "www", "/var/www", :mount_options => [ "dmode=775", "fmode=774" ]
-        end
-        
+
         # Local Machine Hosts
         if defined? VagrantPlugins::HostsUpdater
             # Capture the paths to all `hosts` files under the repository's provision directory.
@@ -103,13 +110,28 @@ install_type='testing'
             end
             config.hostsupdater.aliases = hosts
         end
-        
-        # Salt Provisioning
-        #
+
+         
+        # Set file mounts
+        ###########################################          
+        # Mount the local project's www/ directory as /var/www inside the virtual machine. This will
+        # be mounted as the 'vagrant' user at first, then unmounted and mounted again as 'www-data'
+        # during provisioning.
+        if machine_exists
+            config.vm.synced_folder "www", "/var/www", owner: 'www-data', group: 'www-data', :mount_options => [ "dmode=775", "fmode=774" ]
+        else
+            config.vm.synced_folder "www", "/var/www", :mount_options => [ "dmode=775", "fmode=774" ]
+        end
+
+
+
+        # Provisioning: Salt 
+        ###########################################     
         # Map the provisioning directory to the guest machine and initiate the provisioning process
         # with salt. On the first build of a virtual machine, if Salt has not yet been installed, it
         # will be bootstrapped automatically. We have provided a modified local bootstrap script to
         # avoid network connectivity issues and to specify that a newer version of Salt be installed.
+        
         config.vm.synced_folder "provision/salt", "/srv/salt"
         
         config.vm.provision "shell",
@@ -120,7 +142,7 @@ install_type='testing'
             salt.bootstrap_script = 'provision/bootstrap_salt.sh'
             salt.install_type = install_type
             salt.verbose = true
-            salt.minion_config = 'provision/salt/minions/vagrant.conf'
+            salt.minion_config = 'provision/salt/minions/#{minion}.conf'
             salt.run_highstate = true
         end
         
@@ -131,7 +153,7 @@ install_type='testing'
                 saltproject.bootstrap_script = 'provision/bootstrap_salt.sh'
                 saltproject.install_type = install_type
                 saltproject.verbose = true
-                saltproject.minion_config = "www/#{project}/provision/salt/minions/vagrant.conf"
+                saltproject.minion_config = "www/#{project}/provision/salt/minions/#{minion}.conf"
                 saltproject.run_highstate = true
             end
         end
@@ -141,7 +163,7 @@ install_type='testing'
             finalsalt.bootstrap_script = 'provision/bootstrap_salt.sh'
             finalsalt.install_type = install_type
             finalsalt.verbose = true
-            finalsalt.minion_config = 'provision/salt/minions/finalize.conf'
+            finalsalt.minion_config = "provision/salt/minions/finalize-#{minion}.conf"
             finalsalt.run_highstate = true
         end
  

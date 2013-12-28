@@ -24,7 +24,7 @@ verbose_output=true     # (bol) default:true
 #######################
 # Setup
 ######################
-    
+
     # Setup value defaults
     ###########################################
     
@@ -38,12 +38,33 @@ verbose_output=true     # (bol) default:true
     
     #the sub projects :: will not load any projects if they are not in the www folder  
     projects = []
-    Dir.glob(vagrant_dir + '/www/*/').each do |f|
-        parts=f.split("/")
-        if parts.last != 'html' #ignore html setting as default
-            projects << parts.last
+    
+    #Dir.glob(vagrant_dir + '/www/*/').each do |f|
+    #    parts=f.split("/")
+    #    if parts.last != 'html' #ignore html setting as default
+    #        projects << parts.last
+    #    end
+    #end
+
+    lines = IO.read(vagrant_dir+"/provision/salt/pillar/projects.sls").split( "\n" )
+    i = 0;
+    lines.each do |line|
+        if line.include? "target"
+            target=line.split(":").last
+            project=target.strip! || target
+            projects <<  project
+            
+            if !File.file?("www/#{project}")
+            then
+                # these are created to get past the inital mountings and such till 
+                # the project is importated in the project sections
+                FileUtils::mkdir_p  vagrant_dir+"/www/#{project}/provision/salt/minions/"
+                File.open(vagrant_dir+"/www/#{project}/provision/salt/minions/#{minion}.conf", "w+") { |file| file.write("") }
+            end       
         end
     end
+
+
 
     minion = minion.to_s.empty? ? 'vagrant' : minion
     ip = ip.to_s.empty? ? '10.10.30.30' : ip
@@ -142,7 +163,7 @@ verbose_output=true     # (bol) default:true
             salt.bootstrap_script = 'provision/bootstrap_salt.sh'
             salt.install_type = install_type
             salt.verbose = verbose_output
-            salt.minion_config = 'provision/salt/minions/#{minion}.conf'
+            salt.minion_config = "provision/salt/minions/#{minion}.conf"
             salt.run_highstate = true
         end
         
@@ -166,5 +187,4 @@ verbose_output=true     # (bol) default:true
             finalsalt.minion_config = "provision/salt/minions/finalize-#{minion}.conf"
             finalsalt.run_highstate = true
         end
- 
     end

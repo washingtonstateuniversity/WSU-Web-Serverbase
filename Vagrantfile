@@ -1,8 +1,6 @@
-# WSUWP Environment Vagrant Configuration
+# WSU Server Base Vagrant Configuration
 #
-# This is the development Vagrantfile for the WSUWP Environment project. This
-# Vagrant setup helps to describe an environment for local development that
-# matches the WSUWP Environment production setup as closely as possible.
+# Matches the WSU Server environment production setup as closely as possible.
 #
 # We recommend Vagrant 1.3.5 and Virtualbox 4.3.
 #
@@ -20,6 +18,7 @@ cores=2                 # (int) default:1
 host_64bit=true         # (bol) default:false
 install_type='testing'  # (testing) default:testing
 minion='vagrant'        # (vagrant/production) default:vagrant
+verbose_output=true     # (bol) default:true
 #~end-salt-values
 
 #######################
@@ -36,8 +35,9 @@ minion='vagrant'        # (vagrant/production) default:vagrant
     machines_file = vagrant_dir + '/.vagrant/machines/default/virtualbox/id'
     machine_exists = File.file?(machines_file)
     
+    
+    #the sub projects :: will not load any projects if they are not in the www folder  
     projects = []
-    #the sub projects :: will not load any projects if they are not in the www folder       
     Dir.glob(vagrant_dir + '/www/*/').each do |f|
         parts=f.split("/")
         if parts.last != 'html' #ignore html setting as default
@@ -141,7 +141,7 @@ minion='vagrant'        # (vagrant/production) default:vagrant
         config.vm.provision :salt do |salt|
             salt.bootstrap_script = 'provision/bootstrap_salt.sh'
             salt.install_type = install_type
-            salt.verbose = true
+            salt.verbose = verbose_output
             salt.minion_config = 'provision/salt/minions/#{minion}.conf'
             salt.run_highstate = true
         end
@@ -152,7 +152,7 @@ minion='vagrant'        # (vagrant/production) default:vagrant
             config.vm.provision :salt do |saltproject|
                 saltproject.bootstrap_script = 'provision/bootstrap_salt.sh'
                 saltproject.install_type = install_type
-                saltproject.verbose = true
+                saltproject.verbose = verbose_output
                 saltproject.minion_config = "www/#{project}/provision/salt/minions/#{minion}.conf"
                 saltproject.run_highstate = true
             end
@@ -162,7 +162,7 @@ minion='vagrant'        # (vagrant/production) default:vagrant
         config.vm.provision :salt do |finalsalt|
             finalsalt.bootstrap_script = 'provision/bootstrap_salt.sh'
             finalsalt.install_type = install_type
-            finalsalt.verbose = true
+            finalsalt.verbose = verbose_output
             finalsalt.minion_config = "provision/salt/minions/finalize-#{minion}.conf"
             finalsalt.run_highstate = true
         end

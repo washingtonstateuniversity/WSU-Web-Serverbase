@@ -3,10 +3,18 @@ WSU-serverbase-centos
 Stuff to be said later
 
 
+#Server base
+A very reactive base is loaded where you are able to add a project like `Wordpress`, `Magento`, `elasticsearch` and really anything that would run on a typical LEMP set up.  This project lets us use one server base that can be agmented by a project.  All that needs to be done is to define the projects that are loaded from a git repository in the `pillar/projects.sls`.   Nothing else needs to be done.  An example is:
 
+    projects:
+      store.wsu.edu:
+        name: git://github.com/jeremyBass/WSUMAGE-base.git
+        rev: master
+        target: store.wsu.edu
+        
+This `projects.sls` says that we should be calling for a sub project and putting it in the `/www/store.wsu.edu/` directory.  This base server will look for the `store.wsu.edu` projects provisionor set up and run it after the this servers own provisioning.  This lets us keep the server envroniment clean of the web appications stuff.  
 
-
-#File structure
+##File structure
 The project it's self will just set up the server base that a recipe is based off(ie:file server/ proxy/ database server)
 
 

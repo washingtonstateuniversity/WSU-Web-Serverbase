@@ -4,7 +4,7 @@ Stuff to be said later
 
 
 #Server base
-A very reactive base is loaded where you are able to add a project like `Wordpress`, `Magento`, `elasticsearch` and really anything that would run on a typical LEMP set up.  This project lets us use one server base that can be agmented by a project.  All that needs to be done is to define the projects that are loaded from a git repository in the `pillar/projects.sls`.   Nothing else needs to be done.  An example is:
+A very reactive base is loaded where you are able to add a project like `Wordpress`, `Magento`, `elasticsearch` and really anything that would run on a typical LEMP set up.  This project lets us use one server base that can be augmented by a project.  All that needs to be done is to define the projects that are loaded from a git repository in the `pillar/projects.sls`.   Nothing else needs to be done.  An example is:
 
     projects:
       store.wsu.edu:
@@ -12,14 +12,14 @@ A very reactive base is loaded where you are able to add a project like `Wordpre
         rev: master
         target: store.wsu.edu
         
-This `projects.sls` says that we should be calling for a sub project and putting it in the `/www/store.wsu.edu/` directory.  This base server will look for the `store.wsu.edu` projects provisionor set up and run it after the this servers own provisioning.  This lets us keep the server envroniment clean of the web appications stuff.  
+This `projects.sls` says that we should be calling for a sub project and putting it in the `/www/store.wsu.edu/` directory.  This base server will look for the `store.wsu.edu` projects provisionor set up and run it after this servers own provisioning.  This lets us keep the server environment clean of the web applications stuff.  
 
 ##File structure
 The project it's self will just set up the server base that a recipe is based off(ie:file server/ proxy/ database server)
 
 
 ###Sub projects
-An example usage is that we will set up an install of Magento for the WSU Magento setup.  It is a submodle to this project and would be installed as such.  This will let us keep one knowen server style that can be used for many set ups.  This is the basic folder structure:
+An example usage is that we will set up an install of Magento for the WSU Magento setup.  It is a submodule to this project and would be installed as such.  This will let us keep one known server style that can be used for many set ups.  This is the basic folder structure:
 
     -{clone directory}      - this is the clone folder for this project
      |-/www                 - the www host folder that comes with this project
@@ -34,7 +34,7 @@ An example usage is that we will set up an install of Magento for the WSU Magent
      |         |--top.sls   - | salt top file that sets things in line
      |   |--/stage          - | staging folder
 
-An Example implamentation:
+An Example implementation:
 
     -wsumage
      |-/www
@@ -63,9 +63,9 @@ An Example implamentation:
      
 to make it clear the sub project is set up 
 
-     |-/{project name}    - this is loaded from the base as it has no webserver of it's own
+     |-/{project name}    - this is loaded from the base as it has no webserver of its own
      | |--/html           - when we map the host file it'll be to this folder
-     | |--/provision      - we make the project stateful thruogh the provision
+     | |--/provision      - we make the project stateful through the provision
      |    |--/salt        - the salt provisioner of choice
      |       |--host      - the host file listing the domains (\n delimited)
      |       |--/config   - salt config folder

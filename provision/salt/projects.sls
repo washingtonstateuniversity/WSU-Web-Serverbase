@@ -7,7 +7,7 @@ load-project-{{ project }}:
     - name: {{ project_arg['name'] }}
     {% if project_arg['rev'] != '' %}- rev: {{ project_arg['rev'] }}{%- endif %}
     - target: /var/www/{{ project_arg['target'] }}
-    - force: True
+    {% if project_arg['force'] != 'True' %}- force: True{%- endif %} 
     - unless: cd /var/www/{{ project_arg['target'] }}/provision/salt/config  #maybe this shouldn't be at all?
-    - submodules: True    
+    {% if project_arg['submodules'] != 'True' %}- submodules: True{%- endif %} 
 {% endfor %}

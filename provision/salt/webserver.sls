@@ -201,3 +201,14 @@ install-composer:
 
 
 
+www-umount-initial:
+  cmd.run:
+    - name: sudo umount /var/www/
+    - cwd: /
+    - require_in:
+      - cmd: www-mount-initial
+
+www-mount-initial:
+  cmd.run:
+    - name: sudo mount -t vboxsf -o dmode=775,fmode=664,uid=`id -u www-data`,gid=`id -g www-data` /var/www/ /var/www/
+    - cwd: /

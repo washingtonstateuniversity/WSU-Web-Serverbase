@@ -15,37 +15,34 @@ ip="10.10.30.30"        # (str) default:10.10.30.30
 hostname="wsumage"      # (str) default:WSUBASE
 memory=512              # (int) default:512
 cores=2                 # (int) default:1
-host_64bit=true         # (bol) default:false
+host_64bit=true         # (bool) default:false
 install_type='testing'  # (testing) default:testing
 minion='vagrant'        # (vagrant/production) default:vagrant
-verbose_output=true     # (bol) default:true
+verbose_output=true     # (bool) default:true
 #~end-salt-values
 
 #######################
 # Setup
 ######################
 
+    ################################################################ 
     # Setup value defaults
-    ###########################################
+    ################################################################ 
     
-    #base
+    #base dir
+    ################################################################ 
     vagrant_dir = File.expand_path(File.dirname(__FILE__))
         
-    # Look for the machine ID file. This should indicate if the VM state is suspended, halted, or up.
+    # Look for the machine ID file. This should indicate if the 
+    # VM state is suspended, halted, or up.
+    ################################################################ 
     machines_file = vagrant_dir + '/.vagrant/machines/default/virtualbox/id'
     machine_exists = File.file?(machines_file)
     
-    
-    #the sub projects :: will not load any projects if they are not in the www folder  
+    # the sub projects :: will not load any projects if they are
+    # not listed out in the pillar/projects.sls
+    ###############################################################
     projects = []
-    
-    #Dir.glob(vagrant_dir + '/www/*/').each do |f|
-    #    parts=f.split("/")
-    #    if parts.last != 'html' #ignore html setting as default
-    #        projects << parts.last
-    #    end
-    #end
-
     lines = IO.read(vagrant_dir+"/provision/salt/pillar/projects.sls").split( "\n" )
     i = 0;
     lines.each do |line|
@@ -65,7 +62,8 @@ verbose_output=true     # (bol) default:true
     end
 
 
-
+    # set defaults ?? maybe go away ??
+    ################################################################
     minion = minion.to_s.empty? ? 'vagrant' : minion
     ip = ip.to_s.empty? ? '10.10.30.30' : ip
     memory = memory.to_s.empty? ? 512 : memory
@@ -74,13 +72,14 @@ verbose_output=true     # (bol) default:true
     install_type = install_type.to_s.empty? ? "testing" : install_type
     host_64bit = host_64bit.to_s.empty? ? false : host_64bit
 
-    
+
+    ################################################################ 
     # Start Vagrant
-    ###########################################    
+    ################################################################   
     Vagrant.configure("2") do |config|
 
-        # Virtualbox specific setting to allocate 512MB of memory to the virtual machine.
-        ###########################################  
+        # Virtualbox specific settings for the virtual machine.
+        ################################################################ 
         config.vm.provider :virtualbox do |v|
             v.gui = false
             v.name = hostname
@@ -95,12 +94,12 @@ verbose_output=true     # (bol) default:true
         
 
         # CentOS 6.4, 64 bit release
-        ###########################################  
+        ################################################################  
         config.vm.box     = "centos-64-x64-puppetlabs"
         config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box"
         
-        # Set networking
-        ###########################################          
+        # Set networking options
+        ################################################################           
         if !(hostname.nil? || !hostname.empty?)
             config.vm.hostname = hostname
         end
@@ -134,7 +133,7 @@ verbose_output=true     # (bol) default:true
 
          
         # Set file mounts
-        ###########################################          
+        ################################################################           
         # Mount the local project's www/ directory as /var/www inside the virtual machine. This will
         # be mounted as the 'vagrant' user at first, then unmounted and mounted again as 'www-data'
         # during provisioning.
@@ -147,7 +146,7 @@ verbose_output=true     # (bol) default:true
 
 
         # Provisioning: Salt 
-        ###########################################     
+        ################################################################      
         # Map the provisioning directory to the guest machine and initiate the provisioning process
         # with salt. On the first build of a virtual machine, if Salt has not yet been installed, it
         # will be bootstrapped automatically. We have provided a modified local bootstrap script to
@@ -158,7 +157,8 @@ verbose_output=true     # (bol) default:true
         config.vm.provision "shell",
         inline: "cp /srv/salt/config/yum.conf /etc/yum.conf"
         
-        #the base
+        # Provision the server base
+        ################################################################ 
         config.vm.provision :salt do |salt|
             salt.bootstrap_script = 'provision/bootstrap_salt.sh'
             salt.install_type = install_type
@@ -167,7 +167,8 @@ verbose_output=true     # (bol) default:true
             salt.run_highstate = true
         end
         
-        #provision the projects to install them
+        # Provision the projects detected
+        ################################################################ 
         projects.each do |project|
             config.vm.synced_folder "www/#{project}/provision/salt", "/srv/#{project}/salt"
             config.vm.provision :salt do |saltproject|
@@ -179,7 +180,8 @@ verbose_output=true     # (bol) default:true
             end
         end
  
-        #reset and finalize the server
+        # Reset and finalize the server
+        ################################################################ 
         config.vm.provision :salt do |finalsalt|
             finalsalt.bootstrap_script = 'provision/bootstrap_salt.sh'
             finalsalt.install_type = install_type

@@ -4,9 +4,9 @@ www-umount-initial:
   cmd.run:
     - name: sudo umount /var/www/
     - cwd: /
-    - require:
+   # - require:
       #- sls: webserver
-      - git: wsuwp-dev-initial
+   #   - git: wsuwp-dev-initial
     - require_in:
       - cmd: www-mount-initial
 

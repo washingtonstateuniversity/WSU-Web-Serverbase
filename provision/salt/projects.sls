@@ -6,7 +6,7 @@ load-project-{{ project }}:
   git.latest:
     - name: {{ project_arg['name'] }}
     - target: /var/www/{{ project_arg['target'] }}
-    - unless: cd /var/www/{{ project_arg['target'] }}/provision/salt/config  #maybe this shouldn't be at all?
+    - unless: cd /var/www/{{ project_arg['target'] }}/provision/salt/config
     {% if project_arg['rev'] is defined and project_arg['rev'] != '' %}- rev: {{ project_arg['rev'] }}{%- endif %}
     {% if project_arg['remote_name'] is defined and project_arg['remote_name'] != '' %}- remote_name: {{ project_arg['remote_name'] }}{%- endif %}
     {% if project_arg.get( 'force', False ) is sameas True %}- force: True{%- endif %}

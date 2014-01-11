@@ -1,10 +1,17 @@
+###########################################################
+###########################################################
+# folder and users
+###########################################################
 group-www-data:
   group.present:
     - name: www-data
+    - gid: 510
 
 user-www-data:
   user.present:
     - name: www-data
+    - uid: 510
+    - gid: 510
     - groups:
       - www-data
     - require:
@@ -136,6 +143,7 @@ php-fpm:
       - php-pear
       - php-pdo
       - php-mcrypt
+      - php-imap
       - php-pecl-zendopcache
       - php-pecl-xdebug
       - php-pecl-memcached
@@ -199,16 +207,3 @@ install-composer:
       - cmd: get-composer
     
 
-
-
-www-umount-initial:
-  cmd.run:
-    - name: sudo umount /var/www/
-    - cwd: /
-    - require_in:
-      - cmd: www-mount-initial
-
-www-mount-initial:
-  cmd.run:
-    - name: sudo mount -t vboxsf -o dmode=775,fmode=664,uid=`id -u www-data`,gid=`id -g www-data` /var/www/ /var/www/
-    - cwd: /

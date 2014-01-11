@@ -144,6 +144,8 @@ php-fpm:
       - php-pdo
       - php-mcrypt
       - php-imap
+      - php-gd
+      - php-mbstring
       - php-pecl-zendopcache
       - php-pecl-xdebug
       - php-pecl-memcached

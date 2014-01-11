@@ -97,7 +97,6 @@ nginx:
     - watch:
       - file: /etc/nginx/nginx.conf
       - file: /etc/nginx/sites-enabled/default
-      - file: /etc/nginx/sites-enabled/store.mage.dev.conf
       
 #***************************************      
 # nginx files & configs
@@ -111,6 +110,7 @@ nginx:
     - require:
       - cmd: nginx-init
 
+
 /etc/nginx/sites-enabled/default:
   file.managed:
     - source: salt://config/nginx/default
@@ -120,14 +120,6 @@ nginx:
     - require:
       - cmd: nginx-init
 
-/etc/nginx/sites-enabled/store.mage.dev.conf:
-  file.managed:
-    - source: salt://config/nginx/store.mage.dev.conf
-    - user: root
-    - group: root
-    - mode: 644
-    - require:
-      - cmd: nginx-init
 
 ###########################################################  
 ###########################################################

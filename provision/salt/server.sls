@@ -8,9 +8,6 @@ server-utilities:
       - curl
       - dos2unix
 
-
-
-
 ###########################################################
 ###########################################################
 # Remi Repository 
@@ -36,18 +33,15 @@ remi-rep:
     - user: root
     - group: root
     - mode: 600
-
+  cmd.run: #insure it's going to run on windows hosts
+    - name: dos2unix /etc/sysconfig/iptables
+    
 iptables:
   pkg.installed:
     - name: iptables
   service.running:
     - watch:
       - file: /etc/sysconfig/iptables
-  cmd.run:
-    - name: dos2unix /etc/sysconfig/iptables
-    - unless: service iptables status | grep -qi "not running"
-
-
 
 fail2ban:
   pkg.installed:

@@ -53,6 +53,8 @@ nginx-compiler-base:
     - user: root
     - group: root
     - mode: 755
+  cmd.run: #insure it's going to run on windows hosts
+    - name: dos2unix /etc/init.d/nginx
     
 # Ensure a source folder (/src/) is there to do `make`'s in
 /src/:

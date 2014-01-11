@@ -19,12 +19,17 @@ ini(){
     wget -N http://www.openssl.org/source/openssl-1.0.1e.tar.gz 2>/dev/null
     tar -xzf openssl-1.0.1e.tar.gz >/dev/null
     
-
+    #get page speed
+    wget -N https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.2-beta.zip 2>/dev/null
+    unzip v1.7.30.2-beta.zip >/dev/null # or unzip v1.7.30.2-beta
+    cd ngx_pagespeed-1.7.30.2-beta/
+    wget -N https://dl.google.com/dl/page-speed/psol/1.7.30.2.tar.gz 2>/dev/null
+    tar -xzvf 1.7.30.2.tar.gz >/dev/null # expands to psol/
     #mkdir /tmp/nginx-modules
     #cd /tmp/nginx-modules
     #wget https://github.com/agentzh/headers-more-nginx-module/archive/v0.19.tar.gz
     #tar -xzvf v0.19.tar.gz 
-
+    cd /src/nginx
     
     ./configure \
 --prefix=/etc/nginx \
@@ -54,6 +59,7 @@ ini(){
 --with-http_realip_module \
 --without-http_scgi_module \
 --without-http_uwsgi_module \
+--add-module=/src/nginx/ngx_pagespeed-1.7.30.2-beta
 --with-openssl='openssl-1.0.1e' \ # wget http://www.openssl.org/source/openssl-1.0.1e.tar.gz
 --with-ipv6 >/dev/null
     make >/dev/null

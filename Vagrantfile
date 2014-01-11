@@ -8,7 +8,7 @@
 # vi: set ft=ruby :
 
 #######################
-# CONFIGS
+# CONFIG Values
 #####################
 #~salt-values
 ip="10.10.30.30"        # (str) default:10.10.30.30
@@ -59,10 +59,6 @@ verbose_output=true     # (bool) default:true
             end
         end
     end
-
-
-
-
 
     # set defaults ?? maybe go away ??
     ################################################################
@@ -140,8 +136,6 @@ verbose_output=true     # (bool) default:true
         # be mounted as the 'vagrant' user at first, then unmounted and mounted again as 'www-data'
         # during provisioning.
         config.vm.synced_folder "www", "/var/www", :mount_options => [ "uid=510,gid=510", "dmode=775", "fmode=774" ]
-
-
 
         # Provisioning: Salt 
         ################################################################      

@@ -8,7 +8,7 @@ name="nginx-compile"
 ini(){
     cd /src
     
-    nginxVersion="1.5.7" # set the value here from nginx website
+    nginxVersion="1.5.8" # set the value here from nginx website
     wget -N http://nginx.org/download/nginx-$nginxVersion.tar.gz 2>/dev/null
     tar -xzf nginx-$nginxVersion.tar.gz >/dev/null
     ln -sf nginx-$nginxVersion nginx
@@ -38,6 +38,7 @@ ini(){
 --with-http_gzip_static_module \
 --with-http_stub_status_module \
 --with-http_ssl_module \
+--with-http_spdy_module\
 --with-pcre \
 --with-file-aio \
 --with-http_realip_module \

@@ -52,7 +52,7 @@ nginx-compiler-base:
     - source: salt://config/nginx/nginx
     - user: root
     - group: root
-    - mode: 744
+    - mode: 755
     
 # Ensure a source folder (/src/) is there to do `make`'s in
 /src/:

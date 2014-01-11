@@ -30,19 +30,24 @@ remi-rep:
 ###########################################################
 # security
 ###########################################################
-iptables:
-  pkg.installed:
-    - name: iptables
-  service.running:
-    - watch:
-      - file: /etc/sysconfig/iptables
-
 /etc/sysconfig/iptables:
   file.managed:
     - source: salt://config/iptables/iptables
     - user: root
     - group: root
     - mode: 600
+
+iptables:
+  pkg.installed:
+    - name: iptables
+  service.running:
+    - watch:
+      - file: /etc/sysconfig/iptables
+  cmd.run:
+    - name: dos2unix /etc/sysconfig/iptables
+    - unless: service iptables status | grep -qi "not running"
+
+
 
 fail2ban:
   pkg.installed:

@@ -17,3 +17,13 @@ load-project-{{ project }}:
     {% if project_arg['identity'] is defined and project_arg['identity'] != '' %}- identity: {{ project_arg['identity'] }}{%- endif %}
     {% if project_arg['user'] is defined and project_arg['user'] != '' %}- user: {{ project_arg['user'] }}{%- endif %}
 {% endfor %}
+
+
+
+#{% for project, project_arg in pillar.get('projects',{}).items() %}
+#project-install-{{ project }}:
+#  cwd.run:
+#    - name: /var/www/{{ project_arg['name'] }}
+#    - target: /var/www/{{ project_arg['target'] }}
+#    - unless: cd /var/www/{{ project_arg['target'] }}/provision/salt/config
+#{% endfor %}

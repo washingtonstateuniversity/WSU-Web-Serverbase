@@ -1,10 +1,17 @@
+###########################################################
+###########################################################
+# folder and users
+###########################################################
 group-www-data:
   group.present:
     - name: www-data
+    - gid: 510
 
 user-www-data:
   user.present:
     - name: www-data
+    - uid: 510
+    - gid: 510
     - groups:
       - www-data
     - require:
@@ -45,7 +52,9 @@ nginx-compiler-base:
     - source: salt://config/nginx/nginx
     - user: root
     - group: root
-    - mode: 744
+    - mode: 755
+  cmd.run: #insure it's going to run on windows hosts
+    - name: dos2unix /etc/init.d/nginx
     
 # Ensure a source folder (/src/) is there to do `make`'s in
 /src/:
@@ -90,7 +99,6 @@ nginx:
     - watch:
       - file: /etc/nginx/nginx.conf
       - file: /etc/nginx/sites-enabled/default
-      - file: /etc/nginx/sites-enabled/store.mage.dev.conf
       
 #***************************************      
 # nginx files & configs
@@ -104,6 +112,7 @@ nginx:
     - require:
       - cmd: nginx-init
 
+
 /etc/nginx/sites-enabled/default:
   file.managed:
     - source: salt://config/nginx/default
@@ -113,14 +122,6 @@ nginx:
     - require:
       - cmd: nginx-init
 
-/etc/nginx/sites-enabled/store.mage.dev.conf:
-  file.managed:
-    - source: salt://config/nginx/store.mage.dev.conf
-    - user: root
-    - group: root
-    - mode: 644
-    - require:
-      - cmd: nginx-init
 
 ###########################################################  
 ###########################################################
@@ -136,6 +137,9 @@ php-fpm:
       - php-pear
       - php-pdo
       - php-mcrypt
+      - php-imap
+      - php-gd
+      - php-mbstring
       - php-pecl-zendopcache
       - php-pecl-xdebug
       - php-pecl-memcached
@@ -199,16 +203,3 @@ install-composer:
       - cmd: get-composer
     
 
-
-
-www-umount-initial:
-  cmd.run:
-    - name: sudo umount /var/www/
-    - cwd: /
-    - require_in:
-      - cmd: www-mount-initial
-
-www-mount-initial:
-  cmd.run:
-    - name: sudo mount -t vboxsf -o dmode=775,fmode=664,uid=`id -u www-data`,gid=`id -g www-data` /var/www/ /var/www/
-    - cwd: /

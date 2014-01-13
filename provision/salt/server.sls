@@ -8,9 +8,6 @@ server-utilities:
       - curl
       - dos2unix
 
-
-
-
 ###########################################################
 ###########################################################
 # Remi Repository 
@@ -30,19 +27,21 @@ remi-rep:
 ###########################################################
 # security
 ###########################################################
-iptables:
-  pkg.installed:
-    - name: iptables
-  service.running:
-    - watch:
-      - file: /etc/sysconfig/iptables
-
 /etc/sysconfig/iptables:
   file.managed:
     - source: salt://config/iptables/iptables
     - user: root
     - group: root
     - mode: 600
+  cmd.run: #insure it's going to run on windows hosts
+    - name: dos2unix /etc/sysconfig/iptables
+    
+iptables:
+  pkg.installed:
+    - name: iptables
+  service.running:
+    - watch:
+      - file: /etc/sysconfig/iptables
 
 fail2ban:
   pkg.installed:

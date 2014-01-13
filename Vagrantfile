@@ -8,7 +8,7 @@
 # vi: set ft=ruby :
 
 #######################
-# CONFIGS
+# CONFIG Values
 #####################
 #~salt-values
 ip="10.10.30.30"        # (str) default:10.10.30.30
@@ -44,23 +44,21 @@ verbose_output=true     # (bool) default:true
     ###############################################################
     projects = []
     lines = IO.read(vagrant_dir+"/provision/salt/pillar/projects.sls").split( "\n" )
-    i = 0;
+
     lines.each do |line|
         if line.include? "target"
             target=line.split(":").last
             project=target.strip! || target
-            projects <<  project
-            
+            projects <<  project    
             if !File.file?("www/#{project}")
             then
                 # these are created to get past the inital mountings and such till 
                 # the project is importated in the project sections
                 FileUtils::mkdir_p  vagrant_dir+"/www/#{project}/provision/salt/minions/"
                 File.open(vagrant_dir+"/www/#{project}/provision/salt/minions/#{minion}.conf", "w+") { |file| file.write("") }
-            end       
+            end
         end
     end
-
 
     # set defaults ?? maybe go away ??
     ################################################################
@@ -137,13 +135,7 @@ verbose_output=true     # (bool) default:true
         # Mount the local project's www/ directory as /var/www inside the virtual machine. This will
         # be mounted as the 'vagrant' user at first, then unmounted and mounted again as 'www-data'
         # during provisioning.
-        if machine_exists
-            config.vm.synced_folder "www", "/var/www", owner: 'www-data', group: 'www-data', :mount_options => [ "dmode=775", "fmode=774" ]
-        else
-            config.vm.synced_folder "www", "/var/www", :mount_options => [ "dmode=775", "fmode=774" ]
-        end
-
-
+        config.vm.synced_folder "www", "/var/www", :mount_options => [ "uid=510,gid=510", "dmode=775", "fmode=774" ]
 
         # Provisioning: Salt 
         ################################################################      
@@ -156,6 +148,13 @@ verbose_output=true     # (bool) default:true
         
         config.vm.provision "shell",
         inline: "cp /srv/salt/config/yum.conf /etc/yum.conf"
+
+        # Set up the minions
+        ########################
+        projects.each do |project| 
+            config.vm.synced_folder "www/#{project}/provision/salt", "/srv/#{project}/salt"
+        end
+
         
         # Provision the server base
         ################################################################ 
@@ -165,28 +164,5 @@ verbose_output=true     # (bool) default:true
             salt.verbose = verbose_output
             salt.minion_config = "provision/salt/minions/#{minion}.conf"
             salt.run_highstate = true
-        end
-        
-        # Provision the projects detected
-        ################################################################ 
-        projects.each do |project|
-            config.vm.synced_folder "www/#{project}/provision/salt", "/srv/#{project}/salt"
-            config.vm.provision :salt do |saltproject|
-                saltproject.bootstrap_script = 'provision/bootstrap_salt.sh'
-                saltproject.install_type = install_type
-                saltproject.verbose = verbose_output
-                saltproject.minion_config = "www/#{project}/provision/salt/minions/#{minion}.conf"
-                saltproject.run_highstate = true
-            end
-        end
- 
-        # Reset and finalize the server
-        ################################################################ 
-        config.vm.provision :salt do |finalsalt|
-            finalsalt.bootstrap_script = 'provision/bootstrap_salt.sh'
-            finalsalt.install_type = install_type
-            finalsalt.verbose = verbose_output
-            finalsalt.minion_config = "provision/salt/minions/finalize-#{minion}.conf"
-            finalsalt.run_highstate = true
         end
     end

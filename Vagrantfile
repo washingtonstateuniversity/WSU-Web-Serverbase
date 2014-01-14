@@ -45,6 +45,19 @@ verbose_output=true     # (bool) default:true
     projects = []
     lines = IO.read(vagrant_dir+"/provision/salt/pillar/projects.sls").split( "\n" )
 
+PILLARFILE=""
+PILLARFILE << "#PILLAR_ROOT-\n"
+PILLARFILE << "pillar_roots:\n"
+PILLARFILE << "  base:\n"
+PILLARFILE << "    - /srv/salt/pillar\n"
+
+
+ROOTFILE=""
+ROOTFILE << "#FILE_ROOT-\n"
+ROOTFILE << "file_roots:\n"
+ROOTFILE << "  base:\n"
+ROOTFILE << "    - /srv/salt\n"
+
     lines.each do |line|
         if line.include? "target"
             target=line.split(":").last
@@ -57,8 +70,23 @@ verbose_output=true     # (bool) default:true
                 FileUtils::mkdir_p  vagrant_dir+"/www/#{project}/provision/salt/minions/"
                 File.open(vagrant_dir+"/www/#{project}/provision/salt/minions/#{minion}.conf", "w+") { |file| file.write("") }
             end
+            
+            PILLARFILE << "    - /srv/#{project}/salt/pillar\n"
+            ROOTFILE << "    - /srv/#{project}/salt\n"
         end
     end
+
+
+PILLARFILE << "#END_OF_PILLAR_ROOT-"
+
+ROOTFILE << "    - /srv/salt/finalize\n"
+ROOTFILE << "#END_OF_FILE_ROOT-"
+
+filename = vagrant_dir+"/provision/salt/minions/#{minion}.conf"
+text = File.read(filename) 
+edited = text.gsub(/\#FILE_ROOT-.*\#END_OF_FILE_ROOT-/im, ROOTFILE)
+edited = edited.gsub(/\#PILLAR_ROOT-.*\#END_OF_PILLAR_ROOT-/im, PILLARFILE)
+File.open(filename, "w") { |file| file << edited }
 
     # set defaults ?? maybe go away ??
     ################################################################

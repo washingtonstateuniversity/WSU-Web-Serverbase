@@ -67,8 +67,7 @@ ROOTFILE << "    - /srv/salt\n"
             then
                 # these are created to get past the inital mountings and such till 
                 # the project is importated in the project sections
-                FileUtils::mkdir_p  vagrant_dir+"/www/#{project}/provision/salt/minions/"
-                File.open(vagrant_dir+"/www/#{project}/provision/salt/minions/#{minion}.conf", "w+") { |file| file.write("") }
+                FileUtils::mkdir_p  vagrant_dir+"/www/#{project}/provision/salt/"
             end
             
             PILLARFILE << "    - /srv/#{project}/salt/pillar\n"

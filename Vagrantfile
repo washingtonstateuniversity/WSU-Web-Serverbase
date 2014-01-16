@@ -58,6 +58,12 @@ ROOTFILE << "file_roots:\n"
 ROOTFILE << "  base:\n"
 ROOTFILE << "    - /srv/salt\n"
 
+SALT_ENV=""
+SALT_ENV << "#ENV_START-\n"
+SALT_ENV << "  env:\n"
+SALT_ENV << "    - vagrant\n"
+
+
     lines.each do |line|
         if line.include? "target"
             target=line.split(":").last
@@ -69,15 +75,23 @@ ROOTFILE << "    - /srv/salt\n"
                 # the project is importated in the project sections
                 FileUtils::mkdir_p  vagrant_dir+"/www/#{project}/provision/salt/"
             end
-            
+
+            SALT_ENV << "    - #{project}\n"
+
+            PILLARFILE << "  #{project}:\n"
             PILLARFILE << "    - /srv/#{project}/salt/pillar\n"
+            
+            ROOTFILE << "  #{project}:\n"
             ROOTFILE << "    - /srv/#{project}/salt\n"
         end
     end
 
 
+SALT_ENV << "#ENV_END-\n"
+
 PILLARFILE << "#END_OF_PILLAR_ROOT-"
 
+ROOTFILE << "  finalize:\n"
 ROOTFILE << "    - /srv/salt/finalize\n"
 ROOTFILE << "#END_OF_FILE_ROOT-"
 
@@ -85,6 +99,7 @@ filename = vagrant_dir+"/provision/salt/minions/#{minion}.conf"
 text = File.read(filename) 
 edited = text.gsub(/\#FILE_ROOT-.*\#END_OF_FILE_ROOT-/im, ROOTFILE)
 edited = edited.gsub(/\#PILLAR_ROOT-.*\#END_OF_PILLAR_ROOT-/im, PILLARFILE)
+edited = edited.gsub(/\#ENV_START-.*\#ENV_END-/im, SALT_ENV)
 File.open(filename, "w") { |file| file << edited }
 
     # set defaults ?? maybe go away ??

@@ -24,9 +24,9 @@ This `projects.sls` says that we should be calling for a sub project and putting
 ### Environment Setup
 
 1. Install required applications:
-    1. A client for [Git](http://git-scm.com/)
-        * GitHub provides a GUI for ([Windows](http://windows.github.com/) or [OSX](http://mac.github.com/)) 
-        * Other Git client downloads are available at the [official site](http://git-scm.com/downloads), including command line utilities.
+    1. [Git](http://git-scm.com/)
+        * GitHub provides a GUI for Git ([Windows](http://windows.github.com/) or [OSX](http://mac.github.com/))
+        * Other Git client downloads, including command line utilities, are available at the [official site](http://git-scm.com/downloads).
         * [Homebrew](http://brew.sh/), a package manager for OSX, can be used to install `git` for the command line.
     1. [Vagrant](http://www.vagrantup.com/)
     1. [VirtualBox](https://www.virtualbox.org/) 

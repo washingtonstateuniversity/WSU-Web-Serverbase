@@ -20,8 +20,8 @@ ini(){
     tar -xzf openssl-1.0.1e.tar.gz >/dev/null
     
     #get page speed
-    wget -N https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.2-beta.zip 2>/dev/null
-    unzip v1.7.30.2-beta.zip >/dev/null # or unzip v1.7.30.2-beta
+    wget -N -O ngx_pagespeed-1.7.30.2-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.2-beta.zip 2>/dev/null
+    unzip -o ngx_pagespeed-1.7.30.2-beta.zip >/dev/null # or unzip v1.7.30.2-beta
     cd ngx_pagespeed-1.7.30.2-beta/
     wget -N https://dl.google.com/dl/page-speed/psol/1.7.30.2.tar.gz 2>/dev/null
     tar -xzvf 1.7.30.2.tar.gz >/dev/null # expands to psol/
@@ -30,8 +30,14 @@ ini(){
     #wget https://github.com/agentzh/headers-more-nginx-module/archive/v0.19.tar.gz
     #tar -xzvf v0.19.tar.gz 
     cd /src/nginx
-    
+
+    #just in case
+    mkdir -p /var/lib/nginx/proxy
+    mkdir -p /var/log/nginx
+
     ./configure \
+--user=www-data \
+--group=www-data \
 --prefix=/etc/nginx \
 --sbin-path=/usr/sbin/nginx \
 --conf-path=/etc/nginx/nginx.conf \
@@ -49,9 +55,7 @@ ini(){
 --with-http_stub_status_module \
 --with-http_ssl_module \
 --with-http_sub_module \
---with-http_xslt_module \
 --with-http_spdy_module \
---with-ipv6 \
 --with-sha1=/usr/include/openssl \
 --with-md5=/usr/include/openssl \
 --with-pcre \
@@ -59,13 +63,11 @@ ini(){
 --with-http_realip_module \
 --without-http_scgi_module \
 --without-http_uwsgi_module \
---add-module=/src/nginx/ngx_pagespeed-1.7.30.2-beta
---with-openssl='openssl-1.0.1e' \ # wget http://www.openssl.org/source/openssl-1.0.1e.tar.gz
---with-ipv6 >/dev/null
+--add-module=/src/nginx/ngx_pagespeed-1.7.30.2-beta >/dev/null
     make >/dev/null
     make install >/dev/null
 
-    return 1 #fix this
+    return 1 #fix this this should be a grep for 'error' or something also this is backwards as non-0 is false yet it's treated as true
 }
 
 ini

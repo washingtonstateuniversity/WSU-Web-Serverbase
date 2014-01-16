@@ -19,23 +19,25 @@ An example is:
         
 This `projects.sls` says that we should be calling for a sub project and putting it in the `/www/store.wsu.edu/` directory. This base server will look for the `store.wsu.edu` project's provisioner set up and run it after this server's own provisioning. This lets us keep the server environment clean of the web applications stuff.  
 
-## Install
+## Local Development
+
+### Environment Setup
 
 1. Install required applications:
-    
-    > 1. GITHUB ([win](http://windows.github.com/)|[mac](http://mac.github.com/)) 
-    > 1. [Vagrant](http://www.vagrantup.com/) (for [help installing see wiki](https://github.com/washingtonstateuniversity/WSUMAGE-vagrant/wiki/Installing-Vagrant))
-    > 1. [VirtualBox](https://www.virtualbox.org/) (for [help installing see wiki](https://github.com/washingtonstateuniversity/WSUMAGE-vagrant/wiki/Installing-Vagrant))
-    
-1. Run at the command line. This can be terminal in OSX or powershell in Windows.
-        
-        $ git clone git@github.com:washingtonstateuniversity/WSU-Web-Serverbase.git devserver
+    1. A client for [Git](http://git-scm.com/)
+        * GitHub provides a GUI for ([Windows](http://windows.github.com/) or [OSX](http://mac.github.com/)) 
+        * Other Git client downloads are available at the [official site](http://git-scm.com/downloads), including command line utilities.
+        * [Homebrew](http://brew.sh/), a package manager for OSX, can be used to install `git` for the command line.
+    1. [Vagrant](http://www.vagrantup.com/)
+    1. [VirtualBox](https://www.virtualbox.org/) 
+1. Clone the WSU Web Serverbase repository to a directory on your local machine.
+    * This can be terminal in OSX or powershell in Windows with `git clone git@github.com:washingtonstateuniversity/WSU-Web-Serverbase.git devserver`
+    * This can also be done with a GUI client for Git.
+1. At the command line, change to the new directory:
 
-1. Change to the new directory:
-        
         $ cd devserver
 
-1. (optional) Add a project to be included in the `pillar/projects.sls`:
+1. (optional) Add a project to the `{devserver}/pillar/projects.sls` file:
 
         projects:
           store.wsu.edu:
@@ -45,14 +47,13 @@ This `projects.sls` says that we should be calling for a sub project and putting
 
 1. Run at the command line:
         
-        $ vargant up
+        $ vagrant up
 
-
-## File structure
+### File structure
 
 The project itself will just set up the server base that a recipe is based off(ie:file server/ proxy/ database server).
 
-### Sub projects
+#### Sub projects
 
 An example usage is that we will set up an install of Magento for the WSU Magento setup. It is a submodule to this project and would be installed as such. This will let us keep one known server style that can be used for many set ups.
 

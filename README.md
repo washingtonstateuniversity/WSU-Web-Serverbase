@@ -5,7 +5,7 @@ This repository contains provisioning for the Linux servers maintained by WSU We
 * [Salt](http://www.saltstack.com/community/) is used to manage configuration and provisioning.
 * A `Vagrantfile` is included to provide a local development environment using this provisioning.
 
-# Server base
+## Server base
 
 A very reactive base is loaded where you are able to add a project like `WordPress`, `Magento`, `Elasticsearch` and really anything that would run on a typical LEMP set up. This project lets us use one server base that can be augmented by a project. All that needs to be done is to define the projects that are loaded from a git repository in the `pillar/projects.sls`.
 

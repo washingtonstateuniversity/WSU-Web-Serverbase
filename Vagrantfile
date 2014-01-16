@@ -10,20 +10,24 @@
 #######################
 # CONFIG Values
 #####################
-#~salt-values
-ip="10.10.30.30"        # (str) default:10.10.30.30
-hostname="wsumage"      # (str) default:WSUBASE
-memory=512              # (int) default:512
-cores=2                 # (int) default:1
-host_64bit=true         # (bool) default:false
-install_type='testing'  # (testing) default:testing
-minion='vagrant'        # (vagrant/production) default:vagrant
-verbose_output=true     # (bool) default:true
-#~end-salt-values
+
+ip="10.10.30.30"        # (str) default:10.10.30.30             - ip of the VirturalBox
+hostname="wsumage"      # (str) default:WSUBASE                 - name of the host
+memory=512              # (int) default:512                     - How much memory would you like to share from your host
+cores=2                 # (int) default:1                       - How many processor from the host do you want to share
+host_64bit=true         # (bool) default:false                  - If you are on windows and are sharing more then 2 cores set to true
+install_type='testing'  # (testing) default:testing             - Type of install
+minion='vagrant'        # (vagrant/production) default:vagrant  - Which minion to run
+verbose_output=true     # (bool) default:true                   - How much do you want to see in the console
+
 
 #######################
 # Setup
 ######################
+
+# There shouldn't be anything to edit below this point config wise
+####################################################################
+
 
     ################################################################ 
     # Setup value defaults
@@ -45,21 +49,18 @@ verbose_output=true     # (bool) default:true
     projects = []
     lines = IO.read(vagrant_dir+"/provision/salt/pillar/projects.sls").split( "\n" )
 
-PILLARFILE=""
-PILLARFILE << "#PILLAR_ROOT-\n"
+PILLARFILE=   "#PILLAR_ROOT-\n"
 PILLARFILE << "pillar_roots:\n"
 PILLARFILE << "  base:\n"
 PILLARFILE << "    - /srv/salt/pillar\n"
 
 
-ROOTFILE=""
-ROOTFILE << "#FILE_ROOT-\n"
+ROOTFILE=   "#FILE_ROOT-\n"
 ROOTFILE << "file_roots:\n"
 ROOTFILE << "  base:\n"
 ROOTFILE << "    - /srv/salt\n"
 
-SALT_ENV=""
-SALT_ENV << "#ENV_START-\n"
+SALT_ENV=   "#ENV_START-\n"
 SALT_ENV << "  env:\n"
 SALT_ENV << "    - vagrant\n"
 
@@ -145,8 +146,12 @@ File.open(filename, "w") { |file| file << edited }
         end
         config.vm.network :private_network, ip: ip
 
+
+        # register hosts for all apps and the server
+        ################################################################
+        APPHOSTS=   "#APP_HOSTS-\n"
+        APPHOSTS << "127.0.0.1           demo\n"
         # Local Machine Hosts
-        if defined? VagrantPlugins::HostsUpdater
             # Capture the paths to all `hosts` files under the repository's provision directory.
             paths = []
             hosts = []
@@ -163,14 +168,22 @@ File.open(filename, "w") { |file| file << edited }
                   file_hosts.each do |line|
                     if line[0..0] != "#"
                       new_hosts << line
+                      APPHOSTS << "127.0.0.1           #{line}\n"
                     end
                   end
                   hosts.concat new_hosts
                 end
             end
+        if defined? VagrantPlugins::HostsUpdater
             config.hostsupdater.aliases = hosts
         end
-
+        
+        
+        APPHOSTS << "#ENDOF_APP_HOSTS-\n"
+        filename = vagrant_dir+"/provision/salt/config/hosts"
+        text = File.read(filename) 
+        edited = text.gsub(/\#APP_HOSTS-.*\#ENDOF_APP_HOSTS-/im, APPHOSTS)
+        File.open(filename, "w") { |file| file << edited }
          
         # Set file mounts
         ################################################################           

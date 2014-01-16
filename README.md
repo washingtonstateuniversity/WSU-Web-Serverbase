@@ -16,8 +16,8 @@ An example is:
         name: git://github.com/jeremyBass/WSUMAGE-base.git
         rev: master
         target: store.wsu.edu
-        
-This `projects.sls` says that we should be calling for a sub project and putting it in the `/www/store.wsu.edu/` directory. This base server will look for the `store.wsu.edu` project's provisioner set up and run it after this server's own provisioning. This lets us keep the server environment clean of the web applications stuff.  
+
+This `projects.sls` says that we should be calling for a sub project and putting it in the `/www/store.wsu.edu/` directory. This base server will look for the `store.wsu.edu` project's provisioner set up and run it after this server's own provisioning. This lets us keep the server environment clean of the web applications stuff.
 
 ## Local Development
 
@@ -29,7 +29,7 @@ This `projects.sls` says that we should be calling for a sub project and putting
         * Other Git client downloads, including command line utilities, are available at the [official site](http://git-scm.com/downloads).
         * [Homebrew](http://brew.sh/), a package manager for OSX, can be used to install `git` for the command line.
     1. [Vagrant](http://www.vagrantup.com/)
-    1. [VirtualBox](https://www.virtualbox.org/) 
+    1. [VirtualBox](https://www.virtualbox.org/)
 1. Clone the WSU Web Serverbase repository to a directory on your local machine.
     * This can be terminal in OSX or powershell in Windows with `git clone git@github.com:washingtonstateuniversity/WSU-Web-Serverbase.git devserver`
     * This can also be done with a GUI client for Git.
@@ -46,7 +46,7 @@ This `projects.sls` says that we should be calling for a sub project and putting
             target: store.wsu.edu
 
 1. Run at the command line:
-        
+
         $ vagrant up
 
 ### File structure
@@ -98,8 +98,8 @@ An Example implementation:
      |         |--top.sls
      |   |--/stage
      |      |--installer.php
-     
-to make it clear the sub project is set up 
+
+to make it clear the sub project is set up
 
      |-/{project name}    - this is loaded from the base as it has no webserver of its own
      | |--/html           - when we map the host file it'll be to this folder

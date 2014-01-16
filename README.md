@@ -1,6 +1,9 @@
 # WSU Web Serverbase
 
-This repository contains the provisioning for base servers used by WSU Web Communication. A `Vagrantfile` is included to provide a development environment where this provisioning can be applied on a project level.
+This repository contains provisioning for the Linux servers maintained by WSU Web Communication for production projects.
+
+* [Salt](http://www.saltstack.com/community/) is used to manage configuration and provisioning.
+* A `Vagrantfile` is included to provide a local development environment using this provisioning.
 
 # Server base
 

@@ -19,6 +19,16 @@ load-project-{{ project }}:
 {% endfor %}
 
 
+refresh_modules:
+  module.run:
+    - name: saltutil.refresh_modules
+refresh_pillar:
+  module.run:
+    - name: saltutil.refresh_pillar
+sync-minions:
+  module.run:
+    - name: saltutil.sync_all    
+    
 
 #{% for project, project_arg in pillar.get('projects',{}).items() %}
 #project-install-{{ project }}:

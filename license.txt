@@ -1,4 +1,4 @@
-WSUWP Environment
+WSU Web Serverbase
 
 Copyright 2013 by the contributors
 

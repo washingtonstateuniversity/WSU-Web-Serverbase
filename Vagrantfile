@@ -149,7 +149,7 @@ verbose_output=true     # (bool) default:true                   - How much do yo
             paths = []
             hosts = []
             projects.each do |project|
-                Dir.glob(vagrant_dir + "/www/#{project}/provision/salt/hosts").each do |path|
+                Dir.glob(vagrant_dir + "/www/#{project}/provision/salt/config/hosts").each do |path|
                   paths << path
                 end
                 # Parse through the `hosts` files in each of the found paths and put the hosts

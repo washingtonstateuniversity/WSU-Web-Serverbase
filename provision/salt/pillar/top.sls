@@ -1,4 +1,3 @@
 base:
   '*':
     - users
-    - projects

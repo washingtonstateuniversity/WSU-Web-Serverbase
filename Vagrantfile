@@ -12,7 +12,7 @@
 #####################
 
 ip="10.10.30.30"        # (str) default:10.10.30.30             - ip of the VirturalBox
-hostname="wsumage"      # (str) default:WSUBASE                 - name of the host
+hostname="WSUBASE"      # (str) default:WSUBASE                 - name of the host
 memory=512              # (int) default:512                     - How much memory would you like to share from your host
 cores=2                 # (int) default:1                       - How many processor from the host do you want to share
 host_64bit=true         # (bool) default:false                  - If you are on windows and are sharing more then 2 cores set to true
@@ -33,85 +33,78 @@ verbose_output=true     # (bool) default:true                   - How much do yo
     # Setup value defaults
     ################################################################ 
     
-    #base dir
-    ################################################################ 
-    vagrant_dir = File.expand_path(File.dirname(__FILE__))
+        #base dir
+        ################################################################ 
+        vagrant_dir = File.expand_path(File.dirname(__FILE__))
         
-    # Look for the machine ID file. This should indicate if the 
-    # VM state is suspended, halted, or up.
-    ################################################################ 
-    machines_file = vagrant_dir + '/.vagrant/machines/default/virtualbox/id'
-    machine_exists = File.file?(machines_file)
+        # the sub projects :: writes out the salt "config data" and 
+        # sets up for vagrant.
+        ###############################################################
     
-    # the sub projects :: will not load any projects if they are
-    # not listed out in the pillar/projects.sls
-    ###############################################################
-    projects = []
-    lines = IO.read(vagrant_dir+"/provision/salt/pillar/projects.sls").split( "\n" )
-
-PILLARFILE=   "#PILLAR_ROOT-\n"
-PILLARFILE << "pillar_roots:\n"
-PILLARFILE << "  base:\n"
-PILLARFILE << "    - /srv/salt/pillar\n"
-
-
-ROOTFILE=   "#FILE_ROOT-\n"
-ROOTFILE << "file_roots:\n"
-ROOTFILE << "  base:\n"
-ROOTFILE << "    - /srv/salt\n"
-
-SALT_ENV=   "#ENV_START-\n"
-SALT_ENV << "  env:\n"
-SALT_ENV << "    - vagrant\n"
-
-
-    lines.each do |line|
-        if line.include? "target"
-            target=line.split(":").last
-            project=target.strip! || target
-            projects <<  project    
-            if !File.file?("www/#{project}")
-            then
-                # these are created to get past the inital mountings and such till 
-                # the project is importated in the project sections
-                FileUtils::mkdir_p  vagrant_dir+"/www/#{project}/provision/salt/"
-            end
-
-            SALT_ENV << "    - #{project}\n"
-
-            PILLARFILE << "  #{project}:\n"
-            PILLARFILE << "    - /srv/#{project}/salt/pillar\n"
-            
-            ROOTFILE << "  #{project}:\n"
-            ROOTFILE << "    - /srv/#{project}/salt\n"
+    
+        PILLARFILE=   "#PILLAR_ROOT-\n"
+        PILLARFILE << "pillar_roots:\n"
+        PILLARFILE << "  base:\n"
+        PILLARFILE << "    - /srv/salt/pillar\n"
+        
+        
+        ROOTFILE=   "#FILE_ROOT-\n"
+        ROOTFILE << "file_roots:\n"
+        ROOTFILE << "  base:\n"
+        ROOTFILE << "    - /srv/salt\n"
+        
+        SALT_ENV=   "#ENV_START-\n"
+        SALT_ENV << "  env:\n"
+        SALT_ENV << "    - vagrant\n"
+    
+        projects = []
+        paths = []
+        Dir.glob(vagrant_dir + "/www/*/provision/salt/pillar/project.sls").each do |path|
+          paths << path
         end
-    end
-
-
-SALT_ENV << "#ENV_END-\n"
-
-PILLARFILE << "#END_OF_PILLAR_ROOT-"
-
-ROOTFILE << "  finalize:\n"
-ROOTFILE << "    - /srv/salt/finalize\n"
-ROOTFILE << "#END_OF_FILE_ROOT-"
-
-filename = vagrant_dir+"/provision/salt/minions/#{minion}.conf"
-text = File.read(filename) 
-edited = text.gsub(/\#FILE_ROOT-.*\#END_OF_FILE_ROOT-/im, ROOTFILE)
-edited = edited.gsub(/\#PILLAR_ROOT-.*\#END_OF_PILLAR_ROOT-/im, PILLARFILE)
-edited = edited.gsub(/\#ENV_START-.*\#ENV_END-/im, SALT_ENV)
-File.open(filename, "w") { |file| file << edited }
-
-    # set defaults ?? maybe go away ??
-    ################################################################
-    minion = minion.to_s.empty? ? 'vagrant' : minion
-    ip = ip.to_s.empty? ? '10.10.30.30' : ip
-    memory = memory.to_s.empty? ? 512 : memory
-    cores = cores.to_s.empty? ? 1 : cores
-    hostname = hostname.to_s.empty? ? "WSUBASE" : hostname
-    install_type = install_type.to_s.empty? ? "testing" : install_type
-    host_64bit = host_64bit.to_s.empty? ? false : host_64bit
+        paths.each do |path|
+            lines = IO.read(path).split( "\n" )
+            lines.each do |line|
+                if line.include? "target"
+                    target=line.split(":").last
+                    project=target.strip! || target
+                    projects <<  project
+                    
+                    SALT_ENV << "    - #{project}\n"
+        
+                    PILLARFILE << "  #{project}:\n"
+                    PILLARFILE << "    - /srv/#{project}/salt/pillar\n"
+                    
+                    ROOTFILE << "  #{project}:\n"
+                    ROOTFILE << "    - /srv/#{project}/salt\n"
+                end
+            end
+        end
+    
+        SALT_ENV << "#ENV_END-\n"
+        
+        PILLARFILE << "#END_OF_PILLAR_ROOT-"
+        
+        ROOTFILE << "  finalize:\n"
+        ROOTFILE << "    - /srv/salt/finalize\n"
+        ROOTFILE << "#END_OF_FILE_ROOT-"
+        
+        filename = vagrant_dir+"/provision/salt/minions/#{minion}.conf"
+        text = File.read(filename) 
+        edited = text.gsub(/\#FILE_ROOT-.*\#END_OF_FILE_ROOT-/im, ROOTFILE)
+        edited = edited.gsub(/\#PILLAR_ROOT-.*\#END_OF_PILLAR_ROOT-/im, PILLARFILE)
+        edited = edited.gsub(/\#ENV_START-.*\#ENV_END-/im, SALT_ENV)
+        File.open(filename, "w") { |file| file << edited }
+    
+        # set defaults ?? maybe go away ??
+        ################################################################
+        minion = minion.to_s.empty? ? 'vagrant' : minion
+        ip = ip.to_s.empty? ? '10.10.30.30' : ip
+        memory = memory.to_s.empty? ? 512 : memory
+        cores = cores.to_s.empty? ? 1 : cores
+        hostname = hostname.to_s.empty? ? "WSUBASE" : hostname
+        install_type = install_type.to_s.empty? ? "testing" : install_type
+        host_64bit = host_64bit.to_s.empty? ? false : host_64bit
 
 
     ################################################################ 

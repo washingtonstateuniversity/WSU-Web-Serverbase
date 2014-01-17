@@ -1,7 +1,6 @@
 base:
   '*':
-    - git           # must have this for projects
-    - projects      # loaded any projects on it's own
+    - git
     - server
     - webserver
     - cacheserver

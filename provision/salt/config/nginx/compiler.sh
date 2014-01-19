@@ -3,12 +3,19 @@
 resulting=""
 name="nginx-compile"
 
+#if [ -z "$1" ]; then
+#    resulting="Faild to provide a version of nginx to use"
+#    echo "name=$name result=False changed=False comment=$resulting"
+#    exit
+#fi
+
+nginxVersion="$1"
+
 #set the compiler to be quite
 #then return message only it it's a fail
 ini(){
     cd /src
-    
-    nginxVersion="1.5.8" # set the value here from nginx website
+    #nginxVersion="1.5.8" # set the value here from nginx website
     wget -N http://nginx.org/download/nginx-$nginxVersion.tar.gz 2>/dev/null
     tar -xzf nginx-$nginxVersion.tar.gz >/dev/null
     ln -sf nginx-$nginxVersion nginx
@@ -53,9 +60,9 @@ ini(){
 --with-http_dav_module \
 --with-http_gzip_static_module \
 --with-http_stub_status_module \
---with-http_ssl_module \
 --with-http_sub_module \
 --with-http_spdy_module \
+--with-http_ssl_module \
 --with-sha1=/usr/include/openssl \
 --with-md5=/usr/include/openssl \
 --with-pcre \
@@ -66,15 +73,15 @@ ini(){
 --add-module=/src/nginx/ngx_pagespeed-1.7.30.2-beta >/dev/null
     make >/dev/null
     make install >/dev/null
-
+    resulting="Just finished installing nginx $nginxVersion"
     return 1 #fix this this should be a grep for 'error' or something also this is backwards as non-0 is false yet it's treated as true
 }
 
 ini
 if [ $? -eq 1 ]; then
-    echo "name=$name result=True changed=True comment=$resulting"
+    echo "name=$name result=True changed=True comment='$resulting'"
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': True, 'comment': ''}"
 else
-    echo "name=$name result=False changed=False comment=$resulting"
+    echo "name=$name result=False changed=False comment='$resulting'"
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': False, 'comment': ''}"
 fi

@@ -1,12 +1,17 @@
 base:
   '*':
-    - git
-    - server
-    - webserver
-    - cacheserver
-    - dbserver
+    - serverbase
+    - security
+    - web
+    - caching
+    - database
   'env:vagrant':
     - match: grain
-    - devserver
+    - env.development
   'env:production':
     - match: grain
+    - env.production
+  'env:*':
+    - match: grain
+    - finalize.restart
+  

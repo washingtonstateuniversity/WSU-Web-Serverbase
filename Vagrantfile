@@ -38,16 +38,17 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         vagrant_dir = File.expand_path(File.dirname(__FILE__))
         
         # the sub projects :: writes out the salt "config data" and 
-        # sets up for vagrant.
+        # sets up for vagrant.  The production is done by hand on purpose
         ###############################################################
     
-    
+        filename = vagrant_dir+"/provision/salt/minions/#{minion}.conf"
+        text = File.read(filename)
+        
         PILLARFILE=   "#PILLAR_ROOT-\n"
         PILLARFILE << "pillar_roots:\n"
         PILLARFILE << "  base:\n"
         PILLARFILE << "    - /srv/salt/pillar\n"
-        
-        
+
         ROOTFILE=   "#FILE_ROOT-\n"
         ROOTFILE << "file_roots:\n"
         ROOTFILE << "  base:\n"
@@ -82,15 +83,9 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         end
     
         SALT_ENV << "#ENV_END-\n"
-        
         PILLARFILE << "#END_OF_PILLAR_ROOT-"
-        
-        ROOTFILE << "  finalize:\n"
-        ROOTFILE << "    - /srv/salt/finalize\n"
         ROOTFILE << "#END_OF_FILE_ROOT-"
-        
-        filename = vagrant_dir+"/provision/salt/minions/#{minion}.conf"
-        text = File.read(filename) 
+ 
         edited = text.gsub(/\#FILE_ROOT-.*\#END_OF_FILE_ROOT-/im, ROOTFILE)
         edited = edited.gsub(/\#PILLAR_ROOT-.*\#END_OF_PILLAR_ROOT-/im, PILLARFILE)
         edited = edited.gsub(/\#ENV_START-.*\#ENV_END-/im, SALT_ENV)
@@ -194,8 +189,8 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         
         config.vm.synced_folder "provision/salt", "/srv/salt"
         
-        config.vm.provision "shell",
-        inline: "cp /srv/salt/config/yum.conf /etc/yum.conf"
+        #config.vm.provision "shell",
+        #inline: "cp /srv/salt/config/yum.conf /etc/yum.conf"
 
         # Set up the minions
         ########################

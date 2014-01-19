@@ -1,6 +1,12 @@
+# set up data first
+###########################################################
+{%- set nginx_version = pillar['nginx']['version'] -%} 
+
+
+
 ###########################################################
 ###########################################################
-# folder and users
+# folder and users for web services
 ###########################################################
 group-www-data:
   group.present:
@@ -45,7 +51,7 @@ nginx-compiler-base:
       - pcre-devel 
       - openssl-devel
     - require:
-      - sls: server
+      - sls: serverbase
 
 # Adds the service file.
 /etc/init.d/nginx:
@@ -69,7 +75,6 @@ nginx-compiler-base:
     - mode: 644
     
 # Run compiler
-{%- set nginx_version = pillar['nginx']['version'] -%}
 nginx-compile:
   cmd.run:
     - name: /srv/salt/config/nginx/compiler.sh {{ nginx_version }}
@@ -78,27 +83,19 @@ nginx-compile:
     - require:
       - pkg: nginx-compiler-base
 
-# Adds the service.
-nginx-init:
-  cmd.run:
-    - name: chkconfig --add nginx
-    - cwd: /
-    - require:
-      - cmd: nginx-compile
-      
 # Set Nginx to run in levels 2345.
-nginx-persistent-state:
+nginx-reboot-auto:
   cmd.run:
     - name: chkconfig --level 2345 nginx on
     - cwd: /
     - require:
-      - cmd: nginx-init
+      - cmd: nginx-compile
 
 # Start nginx
 nginx:
   service.running:
     - require:
-      - cmd: nginx-init
+      - cmd: nginx-compile
       - user: www-data
       - group: www-data
     - watch:
@@ -115,7 +112,7 @@ nginx:
     - group: root
     - mode: 644
     - require:
-      - cmd: nginx-init
+      - cmd: nginx-compile
 
 
 /etc/nginx/sites-enabled/default:
@@ -125,7 +122,7 @@ nginx:
     - group: root
     - mode: 644
     - require:
-      - cmd: nginx-init
+      - cmd: nginx-compile
 
 
 ###########################################################  
@@ -149,7 +146,7 @@ php-fpm:
       - php-pecl-xdebug
       - php-pecl-memcached
     - require:
-      - sls: server
+      - sls: serverbase
   service.running:
     - require:
       - pkg: php-fpm
@@ -157,7 +154,7 @@ php-fpm:
       - file: /etc/php-fpm.d/www.conf
 
 # Set php-fpm to run in levels 2345.
-php-fpm-init:
+php-fpm-reboot-auto:
   cmd.run:
     - name: chkconfig --level 2345 php-fpm on
     - cwd: /
@@ -191,6 +188,8 @@ ImageMagick:
     - mode: 644
     - require:
       - pkg: php-fpm
+
+
 
 ###########################################################
 ###########################################################

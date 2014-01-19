@@ -1,3 +1,3 @@
 base:
   '*':
-    - ini
+    - web

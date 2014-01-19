@@ -82,7 +82,7 @@ verbose_output=true     # (bool) default:true                   - How much do yo
             end
         end
     
-        SALT_ENV << "#ENV_END-\n"
+        SALT_ENV << "#ENV_END-"
         PILLARFILE << "#END_OF_PILLAR_ROOT-"
         ROOTFILE << "#END_OF_FILE_ROOT-"
  
@@ -167,7 +167,7 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         end
         
         
-        APPHOSTS << "#ENDOF_APP_HOSTS-\n"
+        APPHOSTS << "#ENDOF_APP_HOSTS-"
         filename = vagrant_dir+"/provision/salt/config/hosts"
         text = File.read(filename) 
         edited = text.gsub(/\#APP_HOSTS-.*\#ENDOF_APP_HOSTS-/im, APPHOSTS)

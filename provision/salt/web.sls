@@ -80,6 +80,7 @@ nginx-compile:
     - name: /srv/salt/config/nginx/compiler.sh {{ nginx_version }}
     - cwd: /
     - stateful: True
+    - unless: ! nginx -v 2>&1 | grep -qi {{ nginx_version }}
     - require:
       - pkg: nginx-compiler-base
 

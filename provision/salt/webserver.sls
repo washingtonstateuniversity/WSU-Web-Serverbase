@@ -44,6 +44,8 @@ nginx-compiler-base:
       - zlib-devel
       - pcre-devel 
       - openssl-devel
+    - require:
+      - sls: server
 
 # Adds the service file.
 /etc/init.d/nginx:
@@ -55,6 +57,8 @@ nginx-compiler-base:
     - mode: 755
   cmd.run: #insure it's going to run on windows hosts
     - name: dos2unix /etc/init.d/nginx
+    - require:
+      - pkg: dos2unix
 
 # Ensure a source folder (/src/) is there to do `make`'s in
 /src/:
@@ -65,9 +69,10 @@ nginx-compiler-base:
     - mode: 644
     
 # Run compiler
+{%- set nginx_version = pillar['nginx']['version'] -%}
 nginx-compile:
   cmd.run:
-    - name: /srv/salt/config/nginx/compiler.sh
+    - name: /srv/salt/config/nginx/compiler.sh {{ nginx_version }}
     - cwd: /
     - stateful: True
     - require:
@@ -143,6 +148,8 @@ php-fpm:
       - php-pecl-zendopcache
       - php-pecl-xdebug
       - php-pecl-memcached
+    - require:
+      - sls: server
   service.running:
     - require:
       - pkg: php-fpm

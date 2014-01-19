@@ -35,6 +35,8 @@ remi-rep:
     - mode: 600
   cmd.run: #insure it's going to run on windows hosts
     - name: dos2unix /etc/sysconfig/iptables
+    - require:
+      - pkg: dos2unix
     
 iptables:
   pkg.installed:

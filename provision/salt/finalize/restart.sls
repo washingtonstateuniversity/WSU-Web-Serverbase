@@ -6,15 +6,22 @@ flush-cache:
     - require:
       - sls: caching
 
-# Whenever provisioning runs, it doesn't hurt to restart php-fpm, flushing the opcode cache.
-flush-php-fpm:
+clear-mysqld:
+  cmd.run:
+    - name: sudo service mysqld restart
+    - cwd: /
+    - require:
+      - sls: web
+      
+
+clear-php-fpm:
   cmd.run:
     - name: sudo service php-fpm restart
     - cwd: /
     - require:
       - sls: web
 
-# Whenever provisioning runs, it doesn't hurt to restart php-fpm, flushing the opcode cache.
+
 clear-workers:
   cmd.run:
     - name: sudo service nginx restart

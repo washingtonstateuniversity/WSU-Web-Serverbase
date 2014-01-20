@@ -1,10 +1,10 @@
 base:
   '*':
     - serverbase
+    - database
     - security
     - web
     - caching
-    - database
   'env:vagrant':
     - match: grain
     - env.development

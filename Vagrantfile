@@ -189,8 +189,7 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         
         config.vm.synced_folder "provision/salt", "/srv/salt"
         
-        #config.vm.provision "shell",
-        #inline: "cp /srv/salt/config/yum.conf /etc/yum.conf"
+        config.vm.provision "shell", inline: "cp /srv/salt/config/yum.conf /etc/yum.conf"
 
         # Set up the minions
         ########################

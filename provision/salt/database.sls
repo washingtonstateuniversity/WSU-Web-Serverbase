@@ -59,7 +59,7 @@ mysqld-init:
     - require:
       - pkg: mysql
 
-mysql-start:
+mysqld:
   service.running:
     - name: mysqld
     - watch:

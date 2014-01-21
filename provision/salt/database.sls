@@ -71,3 +71,5 @@ mysqld:
       - file: /etc/my.cnf
     - require:
       - file: /etc/my.cnf
+    - required_in:
+      - sls: finalize.restart

@@ -11,7 +11,7 @@ clear-mysqld:
     - name: sudo service mysqld restart
     - cwd: /
     - require:
-      - sls: web
+      - sls: database
       
 
 clear-php-fpm:

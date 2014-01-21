@@ -105,6 +105,8 @@ nginx:
     - watch:
       - file: /etc/nginx/nginx.conf
       - file: /etc/nginx/sites-enabled/default
+    - required_in:
+      - sls: finalize.restart
       
 #***************************************      
 # nginx files & configs
@@ -156,6 +158,8 @@ php-fpm:
       - pkg: php-fpm
     - watch:
       - file: /etc/php-fpm.d/www.conf
+    - required_in:
+      - sls: finalize.restart
 
 # Set php-fpm to run in levels 2345.
 php-fpm-reboot-auto:

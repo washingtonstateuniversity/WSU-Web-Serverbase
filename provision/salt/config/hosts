@@ -3,4 +3,10 @@
 
 #APP_HOSTS-
 127.0.0.1           demo
+127.0.0.1           store.mage.dev
+127.0.0.1           events.store.mage.dev
+127.0.0.1           student.store.mage.dev
+127.0.0.1           general.store.mage.dev
+127.0.0.1           store.admin.mage.dev
+127.0.0.1           tech.store.mage.dev
 #ENDOF_APP_HOSTS-

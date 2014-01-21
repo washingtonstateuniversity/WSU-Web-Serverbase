@@ -60,6 +60,11 @@ mysqld-init:
       - pkg: mysql
 
 mysqld:
+  cmd.run:
+    - name: sudo service mysqld restart
+    - cwd: /
+    - require:
+      - pkg: mysql
   service.running:
     - name: mysqld
     - watch:

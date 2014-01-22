@@ -105,6 +105,19 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         host_64bit = host_64bit.to_s.empty? ? false : host_64bit
 
 
+        # we need these and have the ablilty to install this for them, do so
+        #output = `vagrant plugin list`
+        #if !output.include? "vagrant-hostsupdater"
+        #    puts "hostsupdater not loaded but needed\ninstalling vagrant-hostsupdater plugin"
+        #    puts `vagrant plugin install vagrant-hostsupdater`
+        #end
+        #if !output.include? "vagrant-vbguest"
+        #    puts "installing vagrant-vbguest plugin"
+        #    puts `vagrant plugin install vagrant-vbguest`
+        #end 
+
+
+
     ################################################################ 
     # Start Vagrant
     ################################################################   

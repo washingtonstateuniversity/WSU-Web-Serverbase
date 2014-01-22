@@ -80,7 +80,7 @@ nginx-compiler-base:
 # Run compiler
 nginx-compile:
   cmd.run:
-    - name: /srv/salt/config/nginx/compiler.sh {{ nginx_version }}
+    - name: /srv/salt/base/config/nginx/compiler.sh {{ nginx_version }}
     - cwd: /
     - stateful: True
     - unless: ! nginx -v 2>&1 | grep -qi {{ nginx_version }}
@@ -105,6 +105,8 @@ nginx:
     - watch:
       - file: /etc/nginx/nginx.conf
       - file: /etc/nginx/sites-enabled/default
+    - required_in:
+      - sls: finalize.restart
       
 #***************************************      
 # nginx files & configs
@@ -156,6 +158,8 @@ php-fpm:
       - pkg: php-fpm
     - watch:
       - file: /etc/php-fpm.d/www.conf
+    - required_in:
+      - sls: finalize.restart
 
 # Set php-fpm to run in levels 2345.
 php-fpm-reboot-auto:

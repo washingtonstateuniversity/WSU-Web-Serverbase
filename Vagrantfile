@@ -1,6 +1,8 @@
 # WSU Server Base Vagrant Configuration
 #
 # Matches the WSU Server environment production setup as closely as possible.
+# This will auto edit some of the local provisioning file but not the production.
+# All production states/grains/pillars are to be managed by hand.
 #
 # We recommend Vagrant 1.3.5 and Virtualbox 4.3.
 #
@@ -47,15 +49,16 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         PILLARFILE=   "#PILLAR_ROOT-\n"
         PILLARFILE << "pillar_roots:\n"
         PILLARFILE << "  base:\n"
-        PILLARFILE << "    - /srv/salt/pillar\n"
+        PILLARFILE << "    - /srv/salt/base/pillar\n"
 
         ROOTFILE=   "#FILE_ROOT-\n"
         ROOTFILE << "file_roots:\n"
         ROOTFILE << "  base:\n"
-        ROOTFILE << "    - /srv/salt\n"
+        ROOTFILE << "    - /srv/salt/base\n"
         
         SALT_ENV=   "#ENV_START-\n"
         SALT_ENV << "  env:\n"
+        SALT_ENV << "    - base\n"
         SALT_ENV << "    - vagrant\n"
     
         projects = []
@@ -74,10 +77,10 @@ verbose_output=true     # (bool) default:true                   - How much do yo
                     SALT_ENV << "    - #{project}\n"
         
                     PILLARFILE << "  #{project}:\n"
-                    PILLARFILE << "    - /srv/#{project}/salt/pillar\n"
+                    PILLARFILE << "    - /srv/salt/#{project}/pillar\n"
                     
                     ROOTFILE << "  #{project}:\n"
-                    ROOTFILE << "    - /srv/#{project}/salt\n"
+                    ROOTFILE << "    - /srv/salt/#{project}\n"
                 end
             end
         end
@@ -100,6 +103,19 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         hostname = hostname.to_s.empty? ? "WSUBASE" : hostname
         install_type = install_type.to_s.empty? ? "testing" : install_type
         host_64bit = host_64bit.to_s.empty? ? false : host_64bit
+
+
+        # we need these and have the ablilty to install this for them, do so
+        #output = `vagrant plugin list`
+        #if !output.include? "vagrant-hostsupdater"
+        #    puts "hostsupdater not loaded but needed\ninstalling vagrant-hostsupdater plugin"
+        #    puts `vagrant plugin install vagrant-hostsupdater`
+        #end
+        #if !output.include? "vagrant-vbguest"
+        #    puts "installing vagrant-vbguest plugin"
+        #    puts `vagrant plugin install vagrant-vbguest`
+        #end 
+
 
 
     ################################################################ 
@@ -187,24 +203,18 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         # will be bootstrapped automatically. We have provided a modified local bootstrap script to
         # avoid network connectivity issues and to specify that a newer version of Salt be installed.
         
-        config.vm.synced_folder "provision/salt", "/srv/salt"
+        config.vm.synced_folder "provision/salt", "/srv/salt/base"
         
-        config.vm.provision "shell", inline: "cp /srv/salt/config/yum.conf /etc/yum.conf"
-
-        # Set up the minions
-        ########################
+        $provision_script=""
+        $provision_script<<"cp /srv/salt/base/config/yum.conf /etc/yum.conf\n"
+        $provision_script<<"sh /srv/salt/base/boot/bootstrap_salt.sh\n"
+        $provision_script<<"cp /srv/salt/base/minions/#{minion}.conf /etc/salt/minion.d/\n"
+        $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base\n"
+        # Set up the project apps
+        #########################
         projects.each do |project| 
-            config.vm.synced_folder "www/#{project}/provision/salt", "/srv/#{project}/salt"
+            config.vm.synced_folder "www/#{project}/provision/salt", "/srv/salt/#{project}"
+            $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{project}\n"
         end
-
-        
-        # Provision the server base
-        ################################################################ 
-        config.vm.provision :salt do |salt|
-            salt.bootstrap_script = 'provision/bootstrap_salt.sh'
-            salt.install_type = install_type
-            salt.verbose = verbose_output
-            salt.minion_config = "provision/salt/minions/#{minion}.conf"
-            salt.run_highstate = true
-        end
+        config.vm.provision "shell", inline: $provision_script
     end

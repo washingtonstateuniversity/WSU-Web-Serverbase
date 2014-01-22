@@ -80,7 +80,7 @@ nginx-compiler-base:
 # Run compiler
 nginx-compile:
   cmd.run:
-    - name: salt://config/nginx/compiler.sh {{ nginx_version }}
+    - name: /srv/salt/base/config/nginx/compiler.sh {{ nginx_version }}
     - cwd: /
     - stateful: True
     - unless: ! nginx -v 2>&1 | grep -qi {{ nginx_version }}

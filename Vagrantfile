@@ -47,12 +47,12 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         PILLARFILE=   "#PILLAR_ROOT-\n"
         PILLARFILE << "pillar_roots:\n"
         PILLARFILE << "  base:\n"
-        PILLARFILE << "    - /srv/salt/pillar\n"
+        PILLARFILE << "    - /srv/salt/base/pillar\n"
 
         ROOTFILE=   "#FILE_ROOT-\n"
         ROOTFILE << "file_roots:\n"
         ROOTFILE << "  base:\n"
-        ROOTFILE << "    - /srv/salt\n"
+        ROOTFILE << "    - /srv/salt/base\n"
         
         SALT_ENV=   "#ENV_START-\n"
         SALT_ENV << "  env:\n"
@@ -74,10 +74,10 @@ verbose_output=true     # (bool) default:true                   - How much do yo
                     SALT_ENV << "    - #{project}\n"
         
                     PILLARFILE << "  #{project}:\n"
-                    PILLARFILE << "    - /srv/#{project}/salt/pillar\n"
+                    PILLARFILE << "    - /srv/salt/#{project}/pillar\n"
                     
                     ROOTFILE << "  #{project}:\n"
-                    ROOTFILE << "    - /srv/#{project}/salt\n"
+                    ROOTFILE << "    - /srv/salt/#{project}\n"
                 end
             end
         end
@@ -187,14 +187,14 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         # will be bootstrapped automatically. We have provided a modified local bootstrap script to
         # avoid network connectivity issues and to specify that a newer version of Salt be installed.
         
-        config.vm.synced_folder "provision/salt", "/srv/salt"
+        config.vm.synced_folder "provision/salt", "/srv/salt/base"
         
-        config.vm.provision "shell", inline: "cp /srv/salt/config/yum.conf /etc/yum.conf"
+        config.vm.provision "shell", inline: "cp /srv/salt/base/config/yum.conf /etc/yum.conf"
 
         # Set up the minions
         ########################
         projects.each do |project| 
-            config.vm.synced_folder "www/#{project}/provision/salt", "/srv/#{project}/salt"
+            config.vm.synced_folder "www/#{project}/provision/salt", "/srv/salt/#{project}"
         end
 
         

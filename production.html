@@ -62,39 +62,15 @@
         <section class="row sidebar">
             <div class="column one">
                 <article>
-                    <h1 class="header">Wsumage-base</h1>
+                    <h1 class="header">WSU Server Production Environment</h1>
                     <div class="wrapper markdown-body">
-                      <section>
-                            <div>
-                              <H1><A name="wsumage-base" href="https://github.com/washingtonstateuniversity/WSUMAGE-basehttps://github.com/washingtonstateuniversity/WSUMAGE-base#wsumage-base"></A>WSUMAGE-base</H1>
-                              <p>This is a Magento web app repo.  This is loaded in to a server base project such as <A href="https://github.com/washingtonstateuniversity/WSU-Web-Serverbase">https://github.com/washingtonstateuniversity/WSU-Web-Serverbase</A> .  This project may be loaded with other web apps as well, but it's all loaded in with the server base.  A web app can't live without the server.  The steps to get this project up is </p>
-                              <OL>
-                                <LI>
-                                  <p>git clone the server base </p>
-                                  <BLOCKQUOTE>
-                                    <p><code>$ git clone git@github.com:washingtonstateuniversity/WSU-Web-Serverbase.git devserver</code></p>
-                                  </BLOCKQUOTE>
-                                </LI>
-                                <LI>
-                                  <p>git clone the web app to the www folder </p>
-                                  <BLOCKQUOTE>
-                                    <p><code>$ cd devserver/www</code></p>
-                                    <p><code>$ git clone git@github.com:washingtonstateuniversity/WSUMAGE-base.git store.wsu.edu</code></p>
-                                  </BLOCKQUOTE>
-                                </LI>
-                                <LI>
-                                  <p>get back to the server root and start</p>
-                                  <BLOCKQUOTE>
-                                    <p><code>$ cd ../</code></p>
-                                    <p><code>$ vagrant up</code></p>
-                                  </BLOCKQUOTE>
-                                </LI>
-                              </OL>
-                              <p>Those are the steps for your local dev environment.  You may also highstate the project on its own, but it must be on a ready server.  That is salt-call state.highstate env=store.wsu.edu. </p>
-                              <p>More will come.  Thank you for reading.</p>
-                            </div>
-                      </section>
+                        <h2 class="header">How to Put into production</h2>
+                        <p>Generally if you are ready to push changes up to the server it will be done through the server administrator unless you are placing a new installation.  All server alterations must be tested and installed by the <a class="header name" href="https://github.com/washingtonstateuniversity">WSU University Web Communications Team</a></p>
                     </div>
+                    
+                    <section>
+
+                    </section>
                 </article>
             </div><!--/column-->
         
@@ -180,20 +156,21 @@
 -->
 
 <ul>
-	<li class="current"><a href="/WSU-Web-Serverbase/">WSU Server Environment</a></li>
+	<li><a href="/WSU-Web-Serverbase/">WSU Server Environment</a></li>
 	<li>
 		<a href="/WSU-Web-Serverbase/development.html">Development</a>
         <ul>
             <li><a href="/WSU-Web-Serverbase/development.html#devModsLoaded">Whats loaded?</a></li>
         </ul>
 	</li>
-    <li>
+    <li class="current">
         <a href="/WSU-Web-Serverbase/production.html">Production</a>
         <ul>
             <li><a href="/WSU-Web-Serverbase/production.html#productionModsLoaded">Whats loaded?</a></li>
         </ul>
     </li>
 </ul>
+
 </nav>
 
 <nav id="offsite">

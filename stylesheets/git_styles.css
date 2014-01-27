@@ -1,0 +1,28 @@
+.markdown-body .highlight pre, .markdown-body pre {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    font-size: 13px;
+    line-height: 19px;
+    overflow: auto;
+    padding: 6px 10px;
+    border-radius: 3px;
+}
+
+
+/* would want to move this out */	
+.markdown-body code, .markdown-body tt {
+	margin: 0 2px;
+	padding: 0px 5px;
+	border: 1px solid #ddd;
+	background-color: #f8f8f8;
+	border-radius: 3px;
+	font-size: 0.7em;
+}
+
+.markdown-body pre > code {
+    margin: 0;
+    padding: 0;
+    white-space: pre;
+    border: none;
+    background: transparent;
+}

@@ -67,6 +67,8 @@ verbose_output=true     # (bool) default:true                   - How much do yo
           paths << path
         end
         paths.each do |path|
+            next if path == "html"
+            
             appfolder = path.split( "/" ).last
             app=appfolder.strip! || appfolder
             apps <<  app
@@ -124,6 +126,7 @@ verbose_output=true     # (bool) default:true                   - How much do yo
             v.gui = false
             v.name = hostname
             v.memory = memory
+            
             if cores>1
                 v.customize ["modifyvm", :id, "--cpus", cores]
                 if host_64bit

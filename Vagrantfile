@@ -61,28 +61,23 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         SALT_ENV << "    - base\n"
         SALT_ENV << "    - vagrant\n"
     
-        projects = []
+        apps = []
         paths = []
-        Dir.glob(vagrant_dir + "/www/*/provision/salt/pillar/project.sls").each do |path|
+        Dir.glob(vagrant_dir + "/app/*").each do |path|
           paths << path
         end
         paths.each do |path|
-            lines = IO.read(path).split( "\n" )
-            lines.each do |line|
-                if line.include? "target"
-                    target=line.split(":").last
-                    project=target.strip! || target
-                    projects <<  project
-                    
-                    SALT_ENV << "    - #{project}\n"
-        
-                    PILLARFILE << "  #{project}:\n"
-                    PILLARFILE << "    - /srv/salt/#{project}/pillar\n"
-                    
-                    ROOTFILE << "  #{project}:\n"
-                    ROOTFILE << "    - /srv/salt/#{project}\n"
-                end
-            end
+            appfolder = path.split( "/" ).last
+            app=appfolder.strip! || appfolder
+            apps <<  app
+            
+            SALT_ENV << "    - #{app}\n"
+
+            PILLARFILE << "  #{app}:\n"
+            PILLARFILE << "    - /srv/salt/#{app}/pillar\n"
+            
+            ROOTFILE << "  #{app}:\n"
+            ROOTFILE << "    - /srv/salt/#{app}\n"
         end
     
         SALT_ENV << "#ENV_END-"
@@ -156,28 +151,28 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         APPHOSTS=   "#APP_HOSTS-\n"
         APPHOSTS << "127.0.0.1           demo\n"
         # Local Machine Hosts
-            # Capture the paths to all `hosts` files under the repository's provision directory.
-            paths = []
-            hosts = []
-            projects.each do |project|
-                Dir.glob(vagrant_dir + "/www/#{project}/provision/salt/config/hosts").each do |path|
-                  paths << path
-                end
-                # Parse through the `hosts` files in each of the found paths and put the hosts
-                # that are found into a single array. Lines commented out with # will be skipped.
-                
-                paths.each do |path|
-                  new_hosts = []
-                  file_hosts = IO.read(path).split( "\n" )
-                  file_hosts.each do |line|
-                    if line[0..0] != "#"
-                      new_hosts << line
-                      APPHOSTS << "127.0.0.1           #{line}\n"
-                    end
-                  end
-                  hosts.concat new_hosts
-                end
+        # Capture the paths to all `hosts` files under the repository's provision directory.
+        paths = []
+        hosts = []
+        apps.each do |app|
+            Dir.glob(vagrant_dir + "/app/#{app}/provision/salt/config/hosts").each do |path|
+              paths << path
             end
+            # Parse through the `hosts` files in each of the found paths and put the hosts
+            # that are found into a single array. Lines commented out with # will be skipped.
+            
+            paths.each do |path|
+              new_hosts = []
+              file_hosts = IO.read(path).split( "\n" )
+              file_hosts.each do |line|
+                if line[0..0] != "#"
+                  new_hosts << line
+                  APPHOSTS << "127.0.0.1           #{line}\n"
+                end
+              end
+              hosts.concat new_hosts
+            end
+        end
         if defined? VagrantPlugins::HostsUpdater
             config.hostsupdater.aliases = hosts
         end
@@ -191,10 +186,10 @@ verbose_output=true     # (bool) default:true                   - How much do yo
          
         # Set file mounts
         ################################################################           
-        # Mount the local project's www/ directory as /var/www inside the virtual machine. This will
+        # Mount the local project's app/ directory as /var/app inside the virtual machine. This will
         # be mounted as the 'vagrant' user at first, then unmounted and mounted again as 'www-data'
         # during provisioning.
-        config.vm.synced_folder "www", "/var/www", :mount_options => [ "uid=510,gid=510", "dmode=775", "fmode=774" ]
+        config.vm.synced_folder "app", "/var/app", :mount_options => [ "uid=510,gid=510", "dmode=775", "fmode=774" ]
 
         # Provisioning: Salt 
         ################################################################      
@@ -210,11 +205,11 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         $provision_script<<"sh /srv/salt/base/boot/bootstrap_salt.sh\n"
         $provision_script<<"cp /srv/salt/base/minions/#{minion}.conf /etc/salt/minion.d/\n"
         $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base\n"
-        # Set up the project apps
+        # Set up the web apps
         #########################
-        projects.each do |project| 
-            config.vm.synced_folder "www/#{project}/provision/salt", "/srv/salt/#{project}"
-            $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{project}\n"
+        apps.each do |app| 
+            config.vm.synced_folder "app/#{app}/provision/salt", "/srv/salt/#{app}"
+            $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{app}\n"
         end
         config.vm.provision "shell", inline: $provision_script
     end

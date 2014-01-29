@@ -82,6 +82,7 @@ nginx-compile:
   cmd.run:
     - name: /srv/salt/base/config/nginx/compiler.sh {{ nginx_version }}
     - cwd: /
+    - user: root
     - stateful: True
     - unless: nginx -v 2>&1 | grep -qi "{{ nginx_version }}"
     - require:
@@ -92,12 +93,14 @@ nginx-reboot-auto:
   cmd.run:
     - name: chkconfig --level 2345 nginx on
     - cwd: /
+    - user: root
     - require:
       - cmd: nginx-compile
 
 # Start nginx
 nginx:
   service.running:
+    - user: root
     - require:
       - cmd: nginx-compile
       - user: www-data
@@ -166,6 +169,7 @@ php-fpm-reboot-auto:
   cmd.run:
     - name: chkconfig --level 2345 php-fpm on
     - cwd: /
+    - user: root
     - require:
       - pkg: php-fpm
 
@@ -197,6 +201,14 @@ ImageMagick:
     - require:
       - pkg: php-fpm
 
+/etc/php.d/opcache.ini:
+  file.managed:
+    - source: salt://config/php-fpm/opcache.ini
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - pkg: php-fpm
 
 
 ###########################################################
@@ -207,12 +219,14 @@ get-composer:
   cmd.run:
     - name: 'CURL=`which curl`; $CURL -sS https://getcomposer.org/installer | php'
     - unless: test -f /usr/local/bin/composer
+    - user: root
     - cwd: /root/
  
 install-composer:
   cmd.wait:
     - name: mv /root/composer.phar /usr/local/bin/composer
     - cwd: /root/
+    - user: root
     - watch:
       - cmd: get-composer
     

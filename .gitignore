@@ -11,5 +11,5 @@
 /.vagrant
 
 # Ignore Web files pulled into the mapped www directory.
-/www/*
-!www/.gitshow
+/app/*
+!app/.gitshow

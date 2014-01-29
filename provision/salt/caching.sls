@@ -26,3 +26,4 @@ memcached-init:
     - cwd: /
     - require:
       - pkg: memcached
+

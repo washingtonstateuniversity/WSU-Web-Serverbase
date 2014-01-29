@@ -67,7 +67,9 @@ verbose_output=true     # (bool) default:true                   - How much do yo
           paths << path
         end
         paths.each do |path|
-            next if path == "html"
+            if path.include? "app/html"
+                next
+            end
             
             appfolder = path.split( "/" ).last
             app=appfolder.strip! || appfolder

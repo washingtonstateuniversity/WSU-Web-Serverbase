@@ -5,7 +5,6 @@ base:
     - security
     - web
     - caching
-    - finalize.restart
   'env:vagrant':
     - match: grain
     - env.development
@@ -14,6 +13,4 @@ base:
     - match: grain
     - env.production
     - finalize.restart
-
-    
   

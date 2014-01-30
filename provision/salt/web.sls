@@ -75,8 +75,14 @@ nginx-compiler-base:
     - name: /src/
     - user: root
     - group: root
-    - mode: 644
-    
+    - mode: 777
+
+#/srv/salt/base/config/nginx/compiler.sh:
+#  file.managed:
+#   - user: root
+#   - group: root
+#   - mode: 755
+
 # Run compiler
 nginx-compile:
   cmd.run:

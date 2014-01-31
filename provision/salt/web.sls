@@ -86,7 +86,7 @@ nginx-compiler-base:
 # Run compiler
 nginx-compile-script:
   file.managed:
-    - name: /src/nginx/compiler.sh
+    - name: /src/compiler.sh
     - source: salt://config/nginx/compiler.sh
     - user: root
     - group: root
@@ -95,7 +95,7 @@ nginx-compile-script:
 # Run compiler
 nginx-compile:
   cmd.run:
-    - name: /src/nginx/compiler.sh {{ nginx_version }}
+    - name: /src/compiler.sh {{ nginx_version }}
     - cwd: /
     - user: root
     - stateful: True

@@ -57,6 +57,30 @@
                         <h2 class="header">How to do development</h2>
                         <p>There is an ideal way to development for Magento against the WSUMAGE-base repo.  First you must load the project up under the WSU-Web-Serverbase repo.  This will give you a copy of the production version of the site through a local development area.  This area is a Vagrant controlled a headless VirtualBox.  Once this project is loaded with in the serverbase, you will be able to push changes to this local live site.</p>
                     </div>
+
+
+                    <section>
+                        <a name="#devModsLoaded"></a>
+                        <h3>Vagrant options</h3>
+                    <div class="wrapper markdown-body">
+                        <p>At the top of the <code>Vagrantfile</code>, which is a ruby coded file, you have some options that you may use to change your environment that you are loading.</p>
+                    <pre><code>#######################
+# CONFIG Values
+#####################
+ip="10.10.30.30"        # (str) default:10.10.30.30             - ip of the VirturalBox
+hostname="WSUBASE"      # (str) default:WSUBASE                 - name of the host
+memory=512              # (int) default:512                     - How much memory would you like to share from your host
+cores=2                 # (int) default:1                       - How many processor from the host do you want to share
+host_64bit=true         # (bool) default:false                  - If you are on windows and are sharing more then 2 cores set to true
+install_type='testing'  # (testing) default:testing             - Type of install
+minion='vagrant'        # (vagrant/production) default:vagrant  - Which minion to run
+verbose_output=true     # (bool) default:true                   - How much do you want to see in the console
+</code></pre>
+ </div>
+                     </section>                   
+                    
+                    
+                    
                     
                     <section>
                         <a name="#devModsLoaded"></a>

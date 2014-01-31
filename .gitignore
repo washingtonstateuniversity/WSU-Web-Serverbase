@@ -13,3 +13,6 @@
 # Ignore Web files pulled into the mapped www directory.
 /app/*
 !app/.gitshow
+
+# Ignore the suggested logging
+log.txt

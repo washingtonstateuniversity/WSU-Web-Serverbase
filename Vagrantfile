@@ -207,7 +207,7 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         
         $provision_script=""
         $provision_script<<"cp /srv/salt/base/config/yum.conf /etc/yum.conf\n"
-        $provision_script<<"sh /srv/salt/base/boot/bootstrap_salt.sh\n"
+        $provision_script<<"sh /srv/salt/base/boot/bootstrap-salt.sh\n"
         $provision_script<<"cp /srv/salt/base/minions/#{minion}.conf /etc/salt/minion.d/\n"
         $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base\n"
         # Set up the web apps

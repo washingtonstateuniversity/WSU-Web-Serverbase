@@ -57,6 +57,30 @@
                         <h2 class="header">How to do development</h2>
                         <p>There is an ideal way to development for Magento against the WSUMAGE-base repo.  First you must load the project up under the WSU-Web-Serverbase repo.  This will give you a copy of the production version of the site through a local development area.  This area is a Vagrant controlled a headless VirtualBox.  Once this project is loaded with in the serverbase, you will be able to push changes to this local live site.</p>
                     </div>
+
+
+                    <section>
+                        <a name="#devVagrantOptions"></a>
+                        <h3>Vagrant options</h3>
+                    <div class="wrapper markdown-body">
+                        <p>At the top of the <code>Vagrantfile</code>, which is a ruby coded file, you have some options that you may use to change your environment that you are loading.</p>
+                    <pre><code>#######################
+# CONFIG Values
+#####################
+ip="10.10.30.30"        # (str) default:10.10.30.30             - ip of the VirturalBox
+hostname="WSUBASE"      # (str) default:WSUBASE                 - name of the host
+memory=512              # (int) default:512                     - How much memory would you like to share from your host
+cores=2                 # (int) default:1                       - How many processor from the host do you want to share
+host_64bit=true         # (bool) default:false                  - If you are on windows and are sharing more then 2 cores set to true
+install_type='testing'  # (testing) default:testing             - Type of install
+minion='vagrant'        # (vagrant/production) default:vagrant  - Which minion to run
+verbose_output=true     # (bool) default:true                   - How much do you want to see in the console
+</code></pre>
+ </div>
+                     </section>                   
+                    
+                    
+                    
                     
                     <section>
                         <a name="#devModsLoaded"></a>
@@ -143,41 +167,32 @@
 	
 </section><!--/#wsu-actions-->
 
-<nav id="navigation">
-
-<nav id="site">
-<!-- Your navigation list here
-	• Active link should be denoted with an "active" or "current" link on the link's parent li tag.
-	• First link should be home link (otherwise, add "homeless" class to #site nav)
-	• Replace example navigation list below
--->
-
-<ul>
-	<li><a href="/WSU-Web-Serverbase/">WSU Server Environment</a></li>
-	<li class="current">
-		<a href="/WSU-Web-Serverbase/development.html">Development</a>
-        <ul>
-            <li><a href="/WSU-Web-Serverbase/development.html#devModsLoaded">Whats loaded?</a></li>
-        </ul>
-	</li>
-    <li>
-        <a href="/WSU-Web-Serverbase/production.html">Production</a>
-        <ul>
-            <li><a href="/WSU-Web-Serverbase/production.html#productionModsLoaded">Whats loaded?</a></li>
-        </ul>
-    </li>
-</ul>
-
-</nav>
-
-<nav id="offsite">
-	<ul>
-		<li><a href="">Offsite Link</a></li>
-		<li><a href="">Another</a></li>
-	</ul>
-</nav>
-
-</nav><!-- #navigation -->
+        <nav id="navigation">
+            <nav id="site">
+                <ul>
+                    <li><a href="/WSU-Web-Serverbase/">WSU Server Environment</a></li>
+                    <li class="current">
+                        <a href="/WSU-Web-Serverbase/development.html">Development</a>
+                        <ul>
+                            <li><a href="/WSU-Web-Serverbase/development.html#devVagrantOptions">Vagrant Options</a></li>
+                            <li><a href="/WSU-Web-Serverbase/development.html#devModsLoaded">Whats loaded?</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/WSU-Web-Serverbase/production.html">Production</a>
+                        <ul>
+                            <li><a href="/WSU-Web-Serverbase/production.html#productionModsLoaded">Whats loaded?</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <!--<nav id="offsite">
+                <ul>
+                    <li><a href="">Offsite Link</a></li>
+                    <li><a href="">Another</a></li>
+                </ul>
+            </nav> -->
+        </nav><!-- #navigation -->
 
 <!-- Social and Global Links -->
 <footer>

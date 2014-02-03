@@ -23,12 +23,12 @@ user-www-data:
     - require:
       - group: www-data
 
-/etc/hosts:
-  file.managed:
-    - source: salt://config/hosts
-    - user: root
-    - group: root
-    - mode: 644
+#/etc/hosts:
+#  file.managed:
+#    - source: salt://config/hosts
+#    - user: root
+#    - group: root
+#    - mode: 644
 
 
 #worth noting that there will be some changes as this just gets nuked it seems

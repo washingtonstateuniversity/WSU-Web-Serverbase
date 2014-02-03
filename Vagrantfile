@@ -162,7 +162,7 @@ ERR
         end
 
         if defined? VagrantPlugins::HostsUpdater
-            $ok_msg = "The vagrant-hosts plugin is loaded"
+            $ok_msg = "The vagrant-hostsupdater plugin is loaded"
             puts $ok_msg
         else
         $err_msg = <<ERR
@@ -178,7 +178,6 @@ ERR
             puts $err_msg
             abort()
         end
-
 
 
 

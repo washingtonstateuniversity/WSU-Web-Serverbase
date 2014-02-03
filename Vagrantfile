@@ -9,6 +9,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+    # Parse options
+    options = {}
+
 #######################
 # CONFIG Values
 #####################
@@ -26,9 +29,20 @@ verbose_output=true     # (bool) default:true                   - How much do yo
 #######################
 # Setup
 ######################
-
 # There shouldn't be anything to edit below this point config wise
 ####################################################################
+
+
+    if ARGV[ARGV.length-1]
+        options[:env] = ARGV[ARGV.length-1].split( "=" ).last
+    else
+        options[:env] = nil
+    end
+    
+    
+    #ARGV.delete_at(1)
+    #ARGV.delete_at(1)
+
 
     ################################################################ 
     # Setup value defaults
@@ -120,7 +134,6 @@ verbose_output=true     # (bool) default:true                   - How much do yo
     # Start Vagrant
     ################################################################   
     Vagrant.configure("2") do |config|
-
 
 
 
@@ -276,12 +289,21 @@ ERR
         $provision_script<<"cp /srv/salt/base/config/yum.conf /etc/yum.conf\n"
         $provision_script<<"sh /srv/salt/base/boot/bootstrap-salt.sh\n"
         $provision_script<<"cp /srv/salt/base/minions/#{minion}.conf /etc/salt/minion.d/\n"
-        $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base\n"
-        # Set up the web apps
-        #########################
-        apps.each do |app| 
-            config.vm.synced_folder "app/#{app}/provision/salt", "/srv/salt/#{app}"
-            $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{app}\n"
+        
+        env=options[:env]
+        if apps.include?env
+        then
+            $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{env}\n"
+        else
+            $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base\n"
+            
+            # Set up the web apps
+            #########################
+            apps.each do |app| 
+                config.vm.synced_folder "app/#{app}/provision/salt", "/srv/salt/#{app}"
+                $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{app}\n"
+            end
         end
+
         config.vm.provision "shell", inline: $provision_script
     end

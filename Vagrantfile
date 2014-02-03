@@ -32,17 +32,20 @@ verbose_output=true     # (bool) default:true                   - How much do yo
 # There shouldn't be anything to edit below this point config wise
 ####################################################################
 
-
-    if ARGV[ARGV.length-1]
-        options[:env] = ARGV[ARGV.length-1].split( "=" ).last
-    else
-        options[:env] = nil
+    
+    ARGV.each do |arg|        
+        if arg.include?'env='
+            puts arg
+            options[:env] = arg.split( "=" ).last
+            ARGV.delete_at(ARGV.index(arg))
+        else
+            options[:env] = nil
+        end
     end
-    
-    
-    #ARGV.delete_at(1)
-    #ARGV.delete_at(1)
-
+    puts "now what is"
+    ARGV.each do |arg|        
+        puts arg
+    end
 
     ################################################################ 
     # Setup value defaults

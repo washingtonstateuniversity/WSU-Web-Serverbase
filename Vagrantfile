@@ -228,8 +228,6 @@ ERR
 
         # register hosts for all hosts for apps and the server
         ################################################################
-        APPHOSTS=   "#APP_HOSTS-\n"
-        APPHOSTS << "127.0.0.1           demo\n"
         # Local Machine Hosts
         # Capture the paths to all `hosts` files under the repository's provision directory.
         paths = []
@@ -247,7 +245,6 @@ ERR
               file_hosts.each do |line|
                 if line[0..0] != "#"
                   new_hosts << line
-                  APPHOSTS << "127.0.0.1           #{line}\n"
                 end
               end
               hosts.concat new_hosts
@@ -262,16 +259,6 @@ ERR
           provisioner.add_host '127.0.0.1', hosts
         end
 
-
-
-
-        
-        APPHOSTS << "#ENDOF_APP_HOSTS-"
-        filename = vagrant_dir+"/provision/salt/config/hosts"
-        text = File.read(filename) 
-        edited = text.gsub(/\#APP_HOSTS-.*\#ENDOF_APP_HOSTS-/im, APPHOSTS)
-        File.open(filename, "w") { |file| file << edited }
-         
         # Set file mounts
         ################################################################           
         # Mount the local project's app/ directory as /var/app inside the virtual machine. This will

@@ -36,7 +36,7 @@ cd /src/salt && git clone --depth 1 https://github.com/jeremyBass/WSU-Web-Server
 #start provisioning
 rm -fr /etc/yum.conf
 cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
-sh /srv/salt/base/boot/bootstrap_salt.sh
+sh /srv/salt/base/boot/bootstrap-salt.sh
 rm -fr /etc/salt/minion.d/
-cp -fu --remove-destination /srv/salt/base/minions/wsuwp-vagrant.conf /etc/salt/minion.d/
+cp -fu --remove-destination /srv/salt/base/minions/vagrant.conf /etc/salt/minion.d/
 

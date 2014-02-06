@@ -15,8 +15,8 @@
 #===============================================================================
 
 #this is very lazy but it's just for now
-cd /src && rm -fr salt
-cd /srv && rm -fr salt
+rm -fr /src/salt
+rm -fr /srv/salt
 
 
 #install git
@@ -28,7 +28,7 @@ yum install -y git
 
 #start cloning it the provisioner
 cd /src/salt && git clone --depth 1 https://github.com/jeremyBass/WSU-Web-Serverbase.git
-[ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv /src/salt/WSU-Web-Serverbase/provision /srv/salt/base
+[ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv /src/salt/WSU-Web-Serverbase/provision/ /srv/salt/base/
 
 #make app folder
 [ -d /var/app ] || mkdir -p /var/app

@@ -18,6 +18,11 @@ patch:
   pkg.installed:
     - name: patch
 
+wget:
+  pkg.installed:
+    - name: wget
+
+
 ###########################################################
 ###########################################################
 # Mangage the kernel

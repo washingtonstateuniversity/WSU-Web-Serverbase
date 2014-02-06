@@ -17,15 +17,21 @@
   if [ ! -d /srv/salt/base ];
   then
   
-    yum install -y unzip
-  
-    cd / && mkdir -p /srv/salt/base
-    cd / && mkdir -p /src/salt
-    cd /src/salt && curl -o wsu-web.zip -L https://github.com/washingtonstateuniversity/WSU-Web-Serverbase/archive/master.zip
-    cd /src/salt && unzip -po wsu-web.zip
-  
-    ln -s /src/salt/WSU-Web-Serverbase-master/provision/salt /srv/salt/base
+    #install git
+    yum install -y git
+    
+    #ensure the src bed
+    [ -d /src/salt ] || mkdir -p /src/salt
+    [ -d /srv/salt/base ] || mkdir -p /srv/salt/base
 
+    #start cloning it the provisioner
+    cd /src/salt && git clone https://github.com/jeremyBass/WSU-Web-Serverbase.git
+    [ -d /srv/salt/WSU-Web-Serverbase/provision  ] || mv /srv/salt/WSU-Web-Serverbase/provision /srv/salt/base
+    
+    #make app folder
+    [ -d /var/app ] || mkdir -p /var/app
+
+    #start provisioning
     cp /srv/salt/base/config/yum.conf /etc/yum.conf
     sh /srv/salt/base/boot/bootstrap_salt.sh
     cp /srv/salt/base/salt/minions/wsuwp-vagrant.conf /etc/salt/minion.d/

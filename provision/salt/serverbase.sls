@@ -18,6 +18,10 @@ patch:
   pkg.installed:
     - name: patch
 
+unzip:
+  pkg.installed:
+    - name: unzip
+
 wget:
   pkg.installed:
     - name: wget

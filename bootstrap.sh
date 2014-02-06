@@ -26,7 +26,7 @@
 
     #start cloning it the provisioner
     cd /src/salt && git clone https://github.com/jeremyBass/WSU-Web-Serverbase.git
-    [ -d /srv/salt/WSU-Web-Serverbase/provision  ] || mv /srv/salt/WSU-Web-Serverbase/provision /srv/salt/base
+    [ -d /src/salt/WSU-Web-Serverbase/provision  ] || mv /src/salt/WSU-Web-Serverbase/provision /srv/salt/base
     
     #make app folder
     [ -d /var/app ] || mkdir -p /var/app

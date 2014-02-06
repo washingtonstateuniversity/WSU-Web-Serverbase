@@ -28,13 +28,15 @@ yum install -y git
 
 #start cloning it the provisioner
 cd /src/salt && git clone --depth 1 https://github.com/jeremyBass/WSU-Web-Serverbase.git
-[ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv /src/salt/WSU-Web-Serverbase/provision/ /srv/salt/base/
+[ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
 
 #make app folder
 [ -d /var/app ] || mkdir -p /var/app
 
 #start provisioning
-cp /srv/salt/base/config/yum.conf /etc/yum.conf
+rm -fr /etc/yum.conf
+cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
 sh /srv/salt/base/boot/bootstrap_salt.sh
-cp /srv/salt/base/salt/minions/wsuwp-vagrant.conf /etc/salt/minion.d/
+rm -fr /etc/salt/minion.d/
+cp -fu --remove-destination /srv/salt/base/minions/wsuwp-vagrant.conf /etc/salt/minion.d/
 

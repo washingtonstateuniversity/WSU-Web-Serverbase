@@ -15,22 +15,22 @@
 #===============================================================================
 
 
-    #install git
-    yum install -y git
-    
-    #ensure the src bed
-    [ -d /src/salt ] || mkdir -p /src/salt
-    [ -d /srv/salt/base ] || mkdir -p /srv/salt/base
+#install git
+yum install -y git
 
-    #start cloning it the provisioner
-    cd /src/salt && git clone https://github.com/jeremyBass/WSU-Web-Serverbase.git
-    [ -d /src/salt/WSU-Web-Serverbase/provision  ] || mv /src/salt/WSU-Web-Serverbase/provision /srv/salt/base
-    
-    #make app folder
-    [ -d /var/app ] || mkdir -p /var/app
+#ensure the src bed
+[ -d /src/salt ] || mkdir -p /src/salt
+[ -d /srv/salt/base ] || mkdir -p /srv/salt/base
 
-    #start provisioning
-    cp /srv/salt/base/config/yum.conf /etc/yum.conf
-    sh /srv/salt/base/boot/bootstrap_salt.sh
-    cp /srv/salt/base/salt/minions/wsuwp-vagrant.conf /etc/salt/minion.d/
+#start cloning it the provisioner
+cd /src/salt && git clone https://github.com/jeremyBass/WSU-Web-Serverbase.git
+[ -d /src/salt/WSU-Web-Serverbase/provision  ] || mv /src/salt/WSU-Web-Serverbase/provision /srv/salt/base
+
+#make app folder
+[ -d /var/app ] || mkdir -p /var/app
+
+#start provisioning
+cp /srv/salt/base/config/yum.conf /etc/yum.conf
+sh /srv/salt/base/boot/bootstrap_salt.sh
+cp /srv/salt/base/salt/minions/wsuwp-vagrant.conf /etc/salt/minion.d/
 

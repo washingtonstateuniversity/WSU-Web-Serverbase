@@ -27,7 +27,7 @@ yum install -y git
 [ -d /srv/salt/base ] || mkdir -p /srv/salt/base
 
 #start cloning it the provisioner
-cd /src/salt && git clone --depth 1 https://github.com/jeremyBass/WSU-Web-Serverbase.git
+cd /src/salt && git clone --depth 1 https://github.com/washingtonstateuniversity/WSU-Web-Serverbase.git
 [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
 
 #make app folder

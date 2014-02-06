@@ -16,7 +16,7 @@
 
 #this is very lazy but it's just for now
 rm -fr /src/salt
-rm -fr /srv/salt
+#rm -fr /srv/salt
 
 
 #install git

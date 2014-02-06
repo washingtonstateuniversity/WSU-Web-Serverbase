@@ -14,6 +14,7 @@ nginxVersion="$1"
 #set the compiler to be quite
 #then return message only it it's a fail
 ini(){
+    [ -d /src/nginx ] || mkdir -p /src/nginx
     cd /src
     #nginxVersion="1.5.8" # set the value here from nginx website
     wget -N http://nginx.org/download/nginx-$nginxVersion.tar.gz 2>/dev/null

@@ -273,12 +273,9 @@ ERR
         # will be bootstrapped automatically. We have provided a modified local bootstrap script to
         # avoid network connectivity issues and to specify that a newer version of Salt be installed.
         
-        config.vm.synced_folder "provision/salt", "/srv/salt/base"
-        
         $provision_script=""
-        $provision_script<<"cp /srv/salt/base/config/yum.conf /etc/yum.conf\n"
-        $provision_script<<"sh /srv/salt/base/boot/bootstrap-salt.sh\n"
-        $provision_script<<"cp /srv/salt/base/minions/#{minion}.conf /etc/salt/minion.d/\n"
+        $provision_script<<"curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/master/bootstrap.sh | sudo sh \n"
+        #$provision_script<<"cp /srv/salt/base/minions/#{minion}.conf /etc/salt/minion.d/\n"
         
         env=options[:env]
         if apps.include?env

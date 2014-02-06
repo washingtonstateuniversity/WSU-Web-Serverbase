@@ -10,6 +10,11 @@ user-mysql:
     - require_in:
       - pkg: mysql
 
+#this needs to be moved out
+group-vagrant:
+  group.present:
+    - name: vagrant
+
 user-vagrant:
   user.present:
     - name: vagrant

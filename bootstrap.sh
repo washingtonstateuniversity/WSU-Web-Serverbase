@@ -16,6 +16,9 @@
 
   if [ ! -d /srv/salt/base ];
   then
+  
+    yum install -y unzip
+  
     cd /srv && mkdir -p srv/salt/base
     cd / && mkdir -p src/salt
     cd /src/salt && curl -o wsu-web.zip -L https://github.com/washingtonstateuniversity/WSU-Web-Serverbase/archive/master.zip

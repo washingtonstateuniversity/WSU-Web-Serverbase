@@ -22,7 +22,7 @@
     cd / && mkdir -p /srv/salt/base
     cd / && mkdir -p /src/salt
     cd /src/salt && curl -o wsu-web.zip -L https://github.com/washingtonstateuniversity/WSU-Web-Serverbase/archive/master.zip
-    cd /src/salt && unzip wsu-web.zip
+    cd /src/salt && unzip -po wsu-web.zip
   
     ln -s /src/salt/WSU-Web-Serverbase-master/provision/salt /srv/salt/base
 

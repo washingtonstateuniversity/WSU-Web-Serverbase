@@ -14,6 +14,10 @@
 #       CREATED: 1/1/2014
 #===============================================================================
 
+#this is very lazy but it's just for now
+cd /src && rm -fr salt
+cd /srv && rm -fr salt
+
 
 #install git
 yum install -y git

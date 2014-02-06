@@ -33,8 +33,4 @@
     cp /srv/salt/base/config/yum.conf /etc/yum.conf
     sh /srv/salt/base/boot/bootstrap_salt.sh
     cp /srv/salt/base/salt/minions/wsuwp-vagrant.conf /etc/salt/minion.d/
-  if [ ! -d /srv/salt/base ];
-  then
-  
-  fi
-  
+

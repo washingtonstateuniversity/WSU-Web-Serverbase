@@ -116,7 +116,6 @@ init_modgit(){
     #make app folder
     [ -d /var/app ] || mkdir -p /var/app
     if [ -f /usr/local/bin/modgit ]
-    then
         echo -n "modgit was already loaded"
     else
         #ensure the deployment bed

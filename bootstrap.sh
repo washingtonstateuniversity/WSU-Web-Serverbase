@@ -58,7 +58,7 @@ END
 #   DESCRIPTION:  Echo errors to stderr.
 #===============================================================================
 echoerror() {
-    printf "${RC} * ERROR${EC}: $@\n" 1>&2;
+    printf "ERROR: $@\n" 1>&2;
 }
 
 

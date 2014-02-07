@@ -59,7 +59,7 @@ _BRANCH=""
 _TAG=""
 
 # Handle options
-while getopts ":vhd:m:o:b:" opt
+while getopts ":vhd:m:o:b:t:" opt
 do
   case "${opt}" in
   

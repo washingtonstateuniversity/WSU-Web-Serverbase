@@ -41,7 +41,9 @@ usage() {
   -m   (Minion) Use a minion of choice.  Defaults to first one found
   
   -o   (Owner) The owner of the repo to draw from    
-
+  
+  -b   (Branch) The branch to use for the server repo
+  
   **COMING
   -d   (Dry run) Dry run mode (show what would be done)
 
@@ -51,10 +53,10 @@ END
 
 _MINION="vagrant"
 _OWNER="jeremyBass"
-
+_BRANCH=""
 
 # Handle options
-while getopts ":vhd:m:o:" opt
+while getopts ":vhd:m:o:b:" opt
 do
   case "${opt}" in
   
@@ -63,7 +65,7 @@ do
     
     m ) _MINION=$OPTARG                                 ;;
     o ) _OWNER=$OPTARG                                  ;;
-
+    b ) _BRANCH=$OPTARG                                 ;;
     
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -92,7 +94,8 @@ yum install -y git
 [ -d /srv/salt/base ] || mkdir -p /srv/salt/base
 
 #start cloning it the provisioner
-cd /src/salt && git clone --depth 1 https://github.com/${_OWNER}/WSU-Web-Serverbase.git
+[ -z ${_BRANCH} ] || _BRANCH=" -b ${_BRANCH}"
+cd /src/salt && git clone --depth 1 ${_BRANCH} https://github.com/${_OWNER}/WSU-Web-Serverbase.git
 [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
 
 #make app folder

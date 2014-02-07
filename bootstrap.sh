@@ -115,7 +115,7 @@ provision_env(){
 init_modgit(){
     #make app folder
     [ -d /var/app ] || mkdir -p /var/app
-    if [ -f /usr/local/bin/modgit ]; then
+    if [ -f /usr/sbin/modgit ]; then
         echo "modgit was already loaded"
     else
         #ensure the deployment bed

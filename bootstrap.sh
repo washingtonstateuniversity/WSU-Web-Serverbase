@@ -38,12 +38,13 @@ usage() {
   
   -h   Show this help
   
-  -d   (Dry run) Dry run mode (show what would be done)
-  
   -m   (Minion) Use a minion of choice.  Defaults to first one found
   
   -o   (Owner) The owner of the repo to draw from    
-                
+
+  **COMING
+  -d   (Dry run) Dry run mode (show what would be done)
+
 END
 }
 # ----------  end of usage  ----------

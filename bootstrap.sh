@@ -53,6 +53,11 @@ END
 }
 # ----------  end of usage  ----------
 
+_MINION="vagrant"
+_OWNER="washingtonstateuniversity"
+_BRANCH=""
+_TAG=""
+
 #===  FUNCTION  ================================================================
 #          NAME:  echoerr
 #   DESCRIPTION:  Echo errors to stderr.
@@ -62,11 +67,12 @@ echoerror() {
 }
 
 
+
 #===  FUNCTION  ================================================================
-#          NAME:  initboot
+#          NAME:  init_boot
 #   DESCRIPTION:  starts the booting of the provisioning.
 #===============================================================================
-initboot() {
+init_boot() {
     #this is very lazy but it's just for now
     rm -fr /src/salt
 
@@ -74,40 +80,12 @@ initboot() {
     yum install -y git
 }
 
-
-_MINION="vagrant"
-_OWNER="washingtonstateuniversity"
-_BRANCH=""
-_TAG=""
-
-# Handle options
-while getopts ":vhd:m:o:b:t:i:" opt
-do
-  case "${opt}" in
-  
-    v )  echo "$0 -- Version $__ScriptVersion"; exit 0  ;;
-    h )  usage; exit 0                                  ;;
-    
-    m ) _MINION=$OPTARG                                 ;;
-    o ) _OWNER=$OPTARG                                  ;;
-    b ) _BRANCH=$OPTARG                                 ;;
-    t ) _TAG=$OPTARG                                    ;;
-
-    i ) initboot                                        ;;
-    p ) initboot                                        ;;
-
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument" >&2
-      exit 1
-      ;;
-  esac
-done
-
+#===  FUNCTION  ================================================================
+#          NAME:  init_provision
+#   DESCRIPTION:  starts the booting of the provisioning.
+#===============================================================================
 init_provision(){
+    which git ls 2>&1 | grep -qi "/usr/bin/which: no git " && init_boot
     #ensure the src bed
     [ -d /src/salt ] || mkdir -p /src/salt
     [ -d /srv/salt/base ] || mkdir -p /srv/salt/base
@@ -136,7 +114,34 @@ provision_env(){
     salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base
 }
 
-
 #for check salt insalled /etc/salt/pki
 
 
+# Handle options
+while getopts ":vhd:m:o:b:t:i:" opt
+do
+  case "${opt}" in
+  
+    v )  echo "$0 -- Version $__ScriptVersion"; exit 0  ;;
+    h )  usage; exit 0                                  ;;
+    
+    m ) _MINION=$OPTARG                                 ;;
+    o ) _OWNER=$OPTARG                                  ;;
+    b ) _BRANCH=$OPTARG                                 ;;
+    t ) _TAG=$OPTARG                                    ;;
+
+    e ) _ENV=$OPTARG                                    ;;
+
+    i ) init_provision                                  ;;
+    p ) provision_env                                   ;;
+
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument" >&2
+      exit 1
+      ;;
+  esac
+done

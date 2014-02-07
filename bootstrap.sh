@@ -67,7 +67,6 @@ echoerror() {
 }
 
 
-
 #===  FUNCTION  ================================================================
 #          NAME:  init_boot
 #   DESCRIPTION:  starts the booting of the provisioning.
@@ -76,6 +75,22 @@ init_boot() {
     #install git
     yum install -y git
 }
+
+
+#===  FUNCTION  ================================================================
+#          NAME:  provision_env
+#   DESCRIPTION:  provision an environment.
+#===============================================================================
+provision_env(){
+    envs_str=$1
+    IFS=';' read -ra envs <<< "$envs_str"
+    for env in "${!envs[@]}" #loop with key as the var
+    do
+        salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}
+    done
+    return 1
+}
+
 
 #===  FUNCTION  ================================================================
 #          NAME:  init_provision
@@ -108,14 +123,9 @@ init_provision(){
     cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
     sh /srv/salt/base/boot/bootstrap-salt.sh
     cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
+    provision_env "base"
 }
 
-provision_env(){
-    #start the provisioning
-    salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base
-}
-
-#for check salt insalled /etc/salt/pki
 
 
 # Handle options
@@ -146,3 +156,6 @@ do
       ;;
   esac
 done
+
+
+

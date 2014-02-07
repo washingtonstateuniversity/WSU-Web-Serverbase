@@ -67,44 +67,12 @@ echoerror() {
 #   DESCRIPTION:  starts the booting of the provisioning.
 #===============================================================================
 initboot() {
-#    if [ -d /etc/salt/pki ]; then 
-#        echoerror "the server has already been bootstrapped once before"
-#        exit 1
-#    fi
-
     #this is very lazy but it's just for now
     rm -fr /src/salt
 
     #install git
     yum install -y git
-    
-    #ensure the src bed
-    [ -d /src/salt ] || mkdir -p /src/salt
-    [ -d /srv/salt/base ] || mkdir -p /srv/salt/base
-    
-    #start cloning it the provisioner
-    [[ -z "${_BRANCH}" ]] || _BRANCH=' -b '$_BRANCH
-    [[ -z "${_TAG}" ]] || _TAG=' -t '$_TAG
-    
-    git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
-    
-    cd /src/salt && eval $git_cmd 
-    [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
-    
-    #make app folder
-    [ -d /var/app ] || mkdir -p /var/app
-    
-    #start provisioning
-    rm -fr /etc/yum.conf
-    cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
-    sh /srv/salt/base/boot/bootstrap-salt.sh
-    cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
-    
-    #start the provisioning
-    salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base
 }
-
-
 
 
 _MINION="vagrant"
@@ -139,6 +107,32 @@ do
   esac
 done
 
+init_provision(){
+    #ensure the src bed
+    [ -d /src/salt ] || mkdir -p /src/salt
+    [ -d /srv/salt/base ] || mkdir -p /srv/salt/base
+    
+    #start cloning it the provisioner
+    [[ -z "${_BRANCH}" ]] || _BRANCH=' -b '$_BRANCH
+    [[ -z "${_TAG}" ]] || _TAG=' -t '$_TAG
+    
+    git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
+    
+    cd /src/salt && eval $git_cmd 
+    [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
+    
+    #make app folder
+    [ -d /var/app ] || mkdir -p /var/app
+    
+    #start provisioning
+    rm -fr /etc/yum.conf
+    cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
+    sh /srv/salt/base/boot/bootstrap-salt.sh
+    cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
+
+    #start the provisioning
+    salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base
+}
 
 
 

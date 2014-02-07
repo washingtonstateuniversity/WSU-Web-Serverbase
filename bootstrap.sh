@@ -88,6 +88,7 @@ echoerror() {
 provision_env(){
     envs_str=$1
     IFS=';' read -ra envs <<< "$envs_str"
+
     for env in "${!envs[@]}" #loop with key as the var
     do
         salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}
@@ -107,10 +108,9 @@ init_modgit(){
     curl https://raw.github.com/jeremyBass/modgit/master/modgit > /src/deployment/modgit
     chmod a=r+w+x /src/deployment/modgit
     ln -s /src/deployment/modgit /usr/local/bin/modgit
-    cd /var/app
-    modgit init
+    cd /var/app && modgit init
 }
-#modgit add store.wsu.edu https://github.com/jeremyBass/WSUMAGE-base.git
+
 
 #===  FUNCTION  ================================================================
 #          NAME:  init_provision

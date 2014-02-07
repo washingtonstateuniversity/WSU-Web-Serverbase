@@ -57,6 +57,20 @@ _MINION="vagrant"
 _OWNER="washingtonstateuniversity"
 _BRANCH=""
 _TAG=""
+_ENV="base"
+
+#===  FUNCTION  ================================================================
+#          NAME:  echoerr
+#   DESCRIPTION:  Echo errors to stderr.
+#===============================================================================
+load_env() {
+  if [ -z "$_ENV" ]; then
+    _ENV="$1"
+  else
+    _ENV="$_ENV,$1"
+  fi
+}
+
 
 #===  FUNCTION  ================================================================
 #          NAME:  echoerr
@@ -113,7 +127,7 @@ init_provision(){
     [ -f /srv/salt/base/config/yum.conf ] && cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
     sh /srv/salt/base/boot/bootstrap-salt.sh
     cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
-    provision_env "base"
+    provision_env $_ENV
 }
 
 
@@ -131,10 +145,10 @@ do
     b ) _BRANCH=$OPTARG                                 ;;
     t ) _TAG=$OPTARG                                    ;;
 
-    e ) _ENV=$OPTARG                                    ;;
+    e ) load_envs $OPTARG                               ;;
 
     i ) init_provision                                  ;;
-    p ) provision_env                                   ;;
+    p ) provision_env $OPTARG                           ;;
 
     \?)
       echo "Invalid option: -$OPTARG" >&2

@@ -126,7 +126,7 @@ init_modgit(){
         curl https://raw.github.com/jeremyBass/modgit/master/modgit > /src/deployment/modgit
         ln -s /src/deployment/modgit /usr/local/bin/modgit
         chmod a=r+w+x /usr/local/bin/modgit
-    if
+    fi
     cd /var/app
     modgit init
 }

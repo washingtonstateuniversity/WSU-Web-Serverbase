@@ -71,7 +71,7 @@ do
     b ) _BRANCH=$OPTARG                                 ;;
     t ) _TAG=$OPTARG                                    ;;
 
-    i ) init                                            ;;
+    i ) _init                                           ;;
 
 
     \?)
@@ -87,7 +87,7 @@ done
 
 
 
-init() {
+_init() {
     #this is very lazy but it's just for now
     rm -fr /src/salt
     #rm -fr /srv/salt

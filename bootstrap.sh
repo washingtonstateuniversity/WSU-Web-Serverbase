@@ -122,7 +122,9 @@ init_modgit(){
         [ -d /src/deployment ] || mkdir -p /src/deployment
         curl https://raw.github.com/jeremyBass/modgit/master/modgit > /src/deployment/modgit
         ln -s /src/deployment/modgit /usr/local/bin/modgit
+        ln -s /src/deployment/modgit /usr/sbin/modgit
         ln -s /src/deployment/modgit /etc/init.d/modgit
+        
         chmod a=r+w+x /usr/local/bin/modgit
         
     fi
@@ -140,15 +142,16 @@ load_app(){
     app_str=$1
     IFS=':' read -ra app <<< "$app_str"
     cd /var/app
-    if [ -f /srv/salt/${app[0]} ]; then
+    if [ -f "/srv/salt/${app[0]}" ]; then
         echo "app already linked"
     else
+        #bring it in with modgit
         modgit add ${app[0]} https://github.com/${app[1]}.git
         
         #symlink the app for provisioning
-        ln -s /var/app/${app[0]}/provision/salt /srv/salt/${app[0]}
-        #add the app to the queue of provisioning to do
+        [ -f "/var/app/${app[0]}/provision/salt" ] || ln -s /var/app/${app[0]}/provision/salt /srv/salt/${app[0]}
     fi
+    #add the app to the queue of provisioning to do
     load_env ${app[0]}
 }
 

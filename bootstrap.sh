@@ -53,16 +53,25 @@ END
 }
 # ----------  end of usage  ----------
 
+#===  FUNCTION  ================================================================
+#          NAME:  echoerr
+#   DESCRIPTION:  Echo errors to stderr.
+#===============================================================================
+echoerror() {
+    printf "${RC} * ERROR${EC}: $@\n" 1>&2;
+}
 
 
+#===  FUNCTION  ================================================================
+#          NAME:  initboot
+#   DESCRIPTION:  starts the booting of the provisioning.
+#===============================================================================
 initboot() {
-    [ -d /etc/salt/pki ] && fault "the server has already been bootstrapped once before"
+    [ -d /etc/salt/pki ] && echoerror "the server has already been bootstrapped once before"
 
     #this is very lazy but it's just for now
     rm -fr /src/salt
-    #rm -fr /srv/salt
-    
-    
+
     #install git
     yum install -y git
     

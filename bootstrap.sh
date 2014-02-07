@@ -115,8 +115,8 @@ init_modgit(){
     #ensure the deployment bed
     [ -d /src/deployment ] || mkdir -p /src/deployment
     curl https://raw.github.com/jeremyBass/modgit/master/modgit > /src/deployment/modgit
-    chmod a=r+w+x /src/deployment/modgit
     ln -s /src/deployment/modgit /usr/local/bin/modgit
+    chmod a=r+w+x /usr/local/bin/modgit
     cd /var/app
     modgit init
 }

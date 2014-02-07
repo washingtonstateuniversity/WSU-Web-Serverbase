@@ -55,6 +55,8 @@ usage() {
 END
 }
 # ----------  end of usage  ----------
+#start from the root
+cd /
 
 _MINION="vagrant"
 _OWNER="washingtonstateuniversity"
@@ -117,7 +119,6 @@ provision_env(){
 #   DESCRIPTION:  sets up the app deployment pathway.
 #===============================================================================
 init_modgit(){
-    #set up the deployment
     #ensure the deployment bed
     [ -d /src/deployment ] || mkdir -p /src/deployment
     curl https://raw.github.com/jeremyBass/modgit/master/modgit > /src/deployment/modgit

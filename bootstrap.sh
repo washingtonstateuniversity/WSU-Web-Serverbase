@@ -56,6 +56,8 @@ END
 
 
 initboot() {
+    [ -d /etc/salt/pki ] && fault "the server has already been bootstrapped once before"
+
     #this is very lazy but it's just for now
     rm -fr /src/salt
     #rm -fr /srv/salt

@@ -97,6 +97,22 @@ provision_env(){
 
 
 #===  FUNCTION  ================================================================
+#          NAME:  init_modgit
+#   DESCRIPTION:  sets up the app deployment pathway.
+#===============================================================================
+init_modgit(){
+    #set up the deployment
+    #ensure the deployment bed
+    [ -d /src/deployment ] || mkdir -p /src/deployment
+    curl https://raw.github.com/jeremyBass/modgit/master/modgit > /src/deployment/modgit
+    chmod a=r+w+x /src/deployment/modgit
+    ln -s /src/deployment/modgit /usr/local/bin/modgit
+    cd /var/app
+    modgit init
+}
+#modgit add store.wsu.edu https://github.com/jeremyBass/WSUMAGE-base.git
+
+#===  FUNCTION  ================================================================
 #          NAME:  init_provision
 #   DESCRIPTION:  starts the booting of the provisioning.
 #===============================================================================
@@ -127,6 +143,9 @@ init_provision(){
     [ -f /srv/salt/base/config/yum.conf ] && cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
     sh /srv/salt/base/boot/bootstrap-salt.sh
     cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
+    
+    which modgit || init_modgit
+
     provision_env $_ENV
 }
 

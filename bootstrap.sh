@@ -93,7 +93,9 @@ echoerror() {
 load_app(){
     app_str=$1
     IFS=':' read -ra app <<< "$app_str"
-    cd /var/app && modgit add ${app[1]} https://github.com/${app[2]}.git
+    cd /var/app
+    which modgit || init_modgit
+    which modgit && modgit add ${app[1]} https://github.com/${app[2]}.git
     return 1
 }
 

@@ -35,6 +35,8 @@ usage() {
   $(tput bold)NOTE:$(tput sgr0) github is the only supported repo service at this moment
 
   Options:
+  -a   load a web app
+  
   -v   Show gitploy version
   
   -h   Show this help
@@ -83,17 +85,25 @@ echoerror() {
 
 
 #===  FUNCTION  ================================================================
+#          NAME:  load_app
+#   DESCRIPTION:  load web app for the server.
+#===============================================================================
+load_app(){
+    app_str=$1
+    IFS=';' read -ra app <<< "$app_str"
+    cd /var/app && modgit add ${app[1]} https://github.com/${app[2]}.git
+    return 1
+}
+
+
+
+#===  FUNCTION  ================================================================
 #          NAME:  provision_env
 #   DESCRIPTION:  provision an environment.
 #===============================================================================
 provision_env(){
     envs_str=$1
-    IFS=';' read -ra envs <<< "$envs_str"
-
-
-#modgit add store.wsu.edu https://github.com/jeremyBass/WSUMAGE-base.git
-
-
+    IFS=',' read -ra envs <<< "$envs_str"
     for env in "${!envs[@]}" #loop with key as the var
     do
         salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}
@@ -157,7 +167,7 @@ init_provision(){
 
 
 # Handle options
-while getopts ":vhd:m:o:b:t:e:i:p:" opt
+while getopts ":vhd:m:o:b:t:e:i:p:a:" opt
 do
   case "${opt}" in
   
@@ -171,6 +181,7 @@ do
 
     e ) load_envs $OPTARG                               ;;
 
+    a ) load_app  $OPTARG                               ;;
     i ) init_provision                                  ;;
     p ) provision_env $OPTARG                           ;;
 

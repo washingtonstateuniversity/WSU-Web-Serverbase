@@ -32,6 +32,7 @@ usage() {
     $ ${__ScriptName} $(tput bold)-m <minion>$(tput sgr0)
                 => Install a module by cloning specified git repository
 
+  $(tput bold)NOTE:$(tput sgr0) github is the only supported repo service at this moment
 
   Options:
   -v   Show gitploy version
@@ -88,6 +89,10 @@ echoerror() {
 provision_env(){
     envs_str=$1
     IFS=';' read -ra envs <<< "$envs_str"
+
+
+#modgit add store.wsu.edu https://github.com/jeremyBass/WSUMAGE-base.git
+
 
     for env in "${!envs[@]}" #loop with key as the var
     do

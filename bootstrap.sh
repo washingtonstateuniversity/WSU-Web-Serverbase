@@ -67,7 +67,10 @@ echoerror() {
 #   DESCRIPTION:  starts the booting of the provisioning.
 #===============================================================================
 initboot() {
-    [ -f /etc/salt/pki ] && echoerror "the server has already been bootstrapped once before"
+    if [ -d /etc/salt/pki ]; then 
+        echoerror "the server has already been bootstrapped once before"
+        exit 1
+    fi
 
     #this is very lazy but it's just for now
     rm -fr /src/salt

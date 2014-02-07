@@ -41,14 +41,15 @@ usage() {
   -d   (Dry run) Dry run mode (show what would be done)
   
   -m   (Minion) Use a minion of choice.  Defaults to first one found
-    
+  
+  -o   (Owner) The owner of the repo to draw from    
                 
 END
 }
 # ----------  end of usage  ----------
 
 _MINION="vagrant"
-
+_OWNER="jeremyBass"
 
 
 # Handle options
@@ -59,7 +60,9 @@ do
     v )  echo "$0 -- Version $__ScriptVersion"; exit 0  ;;
     h )  usage; exit 0                                  ;;
     
-    m ) _MINION=$OPTARG                     ;;
+    m ) _MINION=$OPTARG                                 ;;
+    o ) _OWNER=$OPTARG                                  ;;
+    
     
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -88,7 +91,7 @@ yum install -y git
 [ -d /srv/salt/base ] || mkdir -p /srv/salt/base
 
 #start cloning it the provisioner
-cd /src/salt && git clone --depth 1 https://github.com/jeremyBass/WSU-Web-Serverbase.git
+cd /src/salt && git clone --depth 1 https://github.com/${_OWNER}/WSU-Web-Serverbase.git
 [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
 
 #make app folder

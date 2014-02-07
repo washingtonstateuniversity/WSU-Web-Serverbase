@@ -57,7 +57,7 @@ do
   case "${opt}" in
   
     v )  echo "$0 -- Version $__ScriptVersion"; exit 0  ;;
-    
+    h )  usage; exit 0                                  ;;
     
     m ) _MINION=$OPTARG                     ;;
     

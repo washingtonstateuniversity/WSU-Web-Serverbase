@@ -117,7 +117,7 @@ init_modgit(){
     [ -d /var/app ] || mkdir -p /var/app
     if [ -f /usr/local/bin/modgit ]
     then
-        echo "modgit was already loaded"
+        echo -n "modgit was already loaded"
     else
         #ensure the deployment bed
         [ -d /src/deployment ] || mkdir -p /src/deployment
@@ -135,16 +135,20 @@ init_modgit(){
 #   DESCRIPTION:  load web app for the server.
 #===============================================================================
 load_app(){
-    echo "loading apps"
+    echo -n "loading apps"
 
     app_str=$1
     IFS=':' read -ra app <<< "$app_str"
     cd /var/app
-    modgit add ${app[0]} https://github.com/${app[1]}.git
-    
-    #symlink the app for provisioning
-    ln -s /var/app/${app[0]}/provision/salt /srv/salt/${app[0]}
-    #add the app to the queue of provisioning to do
+    if [ -f /srv/salt/${app[0]} ]
+        echo -n "app already linked"
+    else
+        modgit add ${app[0]} https://github.com/${app[1]}.git
+        
+        #symlink the app for provisioning
+        ln -s /var/app/${app[0]}/provision/salt /srv/salt/${app[0]}
+        #add the app to the queue of provisioning to do
+    fi
     load_env ${app[0]}
 }
 

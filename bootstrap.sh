@@ -145,8 +145,12 @@ load_app(){
     if [ -f "/srv/salt/${app[0]}" ]; then
         echo "app already linked"
     else
+        [ -d "/var/app/${app[0]}" ] || mkdir -p "/var/app/${app[0]}"
+        cd "/var/app/${app[0]}"
+        modgit init
+        modname=${app[0]} | sed 's/_//' | sed 's/-//' | sed 's/\.//'
         #bring it in with modgit
-        modgit add ${app[0]} https://github.com/${app[1]}.git
+        modgit add ${modname} https://github.com/${app[1]}.git
         
         #symlink the app for provisioning
         [ -f "/var/app/${app[0]}/provision/salt" ] || ln -s /var/app/${app[0]}/provision/salt /srv/salt/${app[0]}

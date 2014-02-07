@@ -86,24 +86,6 @@ echoerror() {
 }
 
 
-#===  FUNCTION  ================================================================
-#          NAME:  load_app
-#   DESCRIPTION:  load web app for the server.
-#===============================================================================
-load_app(){
-    #ensure deployment is available
-    which modgit || init_modgit
-
-    app_str=$1
-    IFS=':' read -ra app <<< "$app_str"
-    cd /var/app
-    modgit add ${app[0]} https://github.com/${app[1]}.git
-    
-    #symlink the app for provisioning
-    ln -s /var/app/${app[0]}/provision/salt /srv/salt/${app[0]}
-    #add the app to the queue of provisioning to do
-    load_env ${app[0]}
-}
 
 
 
@@ -138,6 +120,26 @@ init_modgit(){
     cd /var/app
     modgit init
 }
+
+#===  FUNCTION  ================================================================
+#          NAME:  load_app
+#   DESCRIPTION:  load web app for the server.
+#===============================================================================
+load_app(){
+    #ensure deployment is available
+    which modgit || init_modgit
+
+    app_str=$1
+    IFS=':' read -ra app <<< "$app_str"
+    cd /var/app
+    modgit add ${app[0]} https://github.com/${app[1]}.git
+    
+    #symlink the app for provisioning
+    ln -s /var/app/${app[0]}/provision/salt /srv/salt/${app[0]}
+    #add the app to the queue of provisioning to do
+    load_env ${app[0]}
+}
+
 
 
 #===  FUNCTION  ================================================================

@@ -115,12 +115,9 @@ provision_env(){
 init_modgit(){
     #make app folder
     [ -d /var/app ] || mkdir -p /var/app
-    if [ -f /usr/local/bin/modgit ]
-    
+    if [ -f /usr/local/bin/modgit ]; then
         echo "modgit was already loaded"
-        
     else
-    
         #ensure the deployment bed
         [ -d /src/deployment ] || mkdir -p /src/deployment
         curl https://raw.github.com/jeremyBass/modgit/master/modgit > /src/deployment/modgit
@@ -143,7 +140,7 @@ load_app(){
     app_str=$1
     IFS=':' read -ra app <<< "$app_str"
     cd /var/app
-    if [ -f /srv/salt/${app[0]} ]
+    if [ -f /srv/salt/${app[0]} ]; then
         echo "app already linked"
     else
         modgit add ${app[0]} https://github.com/${app[1]}.git

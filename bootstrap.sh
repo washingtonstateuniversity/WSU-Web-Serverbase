@@ -116,14 +116,18 @@ init_modgit(){
     #make app folder
     [ -d /var/app ] || mkdir -p /var/app
     if [ -f /usr/local/bin/modgit ]
-        echo -n "modgit was already loaded"
+    
+        echo "modgit was already loaded"
+        
     else
+    
         #ensure the deployment bed
         [ -d /src/deployment ] || mkdir -p /src/deployment
         curl https://raw.github.com/jeremyBass/modgit/master/modgit > /src/deployment/modgit
         ln -s /src/deployment/modgit /usr/local/bin/modgit
         ln -s /src/deployment/modgit /etc/init.d/modgit
         chmod a=r+w+x /usr/local/bin/modgit
+        
     fi
     cd /var/app/
     modgit init
@@ -134,13 +138,13 @@ init_modgit(){
 #   DESCRIPTION:  load web app for the server.
 #===============================================================================
 load_app(){
-    echo -n "loading apps"
+    echo "loading apps"
 
     app_str=$1
     IFS=':' read -ra app <<< "$app_str"
     cd /var/app
     if [ -f /srv/salt/${app[0]} ]
-        echo -n "app already linked"
+        echo "app already linked"
     else
         modgit add ${app[0]} https://github.com/${app[1]}.git
         

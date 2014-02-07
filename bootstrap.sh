@@ -98,8 +98,12 @@ yum install -y git
 [ -d /srv/salt/base ] || mkdir -p /srv/salt/base
 
 #start cloning it the provisioner
-[[ -z "${_TAG}" ]] || _TAG= -t ${_TAG} 
-cd /src/salt && git clone --depth 1 -b ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git
+[[ -z "${_BRANCH}" ]] || _BRANCH= " -b ${_BRANCH} "
+[[ -z "${_TAG}" ]] || _TAG= " -t ${_TAG} "
+
+git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
+
+cd /src/salt && eval $git_cmd 
 [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
 
 #make app folder

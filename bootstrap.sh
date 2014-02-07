@@ -54,7 +54,7 @@ _OWNER="jeremyBass"
 
 
 # Handle options
-while getopts ":vhd:m:" opt
+while getopts ":vhd:m:o:" opt
 do
   case "${opt}" in
   
@@ -63,7 +63,7 @@ do
     
     m ) _MINION=$OPTARG                                 ;;
     o ) _OWNER=$OPTARG                                  ;;
-    
+
     
     \?)
       echo "Invalid option: -$OPTARG" >&2

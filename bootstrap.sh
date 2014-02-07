@@ -99,6 +99,9 @@ initboot() {
     cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
     sh /srv/salt/base/boot/bootstrap-salt.sh
     cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
+    
+    #start the provisioning
+    salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base
 }
 
 

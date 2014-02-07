@@ -274,7 +274,7 @@ ERR
         # avoid network connectivity issues and to specify that a newer version of Salt be installed.
         
         $provision_script=""
-        $provision_script<<"curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh | sudo sh -s -- -m #{minion} \n"
+        $provision_script<<"curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/master/bootstrap.sh | sudo sh -s -- -m #{minion} \n"
 
         env=options[:env]
         if apps.include?env

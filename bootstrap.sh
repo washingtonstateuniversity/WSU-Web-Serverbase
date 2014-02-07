@@ -54,7 +54,7 @@ END
 # ----------  end of usage  ----------
 
 _MINION="vagrant"
-_OWNER="jeremyBass"
+_OWNER="washingtonstateuniversity"
 _BRANCH=""
 _TAG=""
 

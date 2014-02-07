@@ -148,7 +148,7 @@ load_app(){
         [ -d "/var/app/${app[0]}" ] || mkdir -p "/var/app/${app[0]}"
         cd "/var/app/${app[0]}"
         modgit init
-        modname="${app[0]}" | sed 's/_//' | sed 's/-//' | sed 's/\.//'
+        modname=${app[0]//[-._]/}
         #bring it in with modgit
         modgit add ${modname} https://github.com/${app[1]}.git
         

@@ -98,6 +98,8 @@ echoerror() {
 #   DESCRIPTION:  provision an environment.
 #===============================================================================
 provision_env(){
+    salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base
+
     envs_str=$1
     IFS=',' read -ra envs <<< "$envs_str"
     for env in "${!envs[@]}" #loop with key as the var

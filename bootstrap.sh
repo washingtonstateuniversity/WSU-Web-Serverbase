@@ -58,19 +58,17 @@ END
 #start from the root
 cd /
 
-#this is what everything works around
-which git 2>&1 | grep -qi "no git" && yum install -y git
-
-#ensure deployment is available
-which modgit || init_modgit
-
-
-
 _MINION="vagrant"
 _OWNER="washingtonstateuniversity"
 _BRANCH=""
 _TAG=""
 _ENV="base"
+
+
+
+
+
+
 
 #===  FUNCTION  ================================================================
 #          NAME:  echoerr
@@ -181,7 +179,11 @@ init_provision(){
     provision_env $_ENV
 }
 
+#this is what everything works around
+which git 2>&1 | grep -qi "no git" && yum install -y git
 
+#ensure deployment is available
+which modgit || init_modgit
 
 # Handle options
 while getopts ":vhd:m:o:b:t:e:i:p:a:" opt

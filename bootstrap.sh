@@ -68,16 +68,6 @@ echoerror() {
 
 
 #===  FUNCTION  ================================================================
-#          NAME:  init_boot
-#   DESCRIPTION:  starts the booting of the provisioning.
-#===============================================================================
-init_boot() {
-    #install git
-    yum install -y git
-}
-
-
-#===  FUNCTION  ================================================================
 #          NAME:  provision_env
 #   DESCRIPTION:  provision an environment.
 #===============================================================================
@@ -97,7 +87,7 @@ provision_env(){
 #   DESCRIPTION:  starts the booting of the provisioning.
 #===============================================================================
 init_provision(){
-    which git 2>&1 | grep -qi "/usr/bin/which: no git " && init_boot
+    which git 2>&1 | grep -qi "no git" && yum install -y git
     
     #this is very lazy but it's just for now
     rm -fr /src/salt

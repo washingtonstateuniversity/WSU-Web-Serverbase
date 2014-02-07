@@ -73,9 +73,6 @@ echoerror() {
 #   DESCRIPTION:  starts the booting of the provisioning.
 #===============================================================================
 init_boot() {
-    #this is very lazy but it's just for now
-    rm -fr /src/salt
-
     #install git
     yum install -y git
 }
@@ -86,6 +83,10 @@ init_boot() {
 #===============================================================================
 init_provision(){
     which git ls 2>&1 | grep -qi "/usr/bin/which: no git " && init_boot
+    
+    #this is very lazy but it's just for now
+    rm -fr /src/salt
+
     #ensure the src bed
     [ -d /src/salt ] || mkdir -p /src/salt
     [ -d /srv/salt/base ] || mkdir -p /srv/salt/base

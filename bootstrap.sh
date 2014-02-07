@@ -44,6 +44,8 @@ usage() {
   
   -b   (Branch) The branch to use for the server repo
   
+  -t   (Tag) The tag to use for the server repo
+  
   **COMING
   -d   (Dry run) Dry run mode (show what would be done)
 
@@ -54,6 +56,7 @@ END
 _MINION="vagrant"
 _OWNER="jeremyBass"
 _BRANCH=""
+_TAG=""
 
 # Handle options
 while getopts ":vhd:m:o:b:" opt
@@ -66,6 +69,7 @@ do
     m ) _MINION=$OPTARG                                 ;;
     o ) _OWNER=$OPTARG                                  ;;
     b ) _BRANCH=$OPTARG                                 ;;
+    t ) _TAG=$OPTARG                                    ;;
     
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -95,7 +99,8 @@ yum install -y git
 
 #start cloning it the provisioner
 [ -z ${_BRANCH} ] || _BRANCH=" -b ${_BRANCH}"
-cd /src/salt && git clone --depth 1 ${_BRANCH} https://github.com/${_OWNER}/WSU-Web-Serverbase.git
+[ -z ${_TAG} ] || _TAG=" -t ${_TAG}"
+cd /src/salt && git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git
 [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
 
 #make app folder

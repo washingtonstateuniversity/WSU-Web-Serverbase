@@ -71,7 +71,7 @@ do
     b ) _BRANCH=$OPTARG                                 ;;
     t ) _TAG=$OPTARG                                    ;;
 
-    i ) _init                                           ;;
+    i ) initboot                                        ;;
 
 
     \?)
@@ -87,7 +87,7 @@ done
 
 
 
-_init() {
+initboot() {
     #this is very lazy but it's just for now
     rm -fr /src/salt
     #rm -fr /srv/salt

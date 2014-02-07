@@ -109,8 +109,8 @@ init_provision(){
     [ -d /var/app ] || mkdir -p /var/app
     
     #start provisioning
-    rm -fr /etc/yum.conf
-    cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
+    [ -f /srv/salt/base/config/yum.conf ] && rm -fr /etc/yum.conf
+    [ -f /srv/salt/base/config/yum.conf ] && cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
     sh /srv/salt/base/boot/bootstrap-salt.sh
     cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
     provision_env "base"

@@ -133,7 +133,7 @@ init_provision(){
 
 
 # Handle options
-while getopts ":vhd:m:o:b:t:i:" opt
+while getopts ":vhd:m:o:b:t:e:i:p:" opt
 do
   case "${opt}" in
   

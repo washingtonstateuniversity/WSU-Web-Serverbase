@@ -274,9 +274,8 @@ ERR
         # avoid network connectivity issues and to specify that a newer version of Salt be installed.
         
         $provision_script=""
-        $provision_script<<"curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/master/bootstrap.sh | sudo sh \n"
-        #$provision_script<<"cp /srv/salt/base/minions/#{minion}.conf /etc/salt/minion.d/\n"
-        
+        $provision_script<<"curl -L https://raw.github.com/washingtonstateuniversity/WSU-Web-Serverbase/master/bootstrap.sh | sudo sh -s -- -m #{minion} \n"
+
         env=options[:env]
         if apps.include?env
         then

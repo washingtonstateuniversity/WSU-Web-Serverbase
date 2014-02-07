@@ -47,6 +47,30 @@ END
 }
 # ----------  end of usage  ----------
 
+_MINION="vagrant"
+
+
+
+# Handle options
+while getopts ":vhd:m:" opt
+do
+  case "${opt}" in
+
+    m ) _MINION=$OPTARG                     ;;
+    
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument" >&2
+      exit 1
+      ;;
+  esac
+done
+
+
+
 
 #this is very lazy but it's just for now
 rm -fr /src/salt
@@ -71,5 +95,5 @@ cd /src/salt && git clone --depth 1 https://github.com/jeremyBass/WSU-Web-Server
 rm -fr /etc/yum.conf
 cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
 sh /srv/salt/base/boot/bootstrap-salt.sh
-cp -fu /srv/salt/base/minions/vagrant.conf /etc/salt/minion.d/vagrant.conf
+cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
 

@@ -91,18 +91,18 @@ echoerror() {
 #   DESCRIPTION:  load web app for the server.
 #===============================================================================
 load_app(){
+    #ensure deployment is available
+    which modgit || init_modgit
+
     app_str=$1
     IFS=':' read -ra app <<< "$app_str"
     cd /var/app
-    which modgit || init_modgit
-    which modgit && modgit add ${app[0]} https://github.com/${app[1]}.git
+    modgit add ${app[0]} https://github.com/${app[1]}.git
     
     #symlink the app for provisioning
     ln -s /var/app/${app[0]}/provision/salt /srv/salt/${app[0]}
     #add the app to the queue of provisioning to do
     load_env ${app[0]}
-    
-    return 1
 }
 
 
@@ -127,12 +127,16 @@ provision_env(){
 #   DESCRIPTION:  sets up the app deployment pathway.
 #===============================================================================
 init_modgit(){
+    #make app folder
+    [ -d /var/app ] || mkdir -p /var/app
+
     #ensure the deployment bed
     [ -d /src/deployment ] || mkdir -p /src/deployment
     curl https://raw.github.com/jeremyBass/modgit/master/modgit > /src/deployment/modgit
     chmod a=r+w+x /src/deployment/modgit
     ln -s /src/deployment/modgit /usr/local/bin/modgit
-    cd /var/app && modgit init
+    cd /var/app
+    modgit init
 }
 
 
@@ -142,7 +146,12 @@ init_modgit(){
 #===============================================================================
 init_provision(){
     which git 2>&1 | grep -qi "no git" && yum install -y git
-    
+
+    #ensure deployment is available
+    which modgit || init_modgit
+
+
+
     #this is very lazy but it's just for now
     rm -fr /src/salt
 
@@ -159,17 +168,13 @@ init_provision(){
     cd /src/salt && eval $git_cmd 
     [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
     
-    #make app folder
-    [ -d /var/app ] || mkdir -p /var/app
-    
+
+
     #start provisioning
     [ -f /srv/salt/base/config/yum.conf ] && rm -fr /etc/yum.conf
     [ -f /srv/salt/base/config/yum.conf ] && cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
     sh /srv/salt/base/boot/bootstrap-salt.sh
     cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
-    
-    which modgit || init_modgit
-
     provision_env $_ENV
 }
 

@@ -95,7 +95,13 @@ load_app(){
     IFS=':' read -ra app <<< "$app_str"
     cd /var/app
     which modgit || init_modgit
-    which modgit && modgit add ${app[1]} https://github.com/${app[2]}.git
+    which modgit && modgit add ${app[0]} https://github.com/${app[1]}.git
+    
+    #symlink the app for provisioning
+    ln -s /var/app/${app[0]}/provision/salt /srv/salt/${app[0]}
+    #add the app to the queue of provisioning to do
+    load_env ${app[0]}
+    
     return 1
 }
 

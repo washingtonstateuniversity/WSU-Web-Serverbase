@@ -13,6 +13,40 @@
 #  ORGANIZATION: WSU
 #       CREATED: 1/1/2014
 #===============================================================================
+set -o nounset                              # Treat unset variables as an error
+__ScriptVersion="0.1.0"
+__ScriptName="bootstrap.sh"
+
+#===  FUNCTION  ================================================================
+#         NAME:  usage
+#  DESCRIPTION:  Display usage information.
+#===============================================================================
+SCRIPT=${0##*/}
+IFS=$''
+usage() {
+    cat << END
+    
+  Usage :  ${__ScriptName} [options]
+
+  Command Examples:
+    $ ${__ScriptName} $(tput bold)-m <minion>$(tput sgr0)
+                => Install a module by cloning specified git repository
+
+
+  Options:
+  -v   Show gitploy version
+  
+  -h   Show this help
+  
+  -d   (Dry run) Dry run mode (show what would be done)
+  
+  -m   (Minion) Use a minion of choice.  Defaults to first one found
+    
+                
+END
+}
+# ----------  end of usage  ----------
+
 
 #this is very lazy but it's just for now
 rm -fr /src/salt

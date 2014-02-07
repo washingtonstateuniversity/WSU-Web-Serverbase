@@ -98,8 +98,8 @@ yum install -y git
 [ -d /srv/salt/base ] || mkdir -p /srv/salt/base
 
 #start cloning it the provisioner
-[[ -z "${_BRANCH}" ]] || _BRANCH= ' -b ${_BRANCH} '
-[[ -z "${_TAG}" ]] || _TAG= ' -t ${_TAG} '
+[[ -z "${_BRANCH}" ]] || _BRANCH= ' -b '${_BRANCH}
+[[ -z "${_TAG}" ]] || _TAG= ' -t '${_TAG}
 
 git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
 

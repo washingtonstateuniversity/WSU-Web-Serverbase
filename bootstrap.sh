@@ -93,8 +93,6 @@ echoerror() {
 
 
 
-
-
 #===  FUNCTION  ================================================================
 #          NAME:  provision_env
 #   DESCRIPTION:  provision an environment.
@@ -137,8 +135,7 @@ init_modgit(){
 #   DESCRIPTION:  load web app for the server.
 #===============================================================================
 load_app(){
-    #ensure deployment is available
-    which modgit || init_modgit
+    echo "loading apps"
 
     app_str=$1
     IFS=':' read -ra app <<< "$app_str"
@@ -150,7 +147,6 @@ load_app(){
     #add the app to the queue of provisioning to do
     load_env ${app[0]}
 }
-
 
 
 #===  FUNCTION  ================================================================
@@ -173,8 +169,6 @@ init_provision(){
     
     cd /src/salt && eval $git_cmd 
     [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
-    
-
 
     #start provisioning
     [ -f /srv/salt/base/config/yum.conf ] && rm -fr /etc/yum.conf

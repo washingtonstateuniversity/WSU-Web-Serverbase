@@ -58,6 +58,14 @@ END
 #start from the root
 cd /
 
+#this is what everything works around
+which git 2>&1 | grep -qi "no git" && yum install -y git
+
+#ensure deployment is available
+which modgit || init_modgit
+
+
+
 _MINION="vagrant"
 _OWNER="washingtonstateuniversity"
 _BRANCH=""
@@ -147,13 +155,6 @@ load_app(){
 #   DESCRIPTION:  starts the booting of the provisioning.
 #===============================================================================
 init_provision(){
-    which git 2>&1 | grep -qi "no git" && yum install -y git
-
-    #ensure deployment is available
-    which modgit || init_modgit
-
-
-
     #this is very lazy but it's just for now
     rm -fr /src/salt
 

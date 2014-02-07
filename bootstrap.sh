@@ -97,7 +97,7 @@ provision_env(){
 #   DESCRIPTION:  starts the booting of the provisioning.
 #===============================================================================
 init_provision(){
-    which git ls 2>&1 | grep -qi "/usr/bin/which: no git " && init_boot
+    which git 2>&1 | grep -qi "/usr/bin/which: no git " && init_boot
     
     #this is very lazy but it's just for now
     rm -fr /src/salt

@@ -95,6 +95,14 @@ echoerror() {
 
 
 
+containsElement () {
+  local e
+  for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
+  return 1
+}
+
+
+
 #===  FUNCTION  ================================================================
 #          NAME:  provision_env
 #   DESCRIPTION:  provision an environment.
@@ -106,7 +114,7 @@ provision_env(){
     IFS=',' read -ra envs <<< "$envs_str"
     for env in "${!envs[@]}" #loop with key as the var
     do
-        if [[ ${_RANENV[@]}  =~ ${env} ]]; then
+        if [[ containsElement "${env}" "${_RANENV[@]}" ]]; then
             echo "skipping ${env}"
         else
             salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}

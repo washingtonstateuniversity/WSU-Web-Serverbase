@@ -119,6 +119,7 @@ provision_env(){
         if [[ $(containsElement ${env} ${_RANENV[@]}) ]]; then
             echo "skipping ${env}"
         else
+            echo "running environment ${env}"
             salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}
             _RANENV+=(${env})
         fi

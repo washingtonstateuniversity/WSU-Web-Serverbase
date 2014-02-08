@@ -160,7 +160,7 @@ load_app(){
         [ -d "/var/app/${appname}" ] || mkdir -p "/var/app/${appname}"
         cd "/var/app/${appname}"
         modchk= $(modgit ls 2>&1 | grep -qi "${modname}")
-        if [ modchk ]; then
+        if [ $modchk ]; then
             echo "app already linked-- ${modname}"
         else
             modgit init

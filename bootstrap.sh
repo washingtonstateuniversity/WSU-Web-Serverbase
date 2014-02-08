@@ -213,6 +213,11 @@ rm -fr /src/salt
 #ensure deployment is available
 which modgit  2>&1 | grep -qi "/usr/sbin/modgit" || init_modgit
 
+curl https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- init
+
+
+
+
 # Handle options
 while getopts ":vhd:m:o:b:t:e:i:p:a:" opt
 do

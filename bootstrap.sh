@@ -195,7 +195,8 @@ init_provision(){
 
     #start provisioning
     if[ -f /srv/salt/base/config/yum.conf ]; then
-        rm -fr /etc/yum.conf && cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
+        rm -fr /etc/yum.conf 
+        cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
     fi
     
     sh /srv/salt/base/boot/bootstrap-salt.sh

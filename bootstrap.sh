@@ -153,18 +153,22 @@ load_app(){
     IFS=':' read -ra app <<< "$app_str"
     modname=${app[0]//[-._]/}
     cd /var/app
-    if [ -d "/srv/salt/${app[0]}" && modgit ls 2>&1 | grep -qi "${modname}" ]; then
+    if [ -d "/srv/salt/${app[0]}" ]; then
         echo "app already linked"
     else
         [ -d "/var/app/${app[0]}" ] || mkdir -p "/var/app/${app[0]}"
         cd "/var/app/${app[0]}"
-        modgit init
-        
-        #bring it in with modgit
-        modgit add ${modname} https://github.com/${app[1]}.git
-        
-        #symlink the app for provisioning
-        [ -d "/var/app/${app[0]}/provision/salt" ] || ln -s /var/app/${app[0]}/provision/salt/ /srv/salt/${app[0]}/
+        if [ !$(modgit ls 2>&1 | grep -qi "${modname}") ]; then
+            echo "app already linked"
+        else
+            modgit init
+            
+            #bring it in with modgit
+            modgit add ${modname} https://github.com/${app[1]}.git
+            
+            #symlink the app for provisioning
+            [ -d "/var/app/${app[0]}/provision/salt" ] || ln -s /var/app/${app[0]}/provision/salt/ /srv/salt/${app[0]}/
+        fi
     fi
     #add the app to the queue of provisioning to do
     load_env ${app[0]}

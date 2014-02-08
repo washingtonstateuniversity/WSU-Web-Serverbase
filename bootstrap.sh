@@ -218,7 +218,7 @@ which git 2>&1 | grep -qi "no git" && yum install -y git
 rm -fr /src/salt
     
 #ensure deployment is available
-which modgit || init_modgit
+which modgit  2>&1 | grep -qi "/usr/sbin/modgit" || init_modgit
 
 # Handle options
 while getopts ":vhd:m:o:b:t:e:i:p:a:" opt

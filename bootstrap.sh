@@ -139,7 +139,6 @@ init_modgit(){
         ln -s /src/deployment/modgit /etc/init.d/modgit
         
         chmod a=r+w+x /usr/local/bin/modgit
-        
     fi
 }
 
@@ -152,14 +151,15 @@ load_app(){
 
     app_str=$1
     IFS=':' read -ra app <<< "$app_str"
+    modname=${app[0]//[-._]/}
     cd /var/app
-    if [ -d "/srv/salt/${app[0]}" ]; then
+    if [ -d "/srv/salt/${app[0]}" && modgit ls 2>&1 | grep -qi "${modname}" ]; then
         echo "app already linked"
     else
         [ -d "/var/app/${app[0]}" ] || mkdir -p "/var/app/${app[0]}"
         cd "/var/app/${app[0]}"
         modgit init
-        modname=${app[0]//[-._]/}
+        
         #bring it in with modgit
         modgit add ${modname} https://github.com/${app[1]}.git
         
@@ -176,8 +176,6 @@ load_app(){
 #   DESCRIPTION:  starts the booting of the provisioning.
 #===============================================================================
 init_provision(){
-
-
     #ensure the src bed
     [ -d /src/salt ] || mkdir -p /src/salt
     [ -d /srv/salt/base ] || mkdir -p /srv/salt/base

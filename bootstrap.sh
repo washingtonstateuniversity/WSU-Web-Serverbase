@@ -145,25 +145,29 @@ init_modgit(){
 load_app(){
     echo "loading apps"
 
-    app_str=$1
-    IFS=':' read -ra app <<< "$app_str"
+    IFS=':' read -ra app <<< "$1"
+    
     appname=${app[0]};
     modname=${appname//[-._]/}
     repopath=${app[1]}
+    sympath="/srv/salt/${appname}/"
+    
     cd /var/app
-    if [ -d "/srv/salt/${appname}/" ]; then
+
+    if [[ -L "$sympath" && -d "$sympath" ]]; then
         echo "app already linked and init -- ${appname}"
     else
         [ -d "/var/app/${appname}" ] || mkdir -p "/var/app/${appname}"
         cd "/var/app/${appname}"
-        if [ $(modgit ls 2>&1 | grep -qi "${modname}") ]; then
+        modchk= $(modgit ls 2>&1 | grep -qi "${modname}")
+        if [ modchk ]; then
             echo "app already linked-- ${modname}"
         else
             modgit init
             #bring it in with modgit
             modgit add ${modname} "https://github.com/${repopath}.git"
         fi
-        [ -d "/srv/salt/${appname}/" ] || ln -s /var/app/${appname}/provision/salt/ /srv/salt/${appname}/
+        ln -s /var/app/${appname}/provision/salt/ ${sympath}
     fi
     #add the app to the queue of provisioning to do
     load_env ${appname}

@@ -178,8 +178,7 @@ load_app(){
 #   DESCRIPTION:  starts the booting of the provisioning.
 #===============================================================================
 init_provision(){
-    #this is very lazy but it's just for now
-    rm -fr /src/salt
+
 
     #ensure the src bed
     [ -d /src/salt ] || mkdir -p /src/salt
@@ -205,6 +204,9 @@ init_provision(){
 #this is what everything works around
 which git 2>&1 | grep -qi "no git" && yum install -y git
 
+#this is very lazy but it's just for now
+rm -fr /src/salt
+    
 #ensure deployment is available
 which modgit || init_modgit
 

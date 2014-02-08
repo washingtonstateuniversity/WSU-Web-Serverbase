@@ -107,10 +107,11 @@ containsElement () {
 #===============================================================================
 provision_env(){
     salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base
-
+    _RANENV+=("base")
+    
     envs_str=$1
     echo "starting environment run with ${envs_str}"
-    IFS=',' read -ra envs <<< "$envs_str"
+    IFS=',' read -a envs <<< "$envs_str"
     for env in "${!envs[@]}" #loop with key as the var
     do
         tested=$(containsElement ${env} ${_RANENV[@]:_RANENV[@]})

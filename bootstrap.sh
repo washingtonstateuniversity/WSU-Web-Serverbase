@@ -106,7 +106,7 @@ provision_env(){
     IFS=',' read -ra envs <<< "$envs_str"
     for env in "${!envs[@]}" #loop with key as the var
     do
-        if [[ -z ${env} | $_RUNENV == *${env}* ]]; then
+        if [[ -z ${env} || $_RUNENV == *${env}* ]]; then
             echo "skipped ${env}"
         else
             salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}

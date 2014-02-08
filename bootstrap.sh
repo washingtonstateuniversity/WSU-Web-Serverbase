@@ -165,7 +165,7 @@ load_app(){
             #bring it in with modgit
             modgit add ${modname} https://github.com/${app[1]}.git
         fi
-        [ -d "/var/app/${app[0]}/provision/salt" ] || ln -s /var/app/${app[0]}/provision/salt/ /srv/salt/${app[0]}/
+        [ -d "/var/app/${app[0]}/provision/salt/" ] || ln -s /var/app/${app[0]}/provision/salt/ /srv/salt/${app[0]}/
     fi
     #add the app to the queue of provisioning to do
     load_env ${app[0]}

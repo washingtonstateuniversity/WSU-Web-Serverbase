@@ -105,7 +105,7 @@ provision_env(){
     for env in ${envs[@]} #loop with key as the var
     do
         echo "looking for ${env}"
-        if [ ! -z ${_RANENV["$env"]} ]; then
+        if [ ! -z ${_RANENV["$env"]:-} ]; then
             echo "skipping ${env}"
         else
             echo "running environment ${env}"

@@ -162,13 +162,10 @@ load_app(){
             echo "app already linked-- ${modname}"
         else
             modgit init
-            
             #bring it in with modgit
             modgit add ${modname} https://github.com/${app[1]}.git
-            
-            #symlink the app for provisioning
-            [ -d "/var/app/${app[0]}/provision/salt" ] || ln -s /var/app/${app[0]}/provision/salt/ /srv/salt/${app[0]}/
         fi
+        [ -d "/var/app/${app[0]}/provision/salt" ] || ln -s /var/app/${app[0]}/provision/salt/ /srv/salt/${app[0]}/
     fi
     #add the app to the queue of provisioning to do
     load_env ${app[0]}

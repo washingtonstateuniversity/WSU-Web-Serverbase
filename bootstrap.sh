@@ -151,24 +151,26 @@ load_app(){
 
     app_str=$1
     IFS=':' read -ra app <<< "$app_str"
-    modname=${app[0]//[-._]/}
+    appname=${app[0]};
+    modname=${appname//[-._]/}
+    repopath=${app[1]}
     cd /var/app
-    if [ -d "/srv/salt/${app[0]}" ]; then
-        echo "app already linked and init -- ${app[0]}"
+    if [ -d "/srv/salt/${appname}" ]; then
+        echo "app already linked and init -- ${appname}"
     else
-        [ -d "/var/app/${app[0]}" ] || mkdir -p "/var/app/${app[0]}"
-        cd "/var/app/${app[0]}"
+        [ -d "/var/app/${appname}" ] || mkdir -p "/var/app/${appname}"
+        cd "/var/app/${appname}"
         if [ !$(modgit ls 2>&1 | grep -qi "${modname}") ]; then
             echo "app already linked-- ${modname}"
         else
             modgit init
             #bring it in with modgit
-            modgit add ${modname} https://github.com/${app[1]}.git
+            modgit add ${modname} "https://github.com/${repopath}.git"
         fi
-        [ -d "/var/app/${app[0]}/provision/salt/" ] || ln -s /var/app/${app[0]}/provision/salt/ /srv/salt/${app[0]}/
+        [ -d "/var/app/${appname}/provision/salt/" ] || ln -s /var/app/${appname}/provision/salt/ /srv/salt/${appname}/
     fi
     #add the app to the queue of provisioning to do
-    load_env ${app[0]}
+    load_env ${appname}
 }
 
 

@@ -111,9 +111,9 @@ provision_env(){
         else
             salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}
               if [ -z "$_RANENV" ]; then
-                _RANENV="$1"
+                _RANENV="${env}"
               else
-                _RANENV="$_RANENV,$1"
+                _RANENV="$_RANENV,${env}"
               fi
         fi
     done

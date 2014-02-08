@@ -75,13 +75,11 @@ _RANENV=()
 #   DESCRIPTION:  Echo errors to stderr.
 #===============================================================================
 load_env() {
-    if [[ $_ENV == *$1* ]]; then
-      if [ -z "$_ENV" ]; then
-        _ENV="$1"
-      else
-        _ENV="$_ENV,$1"
-      fi
-    fi
+  if [ -z "$_ENV" ]; then
+    _ENV="$1"
+  else
+    _ENV="$_ENV,$1"
+  fi
 }
 
 
@@ -179,7 +177,7 @@ load_app(){
         ln -s /var/app/${appname}/provision/salt/ ${sympath}
     fi
     #add the app to the queue of provisioning to do
-    load_env ${appname}
+    load_env "${appname}"
 }
 
 

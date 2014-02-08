@@ -116,8 +116,7 @@ provision_env(){
     do
         env=${envs[envindex]}
         echo "testing ${env}"
-        tested=$(containsElement ${env} ${_RANENV[@]})
-        if [[ !$tested ]]; then
+        if [[ $(containsElement ${env} ${_RANENV[@]}) ]]; then
             echo "skipping ${env}"
         else
             salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}

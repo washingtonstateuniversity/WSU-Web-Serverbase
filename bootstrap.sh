@@ -187,16 +187,20 @@ init_provision(){
     [[ -z "${_BRANCH}" ]] || _BRANCH=' -b '$_BRANCH
     [[ -z "${_TAG}" ]] || _TAG=' -t '$_TAG
     
+    #build git command
     git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
     
     cd /src/salt && eval $git_cmd 
     [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
 
     #start provisioning
-    [ -f /srv/salt/base/config/yum.conf ] && rm -fr /etc/yum.conf
-    [ -f /srv/salt/base/config/yum.conf ] && cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
+    if[ -f /srv/salt/base/config/yum.conf ]; then
+        rm -fr /etc/yum.conf && cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
+    fi
+    
     sh /srv/salt/base/boot/bootstrap-salt.sh
     cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
+    
     provision_env $_ENV
 }
 

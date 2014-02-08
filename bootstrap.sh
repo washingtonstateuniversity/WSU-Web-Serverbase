@@ -112,9 +112,9 @@ provision_env(){
     envs_str=$1
     echo "starting environment run with ${envs_str}"
     IFS=',' read -a envs <<< ${envs_str}
-    for envindex in ${!envs[@]} #loop with key as the var
+    for env in ${envs[@]} #loop with key as the var
     do
-        env=${envs[envindex]}
+        #env=${envs[envindex]}
         echo "testing ${env}"
         if [[ $(containsElement ${env} ${_RANENV[@]}) ]]; then
             echo "skipping ${env}"

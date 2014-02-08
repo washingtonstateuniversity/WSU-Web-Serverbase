@@ -91,19 +91,6 @@ echoerror() {
 }
 
 
-
-containsElement () {
-    local e
-    for e in "${@:2}";
-    do
-        echo "checking $e :: $1"
-        [[ "$e" == "$1" ]] && return 0; 
-    done
-    return 1
-}
-
-
-
 #===  FUNCTION  ================================================================
 #          NAME:  provision_env
 #   DESCRIPTION:  provision an environment.
@@ -118,7 +105,7 @@ provision_env(){
     for env in ${envs[@]} #loop with key as the var
     do
         echo "looking for ${env}"
-        if [[ ${_RANENV["$env"]-X} == ${_RANENV["$env"]} ]]; then
+        if [[ ${_RANENV["$env"]} ]]; then
             echo "skipping ${env}"
         else
             echo "running environment ${env}"

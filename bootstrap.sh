@@ -75,11 +75,13 @@ _ENV="base"
 #   DESCRIPTION:  Echo errors to stderr.
 #===============================================================================
 load_env() {
-  if [ -z "$_ENV" ]; then
-    _ENV="$1"
-  else
-    _ENV="$_ENV,$1"
-  fi
+    if [[ $_ENV == *$1* ]]; then
+      if [ -z "$_ENV" ]; then
+        _ENV="$1"
+      else
+        _ENV="$_ENV,$1"
+      fi
+    fi
 }
 
 
@@ -104,7 +106,11 @@ provision_env(){
     IFS=',' read -ra envs <<< "$envs_str"
     for env in "${!envs[@]}" #loop with key as the var
     do
-        salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}
+        if [[ -z ${env} ]]; then
+            echo "skipped ${env}"
+        else
+            salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}
+        fi
     done
     return 1
 }

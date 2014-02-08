@@ -141,8 +141,6 @@ init_modgit(){
         chmod a=r+w+x /usr/local/bin/modgit
         
     fi
-    cd /var/app/
-    modgit init
 }
 
 #===  FUNCTION  ================================================================

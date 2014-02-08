@@ -115,7 +115,7 @@ provision_env(){
     for env in ${envs[@]} #loop with key as the var
     do
         echo "testing ${env}"
-     done   
+    done   
     
     
     
@@ -187,7 +187,7 @@ load_app(){
         ln -s /var/app/${appname}/provision/salt/ ${sympath}
     fi
     #add the app to the queue of provisioning to do
-    load_env "${appname}"
+    load_env ${appname}
 }
 
 

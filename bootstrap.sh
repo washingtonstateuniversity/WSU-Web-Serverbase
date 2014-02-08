@@ -194,7 +194,7 @@ init_provision(){
     [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
 
     #start provisioning
-    if[ -f /srv/salt/base/config/yum.conf ]; then
+    if [ -f /srv/salt/base/config/yum.conf ]; then
         rm -fr /etc/yum.conf 
         cp -fu --remove-destination /srv/salt/base/config/yum.conf /etc/yum.conf
     fi

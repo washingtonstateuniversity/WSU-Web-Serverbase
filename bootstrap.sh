@@ -109,10 +109,11 @@ provision_env(){
     salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base
 
     envs_str=$1
+    echo "starting environment run with ${envs_str}"
     IFS=',' read -ra envs <<< "$envs_str"
     for env in "${!envs[@]}" #loop with key as the var
     do
-        tested=$(containsElement "${env}" ${_RANENV[@]:_RANENV[@]})
+        tested=$(containsElement ${env} ${_RANENV[@]:_RANENV[@]})
         if [[ !$tested ]]; then
             echo "skipping ${env}"
         else

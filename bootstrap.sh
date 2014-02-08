@@ -155,12 +155,12 @@ load_app(){
     modname=${appname//[-._]/}
     repopath=${app[1]}
     cd /var/app
-    if [ -d "/srv/salt/${appname}" ]; then
+    if [ -d "/srv/salt/${appname}/" ]; then
         echo "app already linked and init -- ${appname}"
     else
         [ -d "/var/app/${appname}" ] || mkdir -p "/var/app/${appname}"
         cd "/var/app/${appname}"
-        if [ !$(modgit ls 2>&1 | grep -qi "${modname}") ]; then
+        if [ $(modgit ls 2>&1 | grep -qi "${modname}") ]; then
             echo "app already linked-- ${modname}"
         else
             modgit init

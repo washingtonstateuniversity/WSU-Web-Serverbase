@@ -112,14 +112,7 @@ provision_env(){
     envs_str=$1
     echo "starting environment run with ${envs_str}"
     IFS=',' read -a envs <<< "${envs_str}"
-    for env in ${envs[@]} #loop with key as the var
-    do
-        echo "testing ${env}"
-    done   
-    
-    
-    
-    for env in ${envs[@]} #loop with key as the var
+        for env in ${envs[@]} #loop with key as the var
     do
         echo "looking for ${env}"
         if [[ $(containsElement ${env} ${_RANENV[@]}) ]]; then

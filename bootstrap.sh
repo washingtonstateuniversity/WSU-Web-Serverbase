@@ -64,7 +64,7 @@ _BRANCH=""
 _TAG=""
 _ENV="base"
 
-_RANENV=""
+_RANENV=()
 
 
 
@@ -106,15 +106,11 @@ provision_env(){
     IFS=',' read -ra envs <<< "$envs_str"
     for env in "${!envs[@]}" #loop with key as the var
     do
-        if [[ -z ${env} || $_RANENV == *${env}* ]]; then
+        if [[ -z ${env} || " ${_RANENV[*]} " == *"${env}"* ]]; then
             echo "skipped ${env}"
         else
             salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}
-              if [ -z "$_RANENV" ]; then
-                _RANENV="${env}"
-              else
-                _RANENV="$_RANENV,${env}"
-              fi
+            _RANENV+=(${env})
         fi
     done
     return 1

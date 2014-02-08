@@ -64,8 +64,7 @@ _BRANCH=""
 _TAG=""
 _ENV="base"
 
-_RANENV=()
-
+declare -A _RANENV=()
 
 
 
@@ -111,7 +110,7 @@ containsElement () {
 #===============================================================================
 provision_env(){
     salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base
-    _RANENV+=("base")
+    _RANENV["base"]=1
     
     envs_str=$1
     echo "starting environment run with ${envs_str}"
@@ -119,12 +118,12 @@ provision_env(){
     for env in ${envs[@]} #loop with key as the var
     do
         echo "looking for ${env}"
-        if [[ $(containsElement ${env} ${_RANENV[@]}) ]]; then
+        if [[ ${_RANENV[$env]-X} == ${_RANENV[$env]} ]]; then
             echo "skipping ${env}"
         else
             echo "running environment ${env}"
             salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}
-            _RANENV+=(${env})
+            _RANENV["${env}"]=1
         fi
     done
     return 1

@@ -94,9 +94,13 @@ echoerror() {
 
 
 containsElement () {
-  local e
-  for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
-  return 1
+    local e
+    for e in "${@:2}";
+    do
+        echo "checking $e :: $1"
+        [[ "$e" == "$1" ]] && return 0; 
+    done
+    return 1
 }
 
 
@@ -112,7 +116,7 @@ provision_env(){
     envs_str=$1
     echo "starting environment run with ${envs_str}"
     IFS=',' read -a envs <<< "${envs_str}"
-        for env in ${envs[@]} #loop with key as the var
+    for env in ${envs[@]} #loop with key as the var
     do
         echo "looking for ${env}"
         if [[ $(containsElement ${env} ${_RANENV[@]}) ]]; then

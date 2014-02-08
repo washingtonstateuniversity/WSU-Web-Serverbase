@@ -116,7 +116,7 @@ provision_env(){
     do
         env=${envs[envindex]}
         echo "testing ${env}"
-        tested=$(containsElement ${env} ${_RANENV[@]:_RANENV[@]})
+        tested=$(containsElement ${env} ${_RANENV[@]})
         if [[ !$tested ]]; then
             echo "skipping ${env}"
         else

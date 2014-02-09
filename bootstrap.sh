@@ -66,7 +66,8 @@ _ENV="base"
 
 declare -A _RANENV=()
 
-
+_REPOURL="https://github.com"
+_RAWURL="https://raw.github.com"
 
 
 #===  FUNCTION  ================================================================
@@ -116,28 +117,6 @@ provision_env(){
     return 1
 }
 
-
-#===  FUNCTION  ================================================================
-#          NAME:  init_modgit
-#   DESCRIPTION:  sets up the app deployment pathway.
-#===============================================================================
-init_modgit(){
-    #make app folder
-    [ -d /var/app ] || mkdir -p /var/app
-    if [ -f /usr/sbin/modgit ]; then
-        echo "modgit was already loaded"
-    else
-        #ensure the deployment bed
-        [ -d /src/deployment ] || mkdir -p /src/deployment
-        curl https://raw.github.com/jeremyBass/modgit/master/modgit > /src/deployment/modgit
-        ln -s /src/deployment/modgit /usr/local/bin/modgit
-        ln -s /src/deployment/modgit /usr/sbin/modgit
-        ln -s /src/deployment/modgit /etc/init.d/modgit
-        
-        chmod a=r+w+x /usr/local/bin/modgit
-    fi
-}
-
 #===  FUNCTION  ================================================================
 #          NAME:  load_app
 #   DESCRIPTION:  load web app for the server.
@@ -163,9 +142,9 @@ load_app(){
         if [ $(modgit ls 2>&1 | grep -qi "${modname}") ]; then
             echo "app already linked-- ${modname}"
         else
-            modgit init
+            gitploy init
             #bring it in with modgit
-            modgit add ${modname} "https://github.com/${repopath}.git"
+            gitploy add ${modname} "https://github.com/${repopath}.git"
         fi
         ln -s /var/app/${appname}/provision/salt/ ${sympath}
     fi
@@ -205,19 +184,11 @@ init_provision(){
     provision_env $_ENV
 }
 
-#this is what everything works around
-which git 2>&1 | grep -qi "no git" && yum install -y git
-
 #this is very lazy but it's just for now
 rm -fr /src/salt
     
 #ensure deployment is available
-which modgit  2>&1 | grep -qi "/usr/sbin/modgit" || init_modgit
-
-curl https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- init
-
-
-
+which gitploy 2>&1 | grep -qi "/usr/sbin/gitploy" || curl  https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
 
 # Handle options
 while getopts ":vhd:m:o:b:t:e:i:p:a:" opt

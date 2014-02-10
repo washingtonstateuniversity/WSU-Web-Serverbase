@@ -141,7 +141,7 @@ load_app(){
         [ -d "/var/app/${appname}" ] || mkdir -p "/var/app/${appname}"
         cd "/var/app/${appname}"
         
-        if [ $(modgit ls 2>&1 | grep -qi "${modname}") ]; then
+        if [ $(gitploy ls 2>&1 | grep -qi "${modname}") ]; then
             echo "app already linked-- ${modname}"
         else
             gitploy init

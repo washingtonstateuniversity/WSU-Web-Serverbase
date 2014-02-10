@@ -172,7 +172,8 @@ init_provision(){
     #build git command
     git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
     
-    cd /src/salt/Serverbase && gitploy 
+    cd /src/salt/Serverbase
+    [ $(gitploy -v 2>&1 | grep -qi "already initialized") ] || gitploy init
     [ -h /srv/salt/base/ ] || ln -s /src/salt/Serverbase/provision/salt/* /srv/salt/base/
 
     #start provisioning

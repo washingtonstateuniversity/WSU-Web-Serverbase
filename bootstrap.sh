@@ -64,6 +64,12 @@ _BRANCH=""
 _TAG=""
 _ENV="base"
 
+# Some truth values
+SB_TRUE=1
+SB_FALSE=0
+SB_QUIET=$SB_FALSE
+SB_DEBUG=$SB_FALSE
+
 declare -A _RANENV=()
 
 _REPOURL="https://github.com"
@@ -88,7 +94,7 @@ load_env() {
 #   DESCRIPTION:  Echo stdout.  Basicly a proxy is what is done
 #===============================================================================
 echostd() {
-    [ $GD_QUIET -eq $GD_FALSE ] && printf "%s\n" "$@";
+    [ $SB_QUIET -eq $SB_FALSE ] && printf "%s\n" "$@";
 }
 
 #===  FUNCTION  ================================================================
@@ -106,7 +112,7 @@ echoerr() {
 #   DESCRIPTION:  Echo information to stdout.
 #===============================================================================
 echoinfo() {
-    [ $GD_QUIET -eq $GD_FALSE ] && printf "INFO: %s\n" "$@";
+    [ $SB_QUIET -eq $SB_FALSE ] && printf "INFO: %s\n" "$@";
 }
 
 #===  FUNCTION  ================================================================
@@ -114,7 +120,7 @@ echoinfo() {
 #   DESCRIPTION:  Echo warning informations to stdout.
 #===============================================================================
 echowarn() {
-    [ $GD_QUIET -eq $GD_FALSE ] && printf "WARN$: %s\n" "$@";
+    [ $SB_QUIET -eq $SB_FALSE ] && printf "WARN$: %s\n" "$@";
 }
 
 #===  FUNCTION  ================================================================
@@ -122,7 +128,7 @@ echowarn() {
 #   DESCRIPTION:  Echo debug information to stdout.
 #===============================================================================
 echodebug() {
-    if [ $GD_DEBUG -eq $GD_TRUE ]; then
+    if [ $SB_DEBUG -eq $SB_TRUE ]; then
         printf "DEBUG: %s\n" "$@";
     fi
 }

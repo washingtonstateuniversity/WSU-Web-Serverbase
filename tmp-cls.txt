@@ -1,0 +1,60 @@
+
+curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh | sudo sh -s -- -h
+
+
+
+curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh | sudo sh -s -- -a store.wsu.edu:jeremyBass/WSUMAGE-base -i -b bootstrap -o jeremyBass 
+
+curl https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- init
+
+curl https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
+
+gitploy storewsuedu  https://github.com/jeremyBass/WSUMAGE-base.git
+
+
+modgit add storewsuedu https://github.com/jeremyBass/WSUMAGE-base.git
+
+modgit ls 2>&1 | grep -qi "storewsuedu"
+
+git clone https://github.com/jeremyBass/WSUMAGE-base.git /var/app/store.wsu.edu
+curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh | sudo sh -s -- -b bootstrap -o jeremyBass -p store.wsu.edu
+
+
+
+
+vagrant up env=store.wsu.edu:jeremyBass/WSUMAGE-base
+
+
+
+
+
+curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh -m #{minion} | sudo sh
+
+
+ 
+salt-call state.highstate env=store.wsu.edu
+
+salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base
+
+
+
+cd ../
+rm -rf /var/app/store.wsu.edu/
+mkdir -p /var/app/store.wsu.edu/
+rm -rf /src/deployment/gitploy
+rm -rf /usr/sbin/gitploy
+cd /var/app/store.wsu.edu/
+curl https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
+gitploy init
+gitploy storewsuedu  https://github.com/jeremyBass/WSUMAGE-base.git
+
+
+
+
+
+
+
+
+
+
+

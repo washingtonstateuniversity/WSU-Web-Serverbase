@@ -82,6 +82,15 @@ load_env() {
   fi
 }
 
+
+#===  FUNCTION  ================================================================
+#          NAME:  echostd
+#   DESCRIPTION:  Echo stdout.  Basicly a proxy is what is done
+#===============================================================================
+echostd() {
+    [ $GD_QUIET -eq $GD_FALSE ] && printf "%s\n" "$@";
+}
+
 #===  FUNCTION  ================================================================
 #          NAME:  echoerr
 #   DESCRIPTION:  Echo errors to stderr.

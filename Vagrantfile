@@ -182,9 +182,9 @@ ERR
             v.gui = false
             v.name = CONFIG[:hostname]
             v.memory = CONFIG[:memory].to_i
-
+            cores= CONFIG[:cores].to_i
             if cores>1
-                v.customize ["modifyvm", :id, "--cpus", CONFIG[:cores].to_i ]
+                v.customize ["modifyvm", :id, "--cpus", cores ]
                 if CONFIG[:host_64bit]
                     v.customize ["modifyvm", :id, "--ioapic", "on"]
                 end
@@ -242,9 +242,12 @@ ERR
         end
         
         $provision_script<<" -i -b bootstrap -o jeremyBass \n"
-        
-        puts "running : #{$provision_script}"
-        config.vm.provision "shell", inline: $provision_script
+        if !destroying
+            puts "running : #{$provision_script}"
+            config.vm.provision "shell", inline: $provision_script
+        else
+            puts "Destroyed the local server, now, on to the world."
+        end
         puts "at the end of it"
     end
     

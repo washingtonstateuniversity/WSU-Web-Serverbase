@@ -189,9 +189,9 @@ load_app(){
         else
             gitploy init
             #bring it in with modgit
-            gitploy add ${modname} "https://github.com/${repopath}.git"
+            gitploy ${modname} "https://github.com/${repopath}.git"
         fi
-        ln -s /var/app/${appname}/provision/salt/ ${sympath}
+        ln -s /var/app/${appname}/provision/salt/ ${sympath} && echostd "linked /var/app/${appname}/provision/salt/ ${sympath}"
     fi
     #add the app to the queue of provisioning to do
     load_env ${appname}
@@ -238,7 +238,6 @@ rm -fr /src/salt
     
 #ensure deployment is available
 [ $(gitploy -v 2>&1 | grep -qi "Version") ] || curl  https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
-sleep 1
 [ -h /usr/sbin/gitploy ] || echoerr "gitploy failed install"
 
 # Handle options

@@ -116,7 +116,7 @@ provision_env(){
             _RANENV["${env}"]=1
         fi
     done
-    return 1
+    return 0
 }
 
 #===  FUNCTION  ================================================================
@@ -152,6 +152,7 @@ load_app(){
     fi
     #add the app to the queue of provisioning to do
     load_env ${appname}
+    return 0
 }
 
 
@@ -184,6 +185,7 @@ init_provision(){
     cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
     
     provision_env $_ENV
+    return 0
 }
 
 #this is very lazy but it's just for now

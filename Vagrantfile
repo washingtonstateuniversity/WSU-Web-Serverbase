@@ -241,11 +241,11 @@ ERR
         # Set up the web apps
         #########################
         config_obj[:apps].each_pair do |appname, obj|
-            $provision_script<<" -i -a #{appname}:#{obj[:repoid]} "
+            $provision_script<<" -a #{appname}:#{obj[:repoid]} "
         end
         
         $provision_script<<" -i -b bootstrap -o jeremyBass \n"
         
-
+        puts "running : #{$provision_script}"
         config.vm.provision "shell", inline: $provision_script
     end

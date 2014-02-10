@@ -11,6 +11,9 @@
 
 require 'json'
 
+#for dev
+#bootstrap="washingtonstateuniversity/WSU-Web-Serverbase/master"
+bootstrap="jeremyBass/WSU-Web-Serverbase/bootstrap"
 
 #######################
 # Setup
@@ -231,9 +234,8 @@ ERR
         # Provisioning: Salt 
         ################################################################              
         $provision_script=""
-        #$provision_script<<"curl -L https://raw.github.com/washingtonstateuniversity/WSU-Web-Serverbase/master/bootstrap.sh"
 
-        $provision_script<<"curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh | sudo sh -s -- -m #{CONFIG[:minion]} "
+        $provision_script<<"curl -L https://raw.github.com/#{bootstrap}/bootstrap.sh | sudo sh -s -- -m #{CONFIG[:minion]} "
         
         # Set up the web apps
         #########################
@@ -242,6 +244,7 @@ ERR
         end
         
         $provision_script<<" -i -b bootstrap -o jeremyBass \n"
+        
         if !destroying
             puts "running : #{$provision_script}"
             config.vm.provision "shell", inline: $provision_script

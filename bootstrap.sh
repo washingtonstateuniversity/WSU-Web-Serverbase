@@ -97,7 +97,7 @@ echoerror() {
 #   DESCRIPTION:  provision an environment.
 #===============================================================================
 provision_env(){
-    salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base
+    salt-call --log-level=info state.highstate env=base
     _RANENV["base"]=1
     
     envs_str=$1
@@ -110,9 +110,9 @@ provision_env(){
             echo "skipping ${env}"
         else
             echo "running environment ${env}"
-            [ -h "/srv/salt/${env}" ] || ln -s /srv/app/${env}/provision/salt /srv/salt/${env}
+            [ -h "/srv/salt/${env}" ] || ln -s /var/app/${env}/provision/salt /srv/salt/${env}
             salt-call state.clear_cache
-            salt-call --local --log-level=info --config-dir=/srv/app/${env}/provision/salt state.highstate env=${env}
+            salt-call --log-level=info state.highstate env=${env}
             _RANENV["${env}"]=1
         fi
     done

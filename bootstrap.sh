@@ -109,6 +109,15 @@ echoinfo() {
     [ $GD_QUIET -eq $GD_FALSE ] && printf "INFO: %s\n" "$@";
 }
 
+#===  FUNCTION  ================================================================
+#          NAME:  echowarn
+#   DESCRIPTION:  Echo warning informations to stdout.
+#===============================================================================
+echowarn() {
+    [ $GD_QUIET -eq $GD_FALSE ] && printf "WARN$: %s\n" "$@";
+}
+
+
 
 #===  FUNCTION  ================================================================
 #          NAME:  provision_env

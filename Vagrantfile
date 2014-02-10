@@ -281,8 +281,6 @@ ERR
         then
             $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{env}\n"
         else
-            $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=base\n"
-            
             # Set up the web apps
             #########################
             apps.each do |app| 

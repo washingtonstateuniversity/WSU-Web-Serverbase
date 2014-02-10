@@ -13,6 +13,7 @@
 #  ORGANIZATION: WSU
 #       CREATED: 1/1/2014
 #===============================================================================
+cd /
 set -o nounset                              # Treat unset variables as an error
 __ScriptVersion="0.1.0"
 __ScriptName="bootstrap.sh"
@@ -236,7 +237,6 @@ rm -fr /src/salt
     
 #ensure deployment is available
 [ $(gitploy -v 2>&1 | grep -qi "Version") ] || curl  https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
-gitploy -v
 [ $(gitploy -v 2>&1 | grep -qi "Version") ] || echoerr "gitploy failed install"
 
 # Handle options

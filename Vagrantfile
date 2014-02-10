@@ -57,6 +57,19 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         end
 
         if !destroying
+            configFile="config.json"
+            if File.exist?("config.json")
+              # See e.g. https://gist.github.com/karmi/2050769#file-node-example-json
+              begin
+                custom_config = JSON.parse(File.read(configFile), symbolize_names: true)
+              rescue Exception => e
+                STDERR.puts "[!] Error when reading the configuration file:",
+                            e.inspect
+              end
+            else
+              custom_config = {}
+            end
+            
             apps.each_pair do |name, repo|
                 appname=name.to_s
                 repolocation=repo.to_s

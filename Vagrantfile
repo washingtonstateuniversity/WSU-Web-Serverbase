@@ -9,8 +9,14 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-    # Parse options
-    options = {}
+require 'json'
+
+#read this from config
+apps = {
+  :"store.wsu.edu" => "jeremyBass/WSUMAGE-base"
+}
+
+
 
 #######################
 # CONFIG Values
@@ -31,22 +37,7 @@ verbose_output=true     # (bool) default:true                   - How much do yo
 ######################
 # There shouldn't be anything to edit below this point config wise
 ####################################################################
-
     
-    ARGV.each do |arg|        
-        if arg.include?'env='
-            puts arg
-            options[:env] = arg.split( "=" ).last
-            ARGV.delete_at(ARGV.index(arg))
-        else
-            options[:env] = nil
-        end
-    end
-    puts "now what is"
-    ARGV.each do |arg|        
-        puts arg
-    end
-
     ################################################################ 
     # Setup value defaults
     ################################################################ 
@@ -58,7 +49,21 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         # the sub projects :: writes out the salt "config data" and 
         # sets up for vagrant.  The production is done by hand on purpose
         ###############################################################
-    
+        destroying=false
+        ARGV.each do |arg|        
+            if arg.include?'destroy'
+                destroying=true
+            end
+        end
+
+        if !destroying
+            apps.each_pair do |name, repo|
+                appname=name.to_s
+                repolocation=repo.to_s
+                puts "cloning repo that was missing"
+                puts `git clone https://github.com/#{repolocation}.git app/#{appname}`
+            end
+        end
         filename = vagrant_dir+"/provision/salt/minions/#{minion}.conf"
         text = File.read(filename)
         
@@ -274,19 +279,15 @@ ERR
         # avoid network connectivity issues and to specify that a newer version of Salt be installed.
         
         $provision_script=""
-        $provision_script<<"curl -L https://raw.github.com/washingtonstateuniversity/WSU-Web-Serverbase/master/bootstrap.sh | sudo sh -s -- -m #{minion} \n"
+        #$provision_script<<"curl -L https://raw.github.com/washingtonstateuniversity/WSU-Web-Serverbase/master/bootstrap.sh | sudo sh -s -- -m #{minion} \n"
 
-        env=options[:env]
-        if apps.include?env
-        then
-            $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{env}\n"
-        else
-            # Set up the web apps
-            #########################
-            apps.each do |app| 
-                config.vm.synced_folder "app/#{app}/provision/salt", "/srv/salt/#{app}"
-                $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{app}\n"
-            end
+        $provision_script<<"curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh | sudo sh -s --  -i -b bootstrap -o jeremyBass \n"
+        
+        # Set up the web apps
+        #########################
+        apps.each do |app| 
+            config.vm.synced_folder "app/#{app}/provision/salt", "/srv/salt/#{app}"
+            $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{app}\n"
         end
 
         config.vm.provision "shell", inline: $provision_script

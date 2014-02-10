@@ -212,7 +212,7 @@ init_provision(){
     
     #build git command
     #git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
-    git_cmd="gitploy ${_BRANCH} ${_TAG} serverbase https://github.com/${_OWNER}/WSU-Web-Serverbase.git
+    git_cmd="gitploy ${_BRANCH} ${_TAG} serverbase https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
     cd /src/salt/Serverbase
     [ $(gitploy init 2>&1 | grep -qi "already initialized") ] || gitploy init
     [ $(gitploy ls 2>&1 | grep -qi "serverbase") ] || eval $git_cmd

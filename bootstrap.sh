@@ -162,7 +162,7 @@ load_app(){
 #===============================================================================
 init_provision(){
     #ensure the src bed
-    [ -d /src/salt ] || mkdir -p /src/salt
+    [ -d /src/salt/Serverbase ] || mkdir -p /src/salt/Serverbase
     [ -d /srv/salt/base ] || mkdir -p /srv/salt/base
     
     #start cloning it the provisioner
@@ -172,8 +172,8 @@ init_provision(){
     #build git command
     git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
     
-    cd /src/salt && eval $git_cmd 
-    [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
+    cd /src/salt/Serverbase && gitploy 
+    [ -h /srv/salt/base/ ] || ln -s /src/salt/Serverbase/provision/salt/* /srv/salt/base/
 
     #start provisioning
     if [ -f /srv/salt/base/config/yum.conf ]; then

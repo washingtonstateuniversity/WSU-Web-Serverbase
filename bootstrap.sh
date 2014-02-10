@@ -117,7 +117,15 @@ echowarn() {
     [ $GD_QUIET -eq $GD_FALSE ] && printf "WARN$: %s\n" "$@";
 }
 
-
+#===  FUNCTION  ================================================================
+#          NAME:  echodebug
+#   DESCRIPTION:  Echo debug information to stdout.
+#===============================================================================
+echodebug() {
+    if [ $GD_DEBUG -eq $GD_TRUE ]; then
+        printf "DEBUG: %s\n" "$@";
+    fi
+}
 
 #===  FUNCTION  ================================================================
 #          NAME:  provision_env

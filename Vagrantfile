@@ -68,11 +68,14 @@ require 'json'
             config_obj[:apps].each_pair do |name, obj|
                 appname=name.to_s
                 repolocation=obj[:repo].to_s
-                puts "cloning repo that was missing"
-                puts `git clone https://github.com/#{repolocation}.git app/#{appname}`
+                if !File.exist?("app/#{appname}")
+                    puts "cloning repo that was missing"
+                    puts "git clone #{repolocation} app/#{appname}"
+                    puts `git clone #{repolocation} app/#{appname}`
+                end
             end
         end
-        filename = vagrant_dir+"/provision/salt/minions/#{minion}.conf"
+        filename = vagrant_dir+"/provision/salt/minions/#{CONFIG[:minion]}.conf"
         text = File.read(filename)
         
         PILLARFILE=   "#PILLAR_ROOT-\n"
@@ -181,10 +184,10 @@ ERR
             v.gui = false
             v.name = CONFIG[:hostname]
             v.memory = CONFIG[:memory]
-            
+            cores=CONFIG[:cores].to_i
             if cores>1
-                v.customize ["modifyvm", :id, "--cpus", CONFIG[:cores] ]
-                if host_64bit
+                v.customize ["modifyvm", :id, "--cpus", cores ]
+                if CONFIG[:host_64bit]
                     v.customize ["modifyvm", :id, "--ioapic", "on"]
                 end
             end
@@ -198,7 +201,7 @@ ERR
         
         # Set networking options
         ################################################################           
-        if !(hostname.nil? || !hostname.empty?)
+        if !(CONFIG[:hostname].nil? || !CONFIG[:hostname].empty?)
             config.vm.hostname = CONFIG[:hostname]
         end
         config.vm.network :private_network, ip: CONFIG[:ip]
@@ -209,10 +212,8 @@ ERR
         # Capture the paths to all `hosts` files under the repository's provision directory.
 
         hosts = []
-        config_obj[:apps].each do |app|
-            obj[:hosts].each do |host|
-                hosts.concat host
-            end
+        config_obj[:apps].each do |app,obj|
+            hosts.concat obj[:hosts]
         end
         
         if defined? VagrantPlugins::HostsUpdater

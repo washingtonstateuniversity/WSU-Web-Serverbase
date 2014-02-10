@@ -5,15 +5,15 @@
         "memory":"512",
         "cores":"2",
         "host_64bit":"true",
-        "install_type":'testing',
-        "minion":'vagrant',
+        "install_type":"testing",
+        "minion":"vagrant",
         "verbose_output":"true"  
     },
     "apps": {
         "store.wsu.edu": {
             "repo":"-b master https://github.com/jeremyBass/WSUMAGE-base.git",
             "repoid":"jeremyBass/WSUMAGE-base",
-            "host":[
+            "hosts":[
                 "store.mage.dev",
                 "events.store.mage.dev",
                 "student.store.mage.dev",

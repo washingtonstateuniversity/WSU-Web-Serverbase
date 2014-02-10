@@ -175,7 +175,7 @@ load_app(){
     repopath=${app[1]}
     sympath="/srv/salt/${appname}/"
     
-
+    [ -d /var/app ] || mkdir -p /var/app
     cd /var/app
 
     if [[ -L "$sympath" && -d "$sympath" ]]; then

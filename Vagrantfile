@@ -119,8 +119,6 @@ require 'json'
     ################################################################   
     Vagrant.configure("2") do |config|
 
-
-
         # check all versions of vagrant and plugins first
         ################################################################ 
 
@@ -183,16 +181,15 @@ ERR
         config.vm.provider :virtualbox do |v|
             v.gui = false
             v.name = CONFIG[:hostname]
-            v.memory = CONFIG[:memory]
-            cores=CONFIG[:cores].to_i
+            v.memory = CONFIG[:memory].to_i
+
             if cores>1
-                v.customize ["modifyvm", :id, "--cpus", cores ]
+                v.customize ["modifyvm", :id, "--cpus", CONFIG[:cores].to_i ]
                 if CONFIG[:host_64bit]
                     v.customize ["modifyvm", :id, "--ioapic", "on"]
                 end
             end
         end
-        
 
         # CentOS 6.4, 64 bit release
         ################################################################  
@@ -248,4 +245,6 @@ ERR
         
         puts "running : #{$provision_script}"
         config.vm.provision "shell", inline: $provision_script
+        puts "at the end of it"
     end
+    

@@ -101,6 +101,14 @@ echoerr() {
 }
 
 
+#===  FUNCTION  ================================================================
+#          NAME:  echoinfo
+#   DESCRIPTION:  Echo information to stdout.
+#===============================================================================
+echoinfo() {
+    [ $GD_QUIET -eq $GD_FALSE ] && printf "INFO: %s\n" "$@";
+}
+
 
 #===  FUNCTION  ================================================================
 #          NAME:  provision_env

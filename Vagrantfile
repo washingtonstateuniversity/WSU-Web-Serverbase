@@ -90,29 +90,18 @@ require 'json'
         SALT_ENV << "    - base\n"
         SALT_ENV << "    - vagrant\n"
     
-        apps = []
-        paths = []
-        Dir.glob(vagrant_dir + "/app/*").each do |path|
-          paths << path
-        end
-        paths.each do |path|
-            if path.include? "app/html"
-                next
-            end
+        config_obj[:apps].each_pair do |name, obj|
+            appname=name.to_s
             
-            appfolder = path.split( "/" ).last
-            app=appfolder.strip! || appfolder
-            apps <<  app
-            
-            SALT_ENV << "    - #{app}\n"
+            SALT_ENV << "    - #{appname}\n"
 
-            PILLARFILE << "  #{app}:\n"
-            PILLARFILE << "    - /srv/salt/#{app}/pillar\n"
+            PILLARFILE << "  #{appname}:\n"
+            PILLARFILE << "    - /srv/salt/#{appname}/pillar\n"
             
-            ROOTFILE << "  #{app}:\n"
-            ROOTFILE << "    - /srv/salt/#{app}\n"
+            ROOTFILE << "  #{appname}:\n"
+            ROOTFILE << "    - /srv/salt/#{appname}\n"
         end
-    
+
         SALT_ENV << "#ENV_END-"
         PILLARFILE << "#END_OF_PILLAR_ROOT-"
         ROOTFILE << "#END_OF_FILE_ROOT-"
@@ -214,29 +203,15 @@ ERR
         end
         config.vm.network :private_network, ip: CONFIG[:ip]
 
-
         # register hosts for all hosts for apps and the server
         ################################################################
         # Local Machine Hosts
         # Capture the paths to all `hosts` files under the repository's provision directory.
-        paths = []
+
         hosts = []
-        apps.each do |app|
-            Dir.glob(vagrant_dir + "/app/#{app}/provision/salt/config/hosts").each do |path|
-              paths << path
-            end
-            # Parse through the `hosts` files in each of the found paths and put the hosts
-            # that are found into a single array. Lines commented out with # will be skipped.
-            
-            paths.each do |path|
-              new_hosts = []
-              file_hosts = IO.read(path).split( "\n" )
-              file_hosts.each do |line|
-                if line[0..0] != "#"
-                  new_hosts << line
-                end
-              end
-              hosts.concat new_hosts
+        config_obj[:apps].each do |app|
+            obj[:hosts].each do |host|
+                hosts.concat host
             end
         end
         
@@ -256,23 +231,20 @@ ERR
         config.vm.synced_folder "app", "/var/app", :mount_options => [ "uid=510,gid=510", "dmode=775", "fmode=774" ]
 
         # Provisioning: Salt 
-        ################################################################      
-        # Map the provisioning directory to the guest machine and initiate the provisioning process
-        # with salt. On the first build of a virtual machine, if Salt has not yet been installed, it
-        # will be bootstrapped automatically. We have provided a modified local bootstrap script to
-        # avoid network connectivity issues and to specify that a newer version of Salt be installed.
-        
+        ################################################################              
         $provision_script=""
-        #$provision_script<<"curl -L https://raw.github.com/washingtonstateuniversity/WSU-Web-Serverbase/master/bootstrap.sh | sudo sh -s -- -m #{CONFIG[:minion]} \n"
+        #$provision_script<<"curl -L https://raw.github.com/washingtonstateuniversity/WSU-Web-Serverbase/master/bootstrap.sh"
 
-        $provision_script<<"curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh | sudo sh -s --  -i -b bootstrap -o jeremyBass \n"
+        $provision_script<<"curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh | sudo sh -s -- -m #{CONFIG[:minion]} "
         
         # Set up the web apps
         #########################
-        apps.each do |app| 
-            config.vm.synced_folder "app/#{app}/provision/salt", "/srv/salt/#{app}"
-            $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{app}\n"
+        config_obj[:apps].each_pair do |appname, obj|
+            $provision_script<<" -i -a #{appname}:#{obj[:repoid]} \n"
         end
+        
+        $provision_script<<" -i -b bootstrap -o jeremyBass \n"
+        
 
         config.vm.provision "shell", inline: $provision_script
     end

@@ -235,7 +235,8 @@ init_provision(){
 rm -fr /src/salt
     
 #ensure deployment is available
-[ $(gitploy -v 2>&1 | grep -qi "Version") ] || curl  https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install || echoerr "gitploy failed install"
+[ $(gitploy -v 2>&1 | grep -qi "Version") ] || curl  https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
+[ $(gitploy -v 2>&1 | grep -qi "Version") ] || echoerr "gitploy failed install"
 
 # Handle options
 while getopts ":vhd:m:o:b:t:e:i:p:a:" opt

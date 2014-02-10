@@ -241,7 +241,7 @@ ERR
         # Set up the web apps
         #########################
         config_obj[:apps].each_pair do |appname, obj|
-            $provision_script<<" -i -a #{appname}:#{obj[:repoid]} \n"
+            $provision_script<<" -i -a #{appname}:#{obj[:repoid]} "
         end
         
         $provision_script<<" -i -b bootstrap -o jeremyBass \n"

@@ -9,21 +9,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-    # Parse options
-    options = {}
-
-#######################
-# CONFIG Values
-#####################
-
-ip="10.10.30.30"        # (str) default:10.10.30.30             - ip of the VirturalBox
-hostname="WSUBASE"      # (str) default:WSUBASE                 - name of the host
-memory=512              # (int) default:512                     - How much memory would you like to share from your host
-cores=2                 # (int) default:1                       - How many processor from the host do you want to share
-host_64bit=true         # (bool) default:false                  - If you are on windows and are sharing more then 2 cores set to true
-install_type='testing'  # (testing) default:testing             - Type of install
-minion='vagrant'        # (vagrant/production) default:vagrant  - Which minion to run
-verbose_output=true     # (bool) default:true                   - How much do you want to see in the console
+require 'json'
 
 
 #######################
@@ -31,22 +17,7 @@ verbose_output=true     # (bool) default:true                   - How much do yo
 ######################
 # There shouldn't be anything to edit below this point config wise
 ####################################################################
-
     
-    ARGV.each do |arg|        
-        if arg.include?'env='
-            puts arg
-            options[:env] = arg.split( "=" ).last
-            ARGV.delete_at(ARGV.index(arg))
-        else
-            options[:env] = nil
-        end
-    end
-    puts "now what is"
-    ARGV.each do |arg|        
-        puts arg
-    end
-
     ################################################################ 
     # Setup value defaults
     ################################################################ 
@@ -58,8 +29,53 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         # the sub projects :: writes out the salt "config data" and 
         # sets up for vagrant.  The production is done by hand on purpose
         ###############################################################
-    
-        filename = vagrant_dir+"/provision/salt/minions/#{minion}.conf"
+        destroying=false
+        ARGV.each do |arg|        
+            if arg.include?'destroy'
+                destroying=true
+            end
+        end
+        configFile="config.json"
+        if File.exist?("config.json")
+            # See e.g. https://gist.github.com/karmi/2050769#file-node-example-json
+            begin
+                config_obj = JSON.parse(File.read(configFile), symbolize_names: true)
+                rescue Exception => e
+                STDERR.puts "[!] Error when reading the configuration file:",
+                e.inspect
+            end
+        else
+            config_obj = {
+              :vagrant_options => {
+                    :ip => "10.10.30.120",
+                    :hostname => "WSUBASE",
+                    :memory => "512",
+                    :cores => "2",
+                    :host_64bit => true,
+                    :install_type => 'testing',
+                    :minion => 'vagrant',
+                    :verbose_output => true 
+                }
+            }
+        end
+        
+        #######################
+        # CONFIG Values
+        #####################
+        CONFIG=config_obj[:vagrant_options]
+        
+        if !destroying        
+            config_obj[:apps].each_pair do |name, obj|
+                appname=name.to_s
+                repolocation=obj[:repo].to_s
+                if !File.exist?("app/#{appname}")
+                    puts "cloning repo that was missing"
+                    puts "git clone #{repolocation} app/#{appname}"
+                    puts `git clone #{repolocation} app/#{appname}`
+                end
+            end
+        end
+        filename = vagrant_dir+"/provision/salt/minions/#{CONFIG[:minion]}.conf"
         text = File.read(filename)
         
         PILLARFILE=   "#PILLAR_ROOT-\n"
@@ -77,29 +93,18 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         SALT_ENV << "    - base\n"
         SALT_ENV << "    - vagrant\n"
     
-        apps = []
-        paths = []
-        Dir.glob(vagrant_dir + "/app/*").each do |path|
-          paths << path
-        end
-        paths.each do |path|
-            if path.include? "app/html"
-                next
-            end
+        config_obj[:apps].each_pair do |name, obj|
+            appname=name.to_s
             
-            appfolder = path.split( "/" ).last
-            app=appfolder.strip! || appfolder
-            apps <<  app
-            
-            SALT_ENV << "    - #{app}\n"
+            SALT_ENV << "    - #{appname}\n"
 
-            PILLARFILE << "  #{app}:\n"
-            PILLARFILE << "    - /srv/salt/#{app}/pillar\n"
+            PILLARFILE << "  #{appname}:\n"
+            PILLARFILE << "    - /srv/salt/#{appname}/pillar\n"
             
-            ROOTFILE << "  #{app}:\n"
-            ROOTFILE << "    - /srv/salt/#{app}\n"
+            ROOTFILE << "  #{appname}:\n"
+            ROOTFILE << "    - /srv/salt/#{appname}\n"
         end
-    
+
         SALT_ENV << "#ENV_END-"
         PILLARFILE << "#END_OF_PILLAR_ROOT-"
         ROOTFILE << "#END_OF_FILE_ROOT-"
@@ -109,30 +114,6 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         edited = edited.gsub(/\#ENV_START-.*\#ENV_END-/im, SALT_ENV)
         File.open(filename, "w") { |file| file << edited }
     
-        # set defaults ?? maybe go away ??
-        ################################################################
-        minion = minion.to_s.empty? ? 'vagrant' : minion
-        ip = ip.to_s.empty? ? '10.10.30.30' : ip
-        memory = memory.to_s.empty? ? 512 : memory
-        cores = cores.to_s.empty? ? 1 : cores
-        hostname = hostname.to_s.empty? ? "WSUBASE" : hostname
-        install_type = install_type.to_s.empty? ? "testing" : install_type
-        host_64bit = host_64bit.to_s.empty? ? false : host_64bit
-
-
-        # we need these and have the ablilty to install this for them, do so
-        #output = `vagrant plugin list`
-        #if !output.include? "vagrant-hostsupdater"
-        #    puts "hostsupdater not loaded but needed\ninstalling vagrant-hostsupdater plugin"
-        #    puts `vagrant plugin install vagrant-hostsupdater`
-        #end
-        #if !output.include? "vagrant-vbguest"
-        #    puts "installing vagrant-vbguest plugin"
-        #    puts `vagrant plugin install vagrant-vbguest`
-        #end 
-
-
-
     ################################################################ 
     # Start Vagrant
     ################################################################   
@@ -201,12 +182,12 @@ ERR
         ################################################################ 
         config.vm.provider :virtualbox do |v|
             v.gui = false
-            v.name = hostname
-            v.memory = memory
-            
+            v.name = CONFIG[:hostname]
+            v.memory = CONFIG[:memory]
+            cores=CONFIG[:cores].to_i
             if cores>1
-                v.customize ["modifyvm", :id, "--cpus", cores]
-                if host_64bit
+                v.customize ["modifyvm", :id, "--cpus", cores ]
+                if CONFIG[:host_64bit]
                     v.customize ["modifyvm", :id, "--ioapic", "on"]
                 end
             end
@@ -220,35 +201,19 @@ ERR
         
         # Set networking options
         ################################################################           
-        if !(hostname.nil? || !hostname.empty?)
-            config.vm.hostname = hostname
+        if !(CONFIG[:hostname].nil? || !CONFIG[:hostname].empty?)
+            config.vm.hostname = CONFIG[:hostname]
         end
-        config.vm.network :private_network, ip: ip
-
+        config.vm.network :private_network, ip: CONFIG[:ip]
 
         # register hosts for all hosts for apps and the server
         ################################################################
         # Local Machine Hosts
         # Capture the paths to all `hosts` files under the repository's provision directory.
-        paths = []
+
         hosts = []
-        apps.each do |app|
-            Dir.glob(vagrant_dir + "/app/#{app}/provision/salt/config/hosts").each do |path|
-              paths << path
-            end
-            # Parse through the `hosts` files in each of the found paths and put the hosts
-            # that are found into a single array. Lines commented out with # will be skipped.
-            
-            paths.each do |path|
-              new_hosts = []
-              file_hosts = IO.read(path).split( "\n" )
-              file_hosts.each do |line|
-                if line[0..0] != "#"
-                  new_hosts << line
-                end
-              end
-              hosts.concat new_hosts
-            end
+        config_obj[:apps].each do |app,obj|
+            hosts.concat obj[:hosts]
         end
         
         if defined? VagrantPlugins::HostsUpdater
@@ -267,27 +232,20 @@ ERR
         config.vm.synced_folder "app", "/var/app", :mount_options => [ "uid=510,gid=510", "dmode=775", "fmode=774" ]
 
         # Provisioning: Salt 
-        ################################################################      
-        # Map the provisioning directory to the guest machine and initiate the provisioning process
-        # with salt. On the first build of a virtual machine, if Salt has not yet been installed, it
-        # will be bootstrapped automatically. We have provided a modified local bootstrap script to
-        # avoid network connectivity issues and to specify that a newer version of Salt be installed.
-        
+        ################################################################              
         $provision_script=""
-        $provision_script<<"curl -L https://raw.github.com/washingtonstateuniversity/WSU-Web-Serverbase/master/bootstrap.sh | sudo sh -s -- -m #{minion} \n"
+        #$provision_script<<"curl -L https://raw.github.com/washingtonstateuniversity/WSU-Web-Serverbase/master/bootstrap.sh"
 
-        env=options[:env]
-        if apps.include?env
-        then
-            $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{env}\n"
-        else
-            # Set up the web apps
-            #########################
-            apps.each do |app| 
-                config.vm.synced_folder "app/#{app}/provision/salt", "/srv/salt/#{app}"
-                $provision_script<<"salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=#{app}\n"
-            end
+        $provision_script<<"curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh | sudo sh -s -- -m #{CONFIG[:minion]} "
+        
+        # Set up the web apps
+        #########################
+        config_obj[:apps].each_pair do |appname, obj|
+            $provision_script<<" -a #{appname}:#{obj[:repoid]} "
         end
-
+        
+        $provision_script<<" -i -b bootstrap -o jeremyBass \n"
+        
+        puts "running : #{$provision_script}"
         config.vm.provision "shell", inline: $provision_script
     end

@@ -1,0 +1,26 @@
+{
+    "vagrant_options": {
+        "ip":"10.10.30.30",
+        "hostname":"WSUBASE",
+        "memory":"512",
+        "cores":"2",
+        "host_64bit":"true",
+        "install_type":"testing",
+        "minion":"vagrant",
+        "verbose_output":"true"  
+    },
+    "apps": {
+        "store.wsu.edu": {
+            "repo":"-b master https://github.com/jeremyBass/WSUMAGE-base.git",
+            "repoid":"jeremyBass/WSUMAGE-base",
+            "hosts":[
+                "store.mage.dev",
+                "events.store.mage.dev",
+                "student.store.mage.dev",
+                "general.store.mage.dev",
+                "store.admin.mage.dev",
+                "tech.store.mage.dev"
+            ]
+        }
+    }
+}

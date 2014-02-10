@@ -11,26 +11,6 @@
 
 require 'json'
 
-#read this from config
-apps = {
-  :"store.wsu.edu" => "jeremyBass/WSUMAGE-base"
-}
-
-
-
-#######################
-# CONFIG Values
-#####################
-
-ip="10.10.30.30"        # (str) default:10.10.30.30             - ip of the VirturalBox
-hostname="WSUBASE"      # (str) default:WSUBASE                 - name of the host
-memory=512              # (int) default:512                     - How much memory would you like to share from your host
-cores=2                 # (int) default:1                       - How many processor from the host do you want to share
-host_64bit=true         # (bool) default:false                  - If you are on windows and are sharing more then 2 cores set to true
-install_type='testing'  # (testing) default:testing             - Type of install
-minion='vagrant'        # (vagrant/production) default:vagrant  - Which minion to run
-verbose_output=true     # (bool) default:true                   - How much do you want to see in the console
-
 
 #######################
 # Setup
@@ -59,18 +39,35 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         if File.exist?("config.json")
             # See e.g. https://gist.github.com/karmi/2050769#file-node-example-json
             begin
-                custom_config = JSON.parse(File.read(configFile), symbolize_names: true)
+                config_obj = JSON.parse(File.read(configFile), symbolize_names: true)
                 rescue Exception => e
                 STDERR.puts "[!] Error when reading the configuration file:",
                 e.inspect
             end
         else
-            custom_config = {}
+            config_obj = {
+              :vagrant_options => {
+                    :ip => "10.10.30.120",
+                    :hostname => "WSUBASE",
+                    :memory => "512",
+                    :cores => "2",
+                    :host_64bit => true,
+                    :install_type => 'testing',
+                    :minion => 'vagrant',
+                    :verbose_output => true 
+                }
+            }
         end
+        
+        #######################
+        # CONFIG Values
+        #####################
+        CONFIG=config_obj[:vagrant_options]
+        
         if !destroying        
-            apps.each_pair do |name, repo|
+            config_obj[:apps].each_pair do |name, obj|
                 appname=name.to_s
-                repolocation=repo.to_s
+                repolocation=obj[:repo].to_s
                 puts "cloning repo that was missing"
                 puts `git clone https://github.com/#{repolocation}.git app/#{appname}`
             end
@@ -125,30 +122,6 @@ verbose_output=true     # (bool) default:true                   - How much do yo
         edited = edited.gsub(/\#ENV_START-.*\#ENV_END-/im, SALT_ENV)
         File.open(filename, "w") { |file| file << edited }
     
-        # set defaults ?? maybe go away ??
-        ################################################################
-        minion = minion.to_s.empty? ? 'vagrant' : minion
-        ip = ip.to_s.empty? ? '10.10.30.30' : ip
-        memory = memory.to_s.empty? ? 512 : memory
-        cores = cores.to_s.empty? ? 1 : cores
-        hostname = hostname.to_s.empty? ? "WSUBASE" : hostname
-        install_type = install_type.to_s.empty? ? "testing" : install_type
-        host_64bit = host_64bit.to_s.empty? ? false : host_64bit
-
-
-        # we need these and have the ablilty to install this for them, do so
-        #output = `vagrant plugin list`
-        #if !output.include? "vagrant-hostsupdater"
-        #    puts "hostsupdater not loaded but needed\ninstalling vagrant-hostsupdater plugin"
-        #    puts `vagrant plugin install vagrant-hostsupdater`
-        #end
-        #if !output.include? "vagrant-vbguest"
-        #    puts "installing vagrant-vbguest plugin"
-        #    puts `vagrant plugin install vagrant-vbguest`
-        #end 
-
-
-
     ################################################################ 
     # Start Vagrant
     ################################################################   
@@ -217,11 +190,11 @@ ERR
         ################################################################ 
         config.vm.provider :virtualbox do |v|
             v.gui = false
-            v.name = hostname
-            v.memory = memory
+            v.name = CONFIG[:hostname]
+            v.memory = CONFIG[:memory]
             
             if cores>1
-                v.customize ["modifyvm", :id, "--cpus", cores]
+                v.customize ["modifyvm", :id, "--cpus", CONFIG[:cores] ]
                 if host_64bit
                     v.customize ["modifyvm", :id, "--ioapic", "on"]
                 end
@@ -237,9 +210,9 @@ ERR
         # Set networking options
         ################################################################           
         if !(hostname.nil? || !hostname.empty?)
-            config.vm.hostname = hostname
+            config.vm.hostname = CONFIG[:hostname]
         end
-        config.vm.network :private_network, ip: ip
+        config.vm.network :private_network, ip: CONFIG[:ip]
 
 
         # register hosts for all hosts for apps and the server
@@ -290,7 +263,7 @@ ERR
         # avoid network connectivity issues and to specify that a newer version of Salt be installed.
         
         $provision_script=""
-        #$provision_script<<"curl -L https://raw.github.com/washingtonstateuniversity/WSU-Web-Serverbase/master/bootstrap.sh | sudo sh -s -- -m #{minion} \n"
+        #$provision_script<<"curl -L https://raw.github.com/washingtonstateuniversity/WSU-Web-Serverbase/master/bootstrap.sh | sudo sh -s -- -m #{CONFIG[:minion]} \n"
 
         $provision_script<<"curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh | sudo sh -s --  -i -b bootstrap -o jeremyBass \n"
         

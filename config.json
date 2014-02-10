@@ -11,7 +11,7 @@
     },
     "apps": {
         "store.wsu.edu": {
-            "repo":"-b master https://github.com/jeremyBass/WSUMAGE-base.git"
+            "repo":"-b master https://github.com/jeremyBass/WSUMAGE-base.git",
             "host":[
                 "store.mage.dev",
                 "events.store.mage.dev",

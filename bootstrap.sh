@@ -110,7 +110,7 @@ provision_env(){
             echo "skipping ${env}"
         else
             echo "running environment ${env}"
-            salt-call --local --log-level=info --config-dir=/etc/salt state.highstate env=${env}
+            salt-call --local --log-level=info --config-dir=/srv/app/${env}/provision/salt state.highstate env=${env}
             _RANENV["${env}"]=1
         fi
     done

@@ -38,28 +38,27 @@ bootstrap="jeremyBass/WSU-Web-Serverbase/bootstrap"
                 destroying=true
             end
         end
+        config_str_obj=""
         configFile="config.json"
         if File.exist?("config.json")
             # See e.g. https://gist.github.com/karmi/2050769#file-node-example-json
             begin
-                config_obj = JSON.parse(File.read(configFile), symbolize_names: true)
+                config_str_obj=File.read(configFile).split.join(' ')
+                config_obj = JSON.parse(config_str_obj, symbolize_names: true)
                 rescue Exception => e
                 STDERR.puts "[!] Error when reading the configuration file:",
                 e.inspect
             end
         else
-            config_obj = {
-              :vagrant_options => {
-                    :ip => "10.10.30.120",
-                    :hostname => "WSUBASE",
-                    :memory => "512",
-                    :cores => "2",
-                    :host_64bit => true,
-                    :install_type => 'testing',
-                    :minion => 'vagrant',
-                    :verbose_output => true 
-                }
-            }
+            config_str_obj = '{ "vagrant_options": { "ip":"10.10.30.30", "hostname":"WSUWEB", "memory":"1024", "cores":"4", "host_64bit":"true", "install_type":"testing", "minion":"vagrant", "verbose_output":"true" } }'
+            begin
+                config_obj = JSON.parse(config_str_obj, symbolize_names: true)
+                rescue Exception => e
+                STDERR.puts "[!] Error when reading the configuration file:",
+                e.inspect
+            end
+            
+            
         end
         
         #######################
@@ -234,7 +233,6 @@ ERR
         # Provisioning: Salt 
         ################################################################              
         $provision_script=""
-
         $provision_script<<"curl -L https://raw.github.com/#{bootstrap}/bootstrap.sh | sudo sh -s -- -m #{CONFIG[:minion]} "
         
         # Set up the web apps

@@ -11,6 +11,9 @@
 
 require 'json'
 
+#for dev
+#bootstrap="washingtonstateuniversity/WSU-Web-Serverbase/master"
+bootstrap="jeremyBass/WSU-Web-Serverbase/bootstrap"
 
 #######################
 # Setup
@@ -119,8 +122,6 @@ require 'json'
     ################################################################   
     Vagrant.configure("2") do |config|
 
-
-
         # check all versions of vagrant and plugins first
         ################################################################ 
 
@@ -183,8 +184,8 @@ ERR
         config.vm.provider :virtualbox do |v|
             v.gui = false
             v.name = CONFIG[:hostname]
-            v.memory = CONFIG[:memory]
-            cores=CONFIG[:cores].to_i
+            v.memory = CONFIG[:memory].to_i
+            cores= CONFIG[:cores].to_i
             if cores>1
                 v.customize ["modifyvm", :id, "--cpus", cores ]
                 if CONFIG[:host_64bit]
@@ -192,7 +193,6 @@ ERR
                 end
             end
         end
-        
 
         # CentOS 6.4, 64 bit release
         ################################################################  
@@ -234,9 +234,8 @@ ERR
         # Provisioning: Salt 
         ################################################################              
         $provision_script=""
-        #$provision_script<<"curl -L https://raw.github.com/washingtonstateuniversity/WSU-Web-Serverbase/master/bootstrap.sh"
 
-        $provision_script<<"curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh | sudo sh -s -- -m #{CONFIG[:minion]} "
+        $provision_script<<"curl -L https://raw.github.com/#{bootstrap}/bootstrap.sh | sudo sh -s -- -m #{CONFIG[:minion]} "
         
         # Set up the web apps
         #########################
@@ -246,6 +245,12 @@ ERR
         
         $provision_script<<" -i -b bootstrap -o jeremyBass \n"
         
-        puts "running : #{$provision_script}"
-        config.vm.provision "shell", inline: $provision_script
+        if !destroying
+            puts "running : #{$provision_script}"
+            config.vm.provision "shell", inline: $provision_script
+        else
+            puts "Destroyed the local server, now, on to the world."
+        end
+        puts "at the end of it"
     end
+    

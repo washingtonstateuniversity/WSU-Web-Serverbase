@@ -233,6 +233,18 @@ init_provision(){
     return 0
 }
 
+#===  FUNCTION  ================================================================
+#          NAME:  init_json
+#   DESCRIPTION:  adds needed json support to the system.
+#===============================================================================
+init_json(){
+    wget http://stedolan.github.io/jq/download/linux64/jq
+    chmod +x ./jq
+    cp jq /usr/bin
+}
+[ $(which jq 2>&1 | grep -qi "/usr/bin/jq") ] || init_json
+
+
 #this is very lazy but it's just for now
 rm -fr /src/salt
     

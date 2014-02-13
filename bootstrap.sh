@@ -13,6 +13,7 @@
 #  ORGANIZATION: WSU
 #       CREATED: 1/1/2014
 #===============================================================================
+cd /
 set -o nounset                              # Treat unset variables as an error
 __ScriptVersion="0.1.0"
 __ScriptName="bootstrap.sh"
@@ -64,6 +65,12 @@ _BRANCH=""
 _TAG=""
 _ENV="base"
 
+# Some truth values
+SB_TRUE=1
+SB_FALSE=0
+SB_QUIET=$SB_FALSE
+SB_DEBUG=$SB_FALSE
+
 declare -A _RANENV=()
 
 _REPOURL="https://github.com"
@@ -84,13 +91,48 @@ load_env() {
 
 
 #===  FUNCTION  ================================================================
+#          NAME:  echostd
+#   DESCRIPTION:  Echo stdout.  Basicly a proxy is what is done
+#===============================================================================
+echostd() {
+    [ $SB_QUIET -eq $SB_FALSE ] && printf "%s\n" "$@";
+}
+
+#===  FUNCTION  ================================================================
 #          NAME:  echoerr
 #   DESCRIPTION:  Echo errors to stderr.
 #===============================================================================
-echoerror() {
+echoerr() {
     printf "ERROR: $@\n" 1>&2;
+    exit 1
 }
 
+
+#===  FUNCTION  ================================================================
+#          NAME:  echoinfo
+#   DESCRIPTION:  Echo information to stdout.
+#===============================================================================
+echoinfo() {
+    [ $SB_QUIET -eq $SB_FALSE ] && printf "INFO: %s\n" "$@";
+}
+
+#===  FUNCTION  ================================================================
+#          NAME:  echowarn
+#   DESCRIPTION:  Echo warning informations to stdout.
+#===============================================================================
+echowarn() {
+    [ $SB_QUIET -eq $SB_FALSE ] && printf "WARN$: %s\n" "$@";
+}
+
+#===  FUNCTION  ================================================================
+#          NAME:  echodebug
+#   DESCRIPTION:  Echo debug information to stdout.
+#===============================================================================
+echodebug() {
+    if [ $SB_DEBUG -eq $SB_TRUE ]; then
+        printf "DEBUG: %s\n" "$@";
+    fi
+}
 
 #===  FUNCTION  ================================================================
 #          NAME:  provision_env
@@ -116,7 +158,7 @@ provision_env(){
             _RANENV["${env}"]=1
         fi
     done
-    return 1
+    return 0
 }
 
 #===  FUNCTION  ================================================================
@@ -133,6 +175,7 @@ load_app(){
     repopath=${app[1]}
     sympath="/srv/salt/${appname}/"
     
+    [ -d /var/app ] || mkdir -p /var/app
     cd /var/app
 
     if [[ -L "$sympath" && -d "$sympath" ]]; then
@@ -141,17 +184,18 @@ load_app(){
         [ -d "/var/app/${appname}" ] || mkdir -p "/var/app/${appname}"
         cd "/var/app/${appname}"
         
-        if [ $(modgit ls 2>&1 | grep -qi "${modname}") ]; then
+        if [ $(gitploy ls 2>&1 | grep -qi "${modname}") ]; then
             echo "app already linked-- ${modname}"
         else
             gitploy init
             #bring it in with modgit
-            gitploy add ${modname} "https://github.com/${repopath}.git"
+            gitploy ${modname} "https://github.com/${repopath}.git"
         fi
-        ln -s /var/app/${appname}/provision/salt/ ${sympath}
+        ln -s /var/app/${appname}/provision/salt/ ${sympath} && echostd "linked /var/app/${appname}/provision/salt/ ${sympath}"
     fi
     #add the app to the queue of provisioning to do
     load_env ${appname}
+    return 0
 }
 
 
@@ -161,7 +205,7 @@ load_app(){
 #===============================================================================
 init_provision(){
     #ensure the src bed
-    [ -d /src/salt ] || mkdir -p /src/salt
+    [ -d /src/salt/serverbase ] || mkdir -p /src/salt/serverbase
     [ -d /srv/salt/base ] || mkdir -p /srv/salt/base
     
     #start cloning it the provisioner
@@ -169,10 +213,12 @@ init_provision(){
     [[ -z "${_TAG}" ]] || _TAG=' -t '$_TAG
     
     #build git command
-    git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
-    
-    cd /src/salt && eval $git_cmd 
-    [ -d /src/salt/WSU-Web-Serverbase/provision  ] && mv -fu /src/salt/WSU-Web-Serverbase/provision/salt/* /srv/salt/base/
+    #git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
+    git_cmd="gitploy ${_BRANCH} ${_TAG} serverbase https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
+    cd /src/salt/serverbase
+    [ $(gitploy init 2>&1 | grep -qi "already initialized") ] || gitploy init
+    [ $(gitploy ls 2>&1 | grep -qi "serverbase") ] || eval $git_cmd
+    [ -h /srv/salt/base/ ] || ln -s /src/salt/serverbase/provision/salt/* /srv/salt/base/
 
     #start provisioning
     if [ -f /srv/salt/base/config/yum.conf ]; then
@@ -184,13 +230,27 @@ init_provision(){
     cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
     
     provision_env $_ENV
+    return 0
 }
+
+#===  FUNCTION  ================================================================
+#          NAME:  init_json
+#   DESCRIPTION:  adds needed json support to the system.
+#===============================================================================
+init_json(){
+    wget http://stedolan.github.io/jq/download/linux64/jq
+    chmod +x ./jq
+    cp jq /usr/bin
+}
+[ $(which jq 2>&1 | grep -qi "/usr/bin/jq") ] || init_json
+
 
 #this is very lazy but it's just for now
 rm -fr /src/salt
     
 #ensure deployment is available
-which gitploy 2>&1 | grep -qi "/usr/sbin/gitploy" || curl  https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
+[ $(gitploy -v 2>&1 | grep -qi "Version") ] || curl  https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
+[ -h /usr/sbin/gitploy ] || echoerr "gitploy failed install"
 
 # Handle options
 while getopts ":vhd:m:o:b:t:e:i:p:a:" opt

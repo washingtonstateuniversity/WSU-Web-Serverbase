@@ -11,6 +11,9 @@
 
 require 'json'
 
+#for dev
+#bootstrap="washingtonstateuniversity/WSU-Web-Serverbase/master"
+bootstrap="jeremyBass/WSU-Web-Serverbase/bootstrap"
 
 #######################
 # Setup
@@ -35,28 +38,27 @@ require 'json'
                 destroying=true
             end
         end
+        config_str_obj=""
         configFile="config.json"
         if File.exist?("config.json")
             # See e.g. https://gist.github.com/karmi/2050769#file-node-example-json
             begin
-                config_obj = JSON.parse(File.read(configFile), symbolize_names: true)
+                config_str_obj=File.read(configFile).split.join(' ')
+                config_obj = JSON.parse(config_str_obj, symbolize_names: true)
                 rescue Exception => e
                 STDERR.puts "[!] Error when reading the configuration file:",
                 e.inspect
             end
         else
-            config_obj = {
-              :vagrant_options => {
-                    :ip => "10.10.30.120",
-                    :hostname => "WSUBASE",
-                    :memory => "512",
-                    :cores => "2",
-                    :host_64bit => true,
-                    :install_type => 'testing',
-                    :minion => 'vagrant',
-                    :verbose_output => true 
-                }
-            }
+            config_str_obj = '{ "vagrant_options": { "ip":"10.10.30.30", "hostname":"WSUWEB", "memory":"1024", "cores":"4", "host_64bit":"true", "install_type":"testing", "minion":"vagrant", "verbose_output":"true" } }'
+            begin
+                config_obj = JSON.parse(config_str_obj, symbolize_names: true)
+                rescue Exception => e
+                STDERR.puts "[!] Error when reading the configuration file:",
+                e.inspect
+            end
+            
+            
         end
         
         #######################
@@ -118,8 +120,6 @@ require 'json'
     # Start Vagrant
     ################################################################   
     Vagrant.configure("2") do |config|
-
-
 
         # check all versions of vagrant and plugins first
         ################################################################ 
@@ -183,16 +183,15 @@ ERR
         config.vm.provider :virtualbox do |v|
             v.gui = false
             v.name = CONFIG[:hostname]
-            v.memory = CONFIG[:memory]
-            cores=CONFIG[:cores].to_i
+            v.memory = CONFIG[:memory].to_i
+            cores= CONFIG[:cores].to_i
             if cores>1
                 v.customize ["modifyvm", :id, "--cpus", cores ]
-                if CONFIG[:host_64bit]
+                if CONFIG[:host_64bit] == 'true'
                     v.customize ["modifyvm", :id, "--ioapic", "on"]
                 end
             end
         end
-        
 
         # CentOS 6.4, 64 bit release
         ################################################################  
@@ -234,9 +233,7 @@ ERR
         # Provisioning: Salt 
         ################################################################              
         $provision_script=""
-        #$provision_script<<"curl -L https://raw.github.com/washingtonstateuniversity/WSU-Web-Serverbase/master/bootstrap.sh"
-
-        $provision_script<<"curl -L https://raw.github.com/jeremyBass/WSU-Web-Serverbase/bootstrap/bootstrap.sh | sudo sh -s -- -m #{CONFIG[:minion]} "
+        $provision_script<<"curl -L https://raw.github.com/#{bootstrap}/bootstrap.sh | sudo sh -s -- -m #{CONFIG[:minion]} "
         
         # Set up the web apps
         #########################
@@ -246,6 +243,12 @@ ERR
         
         $provision_script<<" -i -b bootstrap -o jeremyBass \n"
         
-        puts "running : #{$provision_script}"
-        config.vm.provision "shell", inline: $provision_script
+        if !destroying
+            puts "running : #{$provision_script}"
+            config.vm.provision "shell", inline: $provision_script
+        else
+            puts "Destroyed the local server, now, on to the world."
+        end
+        puts "at the end of it"
     end
+    

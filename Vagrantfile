@@ -135,8 +135,8 @@ require 'json'
                         $provision_script<<" -i -b bootstrap -o jeremyBass \n"
                         
                         if !@destroying
-                            puts "about to run running: #{$provision_script}"
-                            vmConfig.vm.provision "shell", inline: $provision_script
+                            $running="echo \"about to run running: #{$provision_script} \" \n"
+                            vmConfig.vm.provision "shell", inline: "#{$running}#{$provision_script}"
                         else
                             puts "About to destroy the local server"
                         end

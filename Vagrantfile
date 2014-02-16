@@ -73,7 +73,7 @@ bootstrap="jeremyBass/WSU-Web-Serverbase/bootstrap"
                 if !File.exist?("app/#{appname}")
                     puts "cloning repo that was missing"
                     puts "git clone #{repolocation} app/#{appname}"
-                    puts `git clone #{repolocation} app/#{appname}`
+                    puts `git clone --depth=1 #{repolocation} app/#{appname}`
                 end
             end
         end

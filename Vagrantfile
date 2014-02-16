@@ -47,7 +47,7 @@ require 'json'
     # Start Vagrant
     ################################################################   
     Vagrant.configure("2") do |config|
-
+        load 'includes/vagrant_env.rb'
 
         # CentOS 6.4, 64 bit release
         ################################################################  
@@ -57,12 +57,14 @@ require 'json'
 
         if @vm_pack
             @vm_pack.each_pair do |server, server_obj|
+                @server=nil
+                @server_obj=nil
                 config.vm.define server_obj[:hostname] do |vmConfig|
                     @server=server
                     @server_obj=server_obj
                     load 'includes/vagrant_apps.rb'
                     load 'includes/automated_salt_setup.rb'
-                    load 'includes/vagrant_env.rb'
+                    
 
                     # Virtualbox specific settings for the virtual machine.
                     ################################################################ 
@@ -119,6 +121,7 @@ require 'json'
                     ################################################################              
                         $provision_script=""
                         $provision_script<<"curl -L https://raw.github.com/#{bootstrap}/bootstrap.sh | sudo sh -s -- "
+                        vmConfig.vm.synced_folder "provision/salt/minions", "/srv/salt/base/minions"
                         $provision_script<<" -m #{@server_obj[:minion]}_#{@server_obj[:hostname]} "
                     
                     # Set up the web apps

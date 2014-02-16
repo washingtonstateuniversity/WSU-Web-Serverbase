@@ -76,6 +76,14 @@ declare -A _RANENV=()
 _REPOURL="https://github.com"
 _RAWURL="https://raw.github.com"
 
+#===  FUNCTION  ================================================================
+#          NAME:  is_localhost
+#   DESCRIPTION:  Will check if this is a local devlopment by checking if we 
+#                 have flaged it local.  By defualt we are on "production"
+#===============================================================================
+is_localhost() {
+  return 1
+}
 
 #===  FUNCTION  ================================================================
 #          NAME:  echoerr

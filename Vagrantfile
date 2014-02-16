@@ -50,7 +50,7 @@ bootstrap="jeremyBass/WSU-Web-Serverbase/bootstrap"
                 e.inspect
             end
         else
-            config_str_obj = '{ "vagrant_options": { "ip":"10.10.30.30", "hostname":"WSUWEB", "memory":"1024", "cores":"4", "host_64bit":"true", "install_type":"testing", "minion":"vagrant", "verbose_output":"true" } }'
+            config_str_obj = '{ "vagrant_options": { "ip":"10.10.30.30", "hostname":"WSUWEB", "memory":"1024", "vram":"8", "cores":"4", "host_64bit":"true", "install_type":"testing", "minion":"vagrant", "verbose_output":"true" } }'
             begin
                 config_obj = JSON.parse(config_str_obj, symbolize_names: true)
                 rescue Exception => e
@@ -186,7 +186,7 @@ ERR
             v.memory = CONFIG[:memory].to_i
             cores= CONFIG[:cores].to_i
             if cores>1
-                v.customize ["modifyvm", :id, "--vram", "256"]
+                v.customize ["modifyvm", :id, "--vram", CONFIG[:vram].to_i]
                 v.customize ["modifyvm", :id, "--cpus", cores ]
                 if CONFIG[:host_64bit] == 'true'
                     v.customize ["modifyvm", :id, "--ioapic", "on"]

@@ -43,24 +43,16 @@ require 'json'
         config_str_obj=""
         configFile="config.json"
         if File.exist?("config.json")
-            # See e.g. https://gist.github.com/karmi/2050769#file-node-example-json
-            begin
-                config_str_obj=File.read(configFile).split.join(' ')
-                @config_obj = JSON.parse(config_str_obj, symbolize_names: true)
-                rescue Exception => e
-                STDERR.puts "[!] Error when reading the configuration file:",
-                e.inspect
-            end
+            config_str_obj=File.read(configFile).split.join(' ')
         else
-            config_str_obj = '{ "vagrant_options": { "ip":"10.10.30.30", "hostname":"WSUWEB", "memory":"1024", "vram":"8", "cores":"4", "host_64bit":"true", "install_type":"testing", "minion":"vagrant", "verbose_output":"true" } }'
-            begin
-                @config_obj = JSON.parse(config_str_obj, symbolize_names: true)
-                rescue Exception => e
-                STDERR.puts "[!] Error when reading the configuration file:",
-                e.inspect
-            end
+            config_str_obj = File.read('default_vagrant_config.json').split.join(' ')
         end
-        
+        begin
+            @config_obj = JSON.parse(config_str_obj, symbolize_names: true)
+            rescue Exception => e
+            STDERR.puts "[!] Error when reading the configuration file:",
+            e.inspect
+        end
         #######################
         # CONFIG Values
         #####################

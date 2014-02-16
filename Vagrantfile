@@ -186,6 +186,7 @@ ERR
             v.memory = CONFIG[:memory].to_i
             cores= CONFIG[:cores].to_i
             if cores>1
+                v.customize ["modifyvm", :id, "--vram", "256"]
                 v.customize ["modifyvm", :id, "--cpus", cores ]
                 if CONFIG[:host_64bit] == 'true'
                     v.customize ["modifyvm", :id, "--ioapic", "on"]

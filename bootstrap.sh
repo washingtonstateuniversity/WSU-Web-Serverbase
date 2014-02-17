@@ -296,14 +296,12 @@ do
     a ) load_app  $OPTARG                               ;;
     p ) provision_env $OPTARG                           ;;
 
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument" >&2
-      exit 1
-      ;;
+    \?)  echo
+         echoerr "Option does not exist : $OPTARG"
+         usage
+         exit 1
+         ;;
+
   esac
 done
 

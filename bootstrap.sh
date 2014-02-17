@@ -270,7 +270,7 @@ rm -fr /src/salt
 [ -h /usr/sbin/gitploy ] || echoerr "gitploy failed install"
 
 # Handle options
-while getopts ":vhd:m:o:b:t:e:i:p:a:" opt
+while getopts ":vhd:m:o:b:t:e:p:a:" opt
 do
   case "${opt}" in
   
@@ -294,9 +294,6 @@ do
 
     e ) load_envs $OPTARG                               ;;
     a ) load_app  $OPTARG                               ;;
-    i ) init_provision
-      shift $((OPTIND-1)); OPTIND=1
-      ;;
     p ) provision_env $OPTARG                           ;;
 
     \?)
@@ -310,5 +307,5 @@ do
   esac
 done
 
-
+init_provision
 

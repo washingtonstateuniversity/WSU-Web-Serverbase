@@ -1,4 +1,14 @@
 base:
+  'env:serverbase':
+    - serverbase
+  'env:database':
+    - database
+  'env:security':
+    - security
+  'env:web':
+    - web
+  'env:caching':
+    - caching
   'env:vagrant':
     - match: grain
     - env.development
@@ -7,18 +17,3 @@ base:
     - match: grain
     - env.production
     - finalize.restart
-serverbase:
-  'env:serverbase':
-    - serverbase
-database:
-  'env:database':
-    - database
-security:
-  'env:security':
-    - security
-web:
-  'env:web':
-    - web
-caching:
-  'env:caching':
-    - caching

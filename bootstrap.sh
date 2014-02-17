@@ -150,6 +150,13 @@ prepare_env(){
     return 0
 }
 
+#===  FUNCTION  ================================================================
+#          NAME:  prepare_minion
+#   DESCRIPTION:  set up a minion if it doesn't exist.
+#===============================================================================
+prepare_minion(){
+    return 0
+}
 
 #===  FUNCTION  ================================================================
 #          NAME:  provision_env

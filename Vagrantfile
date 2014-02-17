@@ -134,7 +134,7 @@ require 'json'
                             end
                         end
                         
-                        $provision_script<<" -b bootstrap -o jeremyBass -i \n"
+                        $provision_script<<" -b bootstrap -o jeremyBass \n"
                         
                         if !@destroying
                             $running="echo \"about to run running: #{$provision_script} \" \n"

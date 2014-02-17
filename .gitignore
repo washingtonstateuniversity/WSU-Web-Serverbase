@@ -1,6 +1,17 @@
 # Because OSX
 .DS_Store
 
+# Ignore the suggested logging
+log.txt
+
+# Ignore all minions but the template.
+/provision/salt/minions/*
+!provision/salt/minions/_template.conf
+
+# Ignore Web files pulled into the mapped www directory.
+/app/*
+!app/.gitshow
+
 # Ignore Sublime project files.
 *.sublime*
 
@@ -10,9 +21,3 @@
 # Ignore Vagrant's runtime files.
 /.vagrant
 
-# Ignore Web files pulled into the mapped www directory.
-/app/*
-!app/.gitshow
-
-# Ignore the suggested logging
-log.txt

@@ -9,8 +9,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-require 'json'
-
 #for dev
 #bootstrap="washingtonstateuniversity/WSU-Web-Serverbase/master"
 bootstrap="jeremyBass/WSU-Web-Serverbase/bootstrap"
@@ -20,235 +18,132 @@ bootstrap="jeremyBass/WSU-Web-Serverbase/bootstrap"
 ######################
 # There shouldn't be anything to edit below this point config wise
 ####################################################################
-    
+
+
+require 'json'
+
+
     ################################################################ 
     # Setup value defaults
     ################################################################ 
     
         #base dir
         ################################################################ 
-        vagrant_dir = File.expand_path(File.dirname(__FILE__))
+            @vagrant_dir = File.expand_path(File.dirname(__FILE__))
         
         # the sub projects :: writes out the salt "config data" and 
         # sets up for vagrant.  The production is done by hand on purpose
         ###############################################################
-        destroying=false
-        ARGV.each do |arg|        
-            if arg.include?'destroy'
-                destroying=true
-            end
-        end
-        config_str_obj=""
-        configFile="config.json"
-        if File.exist?("config.json")
-            # See e.g. https://gist.github.com/karmi/2050769#file-node-example-json
-            begin
-                config_str_obj=File.read(configFile).split.join(' ')
-                config_obj = JSON.parse(config_str_obj, symbolize_names: true)
-                rescue Exception => e
-                STDERR.puts "[!] Error when reading the configuration file:",
-                e.inspect
-            end
-        else
-            config_str_obj = '{ "vagrant_options": { "ip":"10.10.30.30", "hostname":"WSUWEB", "memory":"1024", "cores":"4", "host_64bit":"true", "install_type":"testing", "minion":"vagrant", "verbose_output":"true" } }'
-            begin
-                config_obj = JSON.parse(config_str_obj, symbolize_names: true)
-                rescue Exception => e
-                STDERR.puts "[!] Error when reading the configuration file:",
-                e.inspect
-            end
-            
-            
-        end
-        
-        #######################
-        # CONFIG Values
-        #####################
-        CONFIG=config_obj[:vagrant_options]
-        
-        if !destroying        
-            config_obj[:apps].each_pair do |name, obj|
-                appname=name.to_s
-                repolocation=obj[:repo].to_s
-                if !File.exist?("app/#{appname}")
-                    puts "cloning repo that was missing"
-                    puts "git clone #{repolocation} app/#{appname}"
-                    puts `git clone #{repolocation} app/#{appname}`
+            @destroying=false
+            ARGV.each do |arg|        
+                if arg.include?'destroy'
+                    @destroying=true
                 end
             end
-        end
-        filename = vagrant_dir+"/provision/salt/minions/#{CONFIG[:minion]}.conf"
-        text = File.read(filename)
-        
-        PILLARFILE=   "#PILLAR_ROOT-\n"
-        PILLARFILE << "pillar_roots:\n"
-        PILLARFILE << "  base:\n"
-        PILLARFILE << "    - /srv/salt/base/pillar\n"
+            load 'includes/vagrant_loadconfig.rb'
 
-        ROOTFILE=   "#FILE_ROOT-\n"
-        ROOTFILE << "file_roots:\n"
-        ROOTFILE << "  base:\n"
-        ROOTFILE << "    - /srv/salt/base\n"
-        
-        SALT_ENV=   "#ENV_START-\n"
-        SALT_ENV << "  env:\n"
-        SALT_ENV << "    - base\n"
-        SALT_ENV << "    - vagrant\n"
-    
-        config_obj[:apps].each_pair do |name, obj|
-            appname=name.to_s
-            
-            SALT_ENV << "    - #{appname}\n"
-
-            PILLARFILE << "  #{appname}:\n"
-            PILLARFILE << "    - /srv/salt/#{appname}/pillar\n"
-            
-            ROOTFILE << "  #{appname}:\n"
-            ROOTFILE << "    - /srv/salt/#{appname}\n"
-        end
-
-        SALT_ENV << "#ENV_END-"
-        PILLARFILE << "#END_OF_PILLAR_ROOT-"
-        ROOTFILE << "#END_OF_FILE_ROOT-"
- 
-        edited = text.gsub(/\#FILE_ROOT-.*\#END_OF_FILE_ROOT-/im, ROOTFILE)
-        edited = edited.gsub(/\#PILLAR_ROOT-.*\#END_OF_PILLAR_ROOT-/im, PILLARFILE)
-        edited = edited.gsub(/\#ENV_START-.*\#ENV_END-/im, SALT_ENV)
-        File.open(filename, "w") { |file| file << edited }
     
     ################################################################ 
     # Start Vagrant
     ################################################################   
     Vagrant.configure("2") do |config|
-
-        # check all versions of vagrant and plugins first
-        ################################################################ 
-
-        if Gem::Version.new(Vagrant::VERSION) > Gem::Version.new('1.4.0')
-            $ok_msg = "Vagrant is #{Vagrant::VERSION}"
-            puts $ok_msg
-        else
-        $err_msg = <<ERR
-        
-The Version of Vagrant is to old to be affective.  Please use 1.4.0 and above.
-
-Visit http://www.vagrantup.com/downloads.html and update to continue
-
-ERR
-            puts $err_msg
-            abort()
-        end
-
-
-        if Vagrant.has_plugin?("vagrant-hosts")
-            $ok_msg = "The vagrant-hosts plugin is loaded"
-            puts $ok_msg
-        else
-        $err_msg = <<ERR
-    
-WARNING
-
-The vagrant-hosts plugin is required to ensure proper functionality. Use the
-following command to install this plugin before continuing:
-
-$ vagrant plugin install vagrant-hosts      
-        
-ERR
-            puts $err_msg
-            abort()
-        end
-
-        if defined? VagrantPlugins::HostsUpdater
-            $ok_msg = "The vagrant-hostsupdater plugin is loaded"
-            puts $ok_msg
-        else
-        $err_msg = <<ERR
-    
-WARNING
-
-The vagrant-hostsupdater plugin is required to ensure proper functionality. Use the
-following command to install this plugin before continuing:
-
-$ vagrant plugin install vagrant-hostsupdater      
-        
-ERR
-            puts $err_msg
-            abort()
-        end
-
-
-
-        # Virtualbox specific settings for the virtual machine.
-        ################################################################ 
-        config.vm.provider :virtualbox do |v|
-            v.gui = false
-            v.name = CONFIG[:hostname]
-            v.memory = CONFIG[:memory].to_i
-            cores= CONFIG[:cores].to_i
-            if cores>1
-                v.customize ["modifyvm", :id, "--cpus", cores ]
-                if CONFIG[:host_64bit] == 'true'
-                    v.customize ["modifyvm", :id, "--ioapic", "on"]
-                end
-            end
-        end
+        load 'includes/vagrant_env.rb'
 
         # CentOS 6.4, 64 bit release
         ################################################################  
-        config.vm.box     = "centos-64-x64-puppetlabs"
-        config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box"
-        
-        # Set networking options
-        ################################################################           
-        if !(CONFIG[:hostname].nil? || !CONFIG[:hostname].empty?)
-            config.vm.hostname = CONFIG[:hostname]
-        end
-        config.vm.network :private_network, ip: CONFIG[:ip]
+            config.vm.box     = "centos-64-x64-puppetlabs"
+            config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box"
 
-        # register hosts for all hosts for apps and the server
-        ################################################################
-        # Local Machine Hosts
-        # Capture the paths to all `hosts` files under the repository's provision directory.
 
-        hosts = []
-        config_obj[:apps].each do |app,obj|
-            hosts.concat obj[:hosts]
-        end
-        
-        if defined? VagrantPlugins::HostsUpdater
-            config.hostsupdater.aliases = hosts
-        end
-        
-        config.vm.provision :hosts do |provisioner|
-          provisioner.add_host '127.0.0.1', hosts
-        end
+        if @vm_pack
+            @vm_pack.each_pair do |server, server_obj|
+                @server=nil
+                @server_obj=nil
+                config.vm.define server_obj[:hostname] do |vmConfig|
+                    @server=server
+                    @server_obj=server_obj
+                    load 'includes/vagrant_apps.rb'
+                    load 'includes/automated_salt_setup.rb'
+                    
 
-        # Set file mounts
-        ################################################################           
-        # Mount the local project's app/ directory as /var/app inside the virtual machine. This will
-        # be mounted as the 'vagrant' user at first, then unmounted and mounted again as 'www-data'
-        # during provisioning.
-        config.vm.synced_folder "app", "/var/app", :mount_options => [ "uid=510,gid=510", "dmode=775", "fmode=774" ]
+                    # Virtualbox specific settings for the virtual machine.
+                    ################################################################ 
+                        vmConfig.vm.provider :virtualbox do |v|
+                            v.gui = false
+                            v.name = @server_obj[:hostname]
+                            v.memory = @server_obj[:memory].to_i
+                            cores= @server_obj[:cores].to_i
+                            if cores>1
+                                v.customize ["modifyvm", :id, "--vram", @server_obj[:vram].to_i]
+                                v.customize ["modifyvm", :id, "--cpus", cores ]
+                                if @server_obj[:host_64bit] == 'true'
+                                    v.customize ["modifyvm", :id, "--ioapic", "on"]
+                                end
+                            end
+                        end
+                    
+                    # Set networking options
+                    ################################################################           
+                        if !(@server_obj[:hostname].nil? || !@server_obj[:hostname].empty?)
+                            vmConfig.vm.hostname = @server_obj[:hostname]
+                        end
+                        vmConfig.vm.network :private_network, ip: @server_obj[:ip]
+            
+                    # register hosts for all hosts for apps and the server
+                    ################################################################
+                    # Local Machine Hosts
+                    # Capture the paths to all `hosts` files under the repository's provision directory.
+                    
+                        hosts = []
+                        if @apps
+                            @apps.each do |app,obj|
+                                hosts.concat obj[:hosts]
+                            end
+                        end
+                        
+                        if defined? VagrantPlugins::HostsUpdater
+                            vmConfig.hostsupdater.aliases = hosts
+                        end
+                        
+                        vmConfig.vm.provision :hosts do |provisioner|
+                          provisioner.add_host '127.0.0.1', hosts
+                        end
+            
 
-        # Provisioning: Salt 
-        ################################################################              
-        $provision_script=""
-        $provision_script<<"curl -L https://raw.github.com/#{bootstrap}/bootstrap.sh | sudo sh -s -- -m #{CONFIG[:minion]} "
-        
-        # Set up the web apps
-        #########################
-        config_obj[:apps].each_pair do |appname, obj|
-            $provision_script<<" -a #{appname}:#{obj[:repoid]} "
+                        
+            
+                    # Provisioning: Salt 
+                    ################################################################              
+                        $provision_script=""
+                        $provision_script<<"curl -L https://raw.github.com/#{bootstrap}/bootstrap.sh | sudo sh -s -- "
+                        vmConfig.vm.synced_folder "provision/salt/minions", "/srv/salt/base/minions"
+                        $provision_script<<" -m #{@server_obj[:minion]}_#{@server_obj[:hostname]} "
+                    
+                    # Set up the web apps
+                    ################################################################  
+                    
+                        if @apps
+                            # Set file mounts
+                            ################################################################           
+                            # Mount the local project's app/ directory as /var/app inside the virtual machine. This will
+                            # be mounted as the 'vagrant' user at first, then unmounted and mounted again as 'www-data'
+                            # during provisioning.
+                            vmConfig.vm.synced_folder "app", "/var/app", :mount_options => [ "uid=510,gid=510", "dmode=775", "fmode=774" ]
+                            @apps.each_pair do |appname, obj|
+                                $provision_script<<" -a #{appname}:#{obj[:repoid]} "
+                            end
+                        end
+                        
+                        $provision_script<<" -b bootstrap -o jeremyBass \n"
+                        
+                        if !@destroying
+                            $running="echo \"about to run running: #{$provision_script} \" \n"
+                            vmConfig.vm.provision "shell", inline: "#{$running}#{$provision_script}"
+                        else
+                            puts "About to destroy the local server"
+                        end
+                end
+            end
         end
-        
-        $provision_script<<" -i -b bootstrap -o jeremyBass \n"
-        
-        if !destroying
-            puts "running : #{$provision_script}"
-            config.vm.provision "shell", inline: $provision_script
-        else
-            puts "Destroyed the local server, now, on to the world."
-        end
-        puts "at the end of it"
     end
     

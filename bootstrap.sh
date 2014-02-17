@@ -76,6 +76,14 @@ declare -A _RANENV=()
 _REPOURL="https://github.com"
 _RAWURL="https://raw.github.com"
 
+#===  FUNCTION  ================================================================
+#          NAME:  is_localhost
+#   DESCRIPTION:  Will check if this is a local devlopment by checking if we 
+#                 have flaged it local.  By defualt we are on "production"
+#===============================================================================
+is_localhost() {
+  return 1
+}
 
 #===  FUNCTION  ================================================================
 #          NAME:  echoerr
@@ -132,6 +140,22 @@ echodebug() {
     if [ $SB_DEBUG -eq $SB_TRUE ]; then
         printf "DEBUG: %s\n" "$@";
     fi
+}
+
+#===  FUNCTION  ================================================================
+#          NAME:  prepare_env
+#   DESCRIPTION:  set up an environment.
+#===============================================================================
+prepare_env(){
+    return 0
+}
+
+#===  FUNCTION  ================================================================
+#          NAME:  prepare_minion
+#   DESCRIPTION:  set up a minion if it doesn't exist.
+#===============================================================================
+prepare_minion(){
+    return 0
 }
 
 #===  FUNCTION  ================================================================
@@ -253,34 +277,40 @@ rm -fr /src/salt
 [ -h /usr/sbin/gitploy ] || echoerr "gitploy failed install"
 
 # Handle options
-while getopts ":vhd:m:o:b:t:e:i:p:a:" opt
+while getopts ":vhd:m:o:b:t:e:p:a:" opt
 do
   case "${opt}" in
   
     v )  echo "$0 -- Version $__ScriptVersion"; exit 0  ;;
     h )  usage; exit 0                                  ;;
     
-    m ) _MINION=$OPTARG                                 ;;
-    o ) _OWNER=$OPTARG                                  ;;
-    b ) _BRANCH=$OPTARG                                 ;;
-    t ) _TAG=$OPTARG                                    ;;
+    m ) _MINION=$OPTARG
+      shift $((OPTIND-1)); OPTIND=1
+      ;;
+      
+    #git options---------------
+    o ) _OWNER=$OPTARG
+      shift $((OPTIND-1)); OPTIND=1
+      ;;
+    b ) _BRANCH=$OPTARG
+      shift $((OPTIND-1)); OPTIND=1
+      ;;
+    t ) _TAG=$OPTARG
+      shift $((OPTIND-1)); OPTIND=1
+      ;;
 
     e ) load_envs $OPTARG                               ;;
-
     a ) load_app  $OPTARG                               ;;
-    i ) init_provision                                  ;;
     p ) provision_env $OPTARG                           ;;
 
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument" >&2
-      exit 1
-      ;;
+    \?)  echo
+         echoerr "Option does not exist : $OPTARG"
+         usage
+         exit 1
+         ;;
+
   esac
 done
 
-
+init_provision
 

@@ -1,12 +1,8 @@
 # Because OSX
 .DS_Store
 
-# Ignore the suggested logging
-log.txt
 
-# Ignore all minions but the template.
-/provision/salt/minions/*
-!provision/salt/minions/_template.conf
+
 
 # Ignore Web files pulled into the mapped www directory.
 /app/*
@@ -21,3 +17,7 @@ log.txt
 # Ignore Vagrant's runtime files.
 /.vagrant
 
+# Ignore all minions but the template.
+provision/salt/minions/*.conf
+!provision/salt/minions/_template.conf
+log.txt

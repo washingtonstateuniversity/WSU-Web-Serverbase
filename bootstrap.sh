@@ -294,7 +294,9 @@ do
 
     e ) load_envs $OPTARG                               ;;
     a ) load_app  $OPTARG                               ;;
-    i ) init_provision                                  ;;
+    i ) init_provision
+      shift $((OPTIND-1)); OPTIND=1
+      ;;
     p ) provision_env $OPTARG                           ;;
 
     \?)

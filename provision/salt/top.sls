@@ -1,17 +1,20 @@
 base:
- 'G@role:serverbase':
+  'G@role:serverbase':
     - match: compound
     - serverbase
- 'G@role:database':
+  'G@role:database':
     - match: compound
     - database
- 'G@role:security':
+  'G@role:security':
     - match: compound
     - security
- 'G@role:web':
+  'G@role:web':
     - match: compound
     - web
- 'G@role:caching':
+  'G@role:webcaching':
+    - match: compound
+    - caching
+  'G@role:dbcaching':
     - match: compound
     - caching
   'env:vagrant':

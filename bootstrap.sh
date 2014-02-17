@@ -277,13 +277,22 @@ do
     v )  echo "$0 -- Version $__ScriptVersion"; exit 0  ;;
     h )  usage; exit 0                                  ;;
     
-    m ) _MINION=$OPTARG                                 ;;
-    o ) _OWNER=$OPTARG                                  ;;
-    b ) _BRANCH=$OPTARG                                 ;;
-    t ) _TAG=$OPTARG                                    ;;
+    m ) _OWNER=$OPTARG
+      shift $((OPTIND-1)); OPTIND=1
+      ;;
+      
+    #git options---------------
+    o ) _OWNER=$OPTARG
+      shift $((OPTIND-1)); OPTIND=1
+      ;;
+    b ) _BRANCH=$OPTARG
+      shift $((OPTIND-1)); OPTIND=1
+      ;;
+    t ) _TAG=$OPTARG
+      shift $((OPTIND-1)); OPTIND=1
+      ;;
 
     e ) load_envs $OPTARG                               ;;
-
     a ) load_app  $OPTARG                               ;;
     i ) init_provision                                  ;;
     p ) provision_env $OPTARG                           ;;

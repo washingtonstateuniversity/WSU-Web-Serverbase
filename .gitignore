@@ -21,3 +21,4 @@
 provision/salt/minions/*.conf
 !provision/salt/minions/_template.conf
 log.txt
+config.json

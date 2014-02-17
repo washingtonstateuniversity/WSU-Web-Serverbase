@@ -109,13 +109,8 @@ require 'json'
                           provisioner.add_host '127.0.0.1', hosts
                         end
             
-                    # Set file mounts
-                    ################################################################           
-                    # Mount the local project's app/ directory as /var/app inside the virtual machine. This will
-                    # be mounted as the 'vagrant' user at first, then unmounted and mounted again as 'www-data'
-                    # during provisioning.
-                    
-                        vmConfig.vm.synced_folder "app", "/var/app", :mount_options => [ "uid=510,gid=510", "dmode=775", "fmode=774" ]
+
+                        
             
                     # Provisioning: Salt 
                     ################################################################              
@@ -126,13 +121,20 @@ require 'json'
                     
                     # Set up the web apps
                     ################################################################  
+                    
                         if @apps
+                            # Set file mounts
+                            ################################################################           
+                            # Mount the local project's app/ directory as /var/app inside the virtual machine. This will
+                            # be mounted as the 'vagrant' user at first, then unmounted and mounted again as 'www-data'
+                            # during provisioning.
+                            vmConfig.vm.synced_folder "app", "/var/app", :mount_options => [ "uid=510,gid=510", "dmode=775", "fmode=774" ]
                             @apps.each_pair do |appname, obj|
                                 $provision_script<<" -a #{appname}:#{obj[:repoid]} "
                             end
                         end
                         
-                        $provision_script<<" -i -b bootstrap -o jeremyBass \n"
+                        $provision_script<<" -b bootstrap -o jeremyBass -i \n"
                         
                         if !@destroying
                             $running="echo \"about to run running: #{$provision_script} \" \n"

@@ -19,10 +19,14 @@ if !@destroying
     $SALT_ENV << "    - base\n"
     $SALT_ENV << "    - vagrant\n"
 
-    
+    $SALT_ROLES=   "#ROLES_START-\n"
+    $SALT_ROLES << "  roles:\n"
+    $SALT_ROLES << "    - vagrant\n"
+
     if @server_obj[:local_env]
         @server_obj[:local_env].each do |env|
             envname=env.to_s
+            $SALT_ROLES << "    - #{envname}\n"    
             $SALT_ENV << "    - #{envname}\n"
         end
     end
@@ -39,7 +43,7 @@ if !@destroying
             $ROOTFILE << "    - /srv/salt/#{appname}\n"
         end
     end
-
+    $SALT_ROLES << "#ROLES_END-"
     $SALT_ENV << "#ENV_END-"
     $PILLARFILE << "#END_OF_PILLAR_ROOT-"
     $ROOTFILE << "#END_OF_FILE_ROOT-"
@@ -47,6 +51,7 @@ if !@destroying
     edited = text.gsub(/\#FILE_ROOT-.*\#END_OF_FILE_ROOT-/im, $ROOTFILE)
     edited = edited.gsub(/\#PILLAR_ROOT-.*\#END_OF_PILLAR_ROOT-/im, $PILLARFILE)
     edited = edited.gsub(/\#ENV_START-.*\#ENV_END-/im, $SALT_ENV)
+    edited = edited.gsub(/\#ROLES_START-.*\#ROLES_END-/im, $SALT_ROLES)
     File.open(filename, "w") { |file| file << edited }
 
 end

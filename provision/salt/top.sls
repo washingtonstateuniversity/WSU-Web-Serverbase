@@ -1,13 +1,18 @@
 base:
-  'env:serverbase':
+ 'G@role:serverbase':
+    - match: compound
     - serverbase
-  'env:database':
+ 'G@role:database':
+    - match: compound
     - database
-  'env:security':
+ 'G@role:security':
+    - match: compound
     - security
-  'env:web':
+ 'G@role:web':
+    - match: compound
     - web
-  'env:caching':
+ 'G@role:caching':
+    - match: compound
     - caching
   'env:vagrant':
     - match: grain

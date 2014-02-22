@@ -24,7 +24,7 @@ base:
   'G@role:dbcaching':
     - match: compound
     - caching
-{% if is_local is True %}
+{% if is_local %}
     - env.development
 {% else %}
     - env.production

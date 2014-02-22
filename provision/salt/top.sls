@@ -8,21 +8,6 @@ base:
 {% if 'serverbase' in grains['roles'] %}
     - serverbase
 {% endif %}
-  'G@role:database':
-    - match: compound
-    - database
-  'G@role:security':
-    - match: compound
-    - security
-  'G@role:web':
-    - match: compound
-    - web
-  'G@role:webcaching':
-    - match: compound
-    - caching
-  'G@role:dbcaching':
-    - match: compound
-    - caching
 {% if isLocal == "true" %}
     - env.development
 {% else %}

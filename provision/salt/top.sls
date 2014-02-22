@@ -1,8 +1,8 @@
 {% for host,ip in salt['mine.get']('*', 'network.ip_addrs').items() %}
     {% if ip|replace("10.255.255", "LOCAL").split('LOCAL').count() == 2  %}
-        {%- set is_local = "true" -%}
+        {%- set isLocal = "true" -%}
     {% else %}
-        {%- set is_local = "false" -%}
+        {%- set isLocal = "false" -%}
     {%- endif %}
 {% endfor %}
 base:
@@ -24,7 +24,7 @@ base:
   'G@role:dbcaching':
     - match: compound
     - caching
-{% if is_local equals "true" %}
+{% if isLocal == "true" %}
     - env.development
 {% else %}
     - env.production

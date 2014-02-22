@@ -2,8 +2,6 @@
 ###########################################################
 {%- set nginx_version = pillar['nginx']['version'] -%} 
 
-
-
 ###########################################################
 ###########################################################
 # folder and users for web services
@@ -137,6 +135,12 @@ nginx:
     - mode: 644
     - require:
       - cmd: nginx-compile
+    - template: jinja
+    - context:
+      magento: {{ magento }}
+      database: {{ database }}
+      project: {{ project }}
+      env: {{ env }}
 
 
 /etc/nginx/sites-enabled/default:

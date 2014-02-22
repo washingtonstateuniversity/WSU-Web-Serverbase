@@ -1,7 +1,14 @@
+{% for host,ip in salt['mine.get']('*', 'network.ip_addrs').items() %}
+    {% if ip|replace("10.255.255", "LOCAL")|split('LOCAL').count() == 2  %}
+        {%- set is_local = True -%}
+    {% else %}
+        {%- set is_local = False -%}
+    {%- endif %}
+{% endfor %}
 base:
-  'G@role:serverbase':
-    - match: compound
+{% if serverbase in grains['roles'] %}
     - serverbase
+{%- endif %}
   'G@role:database':
     - match: compound
     - database
@@ -17,11 +24,9 @@ base:
   'G@role:dbcaching':
     - match: compound
     - caching
-  'env:vagrant':
-    - match: grain
+{% if is_local is True %}
     - env.development
-    - finalize.restart
-  'env:production':
-    - match: grain
+{% else %}
     - env.production
+{%- endif %}
     - finalize.restart

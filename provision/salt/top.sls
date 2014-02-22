@@ -1,5 +1,5 @@
 {% for host,ip in salt['mine.get']('*', 'network.ip_addrs').items() %}
-    {% if ip|replace("10.255.255", "LOCAL")|split('LOCAL').count() == 2  %}
+    {% if ip|replace("10.255.255", "LOCAL").split('LOCAL').count() == 2  %}
         {%- set is_local = True -%}
     {% else %}
         {%- set is_local = False -%}

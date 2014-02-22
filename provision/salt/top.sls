@@ -6,7 +6,7 @@
     {%- endif %}
 {% endfor %}
 base:
-{% if serverbase in grains['roles'] %}
+{% if 'serverbase' in grains['roles'] %}
     - serverbase
 {%- endif %}
   'G@role:database':

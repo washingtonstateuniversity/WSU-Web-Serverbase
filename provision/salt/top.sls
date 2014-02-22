@@ -5,7 +5,7 @@
     {%- endif %}
 {%- endfor %}
 base:
-{% if 'serverbase' in grains['roles'] %}
+{% if 'serverbase' in grains.item[roles] %}
     - serverbase
 {% endif %}
 {% if isLocal == "true" %}

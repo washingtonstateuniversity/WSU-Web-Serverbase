@@ -1,4 +1,4 @@
 base:
-{% if 'serverroles' in salt['grains.get']('roles') %}
+{% if 'serverbase' in grains.get[roles] %}
     - serverbase
 {% endif %}

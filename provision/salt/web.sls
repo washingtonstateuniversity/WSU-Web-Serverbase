@@ -137,9 +137,6 @@ nginx:
       - cmd: nginx-compile
     - template: jinja
     - context:
-      magento: {{ magento }}
-      database: {{ database }}
-      project: {{ project }}
       env: {{ env }}
 
 

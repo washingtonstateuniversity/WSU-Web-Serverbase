@@ -1,6 +1,6 @@
 {%- set isLocal = "false" -%}
 base:
-{% if salt['grains.get']('roles:serverbase', False) == True %}
+{% if 'serverroles' in salt['grains.get']('roles', []) %}
     - serverbase
 {% endif %}
     - finalize.restart

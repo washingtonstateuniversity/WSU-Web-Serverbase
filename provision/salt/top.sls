@@ -5,7 +5,7 @@
     {%- endif %}
 {%- endfor %}
 base:
-{% if 'serverbase' in salt['mine.get']('roles') %}
+{% if 'serverbase' in salt['grains.get']('roles') %}
     - serverbase
 {% endif %}
 {% if isLocal == "true" %}

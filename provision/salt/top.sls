@@ -1,27 +1,29 @@
+{%- set isLocal = "false" -%}
+{% for host,ip in salt['mine.get']('*', 'network.ip_addrs').items() -%}
+    {% if ip|replace("10.255.255", "LOCAL").split('LOCAL').count() == 2  %}
+        {%- set isLocal = "true" -%}
+    {%- endif %}
+{%- endfor %}
 base:
-  'G@role:serverbase':
-    - match: compound
+  '*':
+{% if 'serverbase' in grains.get('roles') %}
     - serverbase
-  'G@role:database':
-    - match: compound
+{% endif %}
+{% if 'database' in grains.get('roles') %}
     - database
-  'G@role:security':
-    - match: compound
+{% endif %}
+{% if 'security' in grains.get('roles') %}
     - security
-  'G@role:web':
-    - match: compound
+{% endif %}
+{% if 'web' in grains.get('roles') %}
     - web
-  'G@role:webcaching':
-    - match: compound
+{% endif %}
+{% if 'webcaching' in grains.get('roles') %}
     - caching
-  'G@role:dbcaching':
-    - match: compound
-    - caching
-  'env:vagrant':
-    - match: grain
+{% endif %}
+{% if isLocal == "true" %}
     - env.development
-    - finalize.restart
-  'env:production':
-    - match: grain
+{% else %}
     - env.production
+{%- endif %}
     - finalize.restart

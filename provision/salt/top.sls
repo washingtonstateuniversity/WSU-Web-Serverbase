@@ -5,7 +5,7 @@
     {%- endif %}
 {%- endfor %}
 base:
-{% if 'serverbase' in salt['mine.get']('*', 'roles').items() %}
+{% if in salt['grains.get']('roles:serverbase', False) == True %}
     - serverbase
 {% endif %}
     - finalize.restart

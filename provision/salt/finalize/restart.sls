@@ -1,3 +1,4 @@
+{% if 'webcaching' in grains.get('roles') %}
 # Whenever provisioning runs, it doesn't hurt to flush our object cache.
 flush-cache:
   cmd.run:
@@ -5,15 +6,18 @@ flush-cache:
     - cwd: /
     - require:
       - sls: caching
+{% endif %}
 
+{% if 'database' in grains.get('roles') %}
 clear-mysqld:
   cmd.run:
     - name: sudo service mysqld restart
     - cwd: /
     - require:
       - sls: database
-      
+{% endif %}
 
+{% if 'web' in grains.get('roles') %}
 clear-php-fpm:
   cmd.run:
     - name: sudo service php-fpm restart
@@ -28,3 +32,4 @@ clear-workers:
     - cwd: /
     - require:
       - sls: web
+{% endif %}

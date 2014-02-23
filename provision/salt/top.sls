@@ -5,7 +5,7 @@
     {%- endif %}
 {%- endfor %}
 base:
-{% if in salt['grains.get']('roles:serverbase', False) == True %}
+{% if salt['grains.get']('roles:serverbase', False) == True %}
     - serverbase
 {% endif %}
     - finalize.restart

@@ -8,9 +8,4 @@ base:
 {% if 'serverbase' in salt['mine.get']('*', 'roles').items() %}
     - serverbase
 {% endif %}
-{% if isLocal == "true" %}
-    - env.development
-{% else %}
-    - env.production
-{%- endif %}
     - finalize.restart

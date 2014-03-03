@@ -137,7 +137,8 @@ nginx:
       - cmd: nginx-compile
     - template: jinja
     - context:
-      env: {{ env }}
+      isLocal: {{ isLocal }}
+      saltenv: {{ saltenv }}
 
 
 /etc/nginx/sites-enabled/default:

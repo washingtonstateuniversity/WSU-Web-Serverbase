@@ -169,6 +169,9 @@ php-fpm:
       - php-common
       - php-pear
       - php-pdo
+{% if 'database' in grains.get('roles') %}
+      - php-mysql
+{% endif %}
       - php-mcrypt
       - php-imap
       - php-gd
@@ -185,21 +188,6 @@ php-fpm:
     - required_in:
       - sls: finalize.restart
 
-{% if 'database' in grains.get('roles') %}
-php-mysql:
-  pkg.installed:
-    - pkgs:
-      - php-mysql
-    - require:
-      - sls: serverbase
-  service.running:
-    - require:
-      - pkg: php-fpm
-    - watch:
-      - file: /etc/php-fpm.d/www.conf
-    - required_in:
-      - sls: finalize.restart
-{% endif %}
 
 # Set php-fpm to run in levels 2345.
 php-fpm-reboot-auto:

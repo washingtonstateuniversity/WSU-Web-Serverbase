@@ -167,7 +167,6 @@ php-fpm:
       - php-fpm
       - php-cli
       - php-common
-      - php-mysql
       - php-pear
       - php-pdo
       - php-mcrypt
@@ -175,7 +174,6 @@ php-fpm:
       - php-gd
       - php-mbstring
       - php-pecl-zendopcache
-      - php-pecl-xdebug
       - php-pecl-memcached
     - require:
       - sls: serverbase
@@ -202,9 +200,6 @@ php-mysql:
     - required_in:
       - sls: finalize.restart
 {% endif %}
-
-
-
 
 # Set php-fpm to run in levels 2345.
 php-fpm-reboot-auto:

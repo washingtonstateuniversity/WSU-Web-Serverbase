@@ -167,15 +167,16 @@ php-fpm:
       - php-fpm
       - php-cli
       - php-common
-      - php-mysql
       - php-pear
       - php-pdo
+{% if 'database' in grains.get('roles') %}
+      - php-mysql
+{% endif %}
       - php-mcrypt
       - php-imap
       - php-gd
       - php-mbstring
       - php-pecl-zendopcache
-      - php-pecl-xdebug
       - php-pecl-memcached
     - require:
       - sls: serverbase
@@ -186,6 +187,7 @@ php-fpm:
       - file: /etc/php-fpm.d/www.conf
     - required_in:
       - sls: finalize.restart
+
 
 # Set php-fpm to run in levels 2345.
 php-fpm-reboot-auto:

@@ -1,50 +1,52 @@
 {
-    "server2": {
-        "ip":"10.255.255.2",
-        "open_ports":"",
-        "hostname":"web_server",
-        "memory":"6144",
-        "vram":"8",
-        "cores":"2",
-        "host_64bit":"false",
-        "install_type":"testing",
-        "minion":"vagrant",
-        "verbose_output":"true",
-        "remote_env":[
-            "serverbase",
-            "security",
-            "web",
-            "webcaching"
-        ],
-        "local_env":[
-            "serverbase",
-            "security",
-            "web",
-            "webcaching"
-        ],
-        "shared_folders":{
-            "/var/app":{
-                "dest":"/var/app",
-                "from":"app",
-                "user":"uid=510,gid=510",
-                "dmode":"dmode=775",
-                "fmode":"fmode=774"
-            }
-        },
-        "apps": {
-            "store.wsu.edu": {
-                "repo":"-b bootstraped https://github.com/jeremyBass/WSUMAGE-base.git",
-                "repoid":"jeremyBass/WSUMAGE-base",
-                "database_host":"10.255.255.3",
-                "hosts":[
-                    "store.mage.dev",
-                    "events.store.mage.dev",
-                    "student.store.mage.dev",
-                    "general.store.mage.dev",
-                    "store.admin.mage.dev",
-                    "tech.store.mage.dev"
-                ]
-            }
-        }
-    }
+	"server2": {
+		"ip":"10.255.255.2",
+		"open_ports":"",
+		"hostname":"web_server",
+		"memory":"6144",
+		"vram":"8",
+		"cores":"2",
+		"host_64bit":"false",
+		"install_type":"testing",
+		"minion":"vagrant",
+		"verbose_output":"true",
+		"remote_env":[
+			"serverbase",
+			"database",
+			"security",
+			"web",
+			"webcaching"
+		],
+		"local_env":[
+			"serverbase",
+			"database",
+			"security",
+			"web",
+			"webcaching"
+		],
+		"shared_folders":{
+			"/var/app":{
+				"dest":"/var/app",
+				"from":"app",
+				"user":"uid=510,gid=510",
+				"dmode":"dmode=775",
+				"fmode":"fmode=774"
+			}
+		},
+		"apps": {
+			"store.wsu.edu": {
+				"repo":"-b bootstraped https://github.com/jeremyBass/WSUMAGE-base.git",
+				"repoid":"jeremyBass/WSUMAGE-base",
+				"database_host":"10.255.255.3",
+				"hosts":[
+					"store.mage.dev",
+					"events.store.mage.dev",
+					"student.store.mage.dev",
+					"general.store.mage.dev",
+					"store.admin.mage.dev",
+					"tech.store.mage.dev"
+				]
+			}
+		}
+	}
 }

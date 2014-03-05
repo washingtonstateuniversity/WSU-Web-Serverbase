@@ -187,7 +187,6 @@ php-fpm:
       - php-imap
       - php-gd
       - php-mbstring
-      - php-pecl-zendopcache
       - php-pecl-memcached
     - require:
       - sls: serverbase

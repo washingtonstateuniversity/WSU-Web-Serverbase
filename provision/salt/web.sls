@@ -164,13 +164,13 @@ nginx:
 
 # Remi has a repository specifically setup for PHP 5.5. This continues
 # to reply on the standard Remi repository for some packages.
-remi-php55-repo:
-  pkgrepo.managed:
-    - humanname: Remi PHP 5.5 Repository
-    - baseurl: http://rpms.famillecollet.com/enterprise/$releasever/php55/$basearch/
-    - gpgcheck: 0
-    - require_in:
-      - pkg: php-fpm
+#remi-php55-repo:
+#  pkgrepo.managed:
+#    - humanname: Remi PHP 5.5 Repository
+#    - baseurl: http://rpms.famillecollet.com/enterprise/$releasever/php55/$basearch/
+#    - gpgcheck: 0
+#    - require_in:
+#      - pkg: php-fpm
 
 php-fpm:
   pkg.latest:

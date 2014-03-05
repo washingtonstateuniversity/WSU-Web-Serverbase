@@ -136,7 +136,7 @@ Vagrant.configure("2") do |config|
 						end
 					end
 					
-					$provision_script<<" -b #{bootstrap} -o #{owner} \n"
+					$provision_script<<" -b #{branch} -o #{owner} \n"
 					
 					if !@destroying
 						$running="echo \"about to run running: #{$provision_script} \" \n"

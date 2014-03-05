@@ -5,6 +5,9 @@
     {%- endif %}
 {%- endfor %}
 base:
+  'os:(RedHat|CentOS)':
+    - match: grain_pcre
+    - os.centos
   '*':
 {% if 'serverbase' in grains.get('roles') %}
     - serverbase

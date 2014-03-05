@@ -173,7 +173,7 @@ remi-php55-repo:
       - pkg: php-fpm
 
 php-fpm:
-  pkg.installed:
+  pkg.latest:
     - pkgs:
       - php-fpm
       - php-cli

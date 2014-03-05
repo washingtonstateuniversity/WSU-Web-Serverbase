@@ -1,6 +1,7 @@
 {
 	"server2": {
 		"ip":"10.255.255.2",
+		"branch":"master",
 		"open_ports":"",
 		"hostname":"web_server",
 		"memory":"6144",

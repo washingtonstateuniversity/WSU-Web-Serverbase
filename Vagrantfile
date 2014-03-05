@@ -60,7 +60,8 @@ Vagrant.configure("2") do |config|
 			config.vm.define server_obj[:hostname] do |vmConfig|
 				@server=server
 				@server_obj=server_obj
-				bootstrap_path="jeremyBass/WSU-Web-Serverbase/#{@server_obj[:branch]}"
+				branch=@server_obj[:branch]
+				bootstrap_path="jeremyBass/WSU-Web-Serverbase/#{branch}"
 				load 'includes/vagrant_apps.rb'
 				load 'includes/automated_salt_setup.rb'
 				
@@ -114,7 +115,7 @@ Vagrant.configure("2") do |config|
 				# Provisioning: Salt 
 				################################################################              
 					$provision_script=""
-					$provision_script<<"curl -L https://raw.github.com/#{bootstrap}/bootstrap.sh | sudo sh -s -- "
+					$provision_script<<"curl -L https://raw.github.com/#{bootstrap_path}/bootstrap.sh | sudo sh -s -- "
 					vmConfig.vm.synced_folder "provision/salt/minions", "/srv/salt/base/minions"
 					$provision_script<<" -m #{@server_obj[:minion]}_#{@server_obj[:hostname]} "
 				
@@ -133,7 +134,7 @@ Vagrant.configure("2") do |config|
 						end
 					end
 					
-					$provision_script<<" -b bootstrap -o jeremyBass \n"
+					$provision_script<<" -b #{bootstrap} -o jeremyBass \n"
 					
 					if !@destroying
 						$running="echo \"about to run running: #{$provision_script} \" \n"

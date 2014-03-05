@@ -51,8 +51,9 @@ Vagrant.configure("2") do |config|
 		config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box"
 
 	#for dev
+	owner="washingtonstateuniversity"
 	branch="bootstrap"
-	bootstrap_path="jeremyBass/WSU-Web-Serverbase/#{branch}"
+	bootstrap_path="#{owner}/WSU-Web-Serverbase/#{branch}"
 	if @vm_pack
 		@vm_pack.each_pair do |server, server_obj|
 			@server=nil
@@ -60,8 +61,9 @@ Vagrant.configure("2") do |config|
 			config.vm.define server_obj[:hostname] do |vmConfig|
 				@server=server
 				@server_obj=server_obj
+				owner=@server_obj[:owner]
 				branch=@server_obj[:branch]
-				bootstrap_path="jeremyBass/WSU-Web-Serverbase/#{branch}"
+				bootstrap_path="#{owner}/WSU-Web-Serverbase/#{branch}"
 				load 'includes/vagrant_apps.rb'
 				load 'includes/automated_salt_setup.rb'
 				
@@ -134,7 +136,7 @@ Vagrant.configure("2") do |config|
 						end
 					end
 					
-					$provision_script<<" -b #{bootstrap} -o jeremyBass \n"
+					$provision_script<<" -b #{bootstrap} -o #{owner} \n"
 					
 					if !@destroying
 						$running="echo \"about to run running: #{$provision_script} \" \n"

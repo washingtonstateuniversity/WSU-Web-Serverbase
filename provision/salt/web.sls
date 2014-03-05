@@ -181,7 +181,7 @@ php-fpm:
       - php-pear
       - php-pdo
 {% if 'database' in grains.get('roles') %}
-      - php-mysql
+      - php-mysqlnd
 {% endif %}
       - php-mcrypt
       - php-imap

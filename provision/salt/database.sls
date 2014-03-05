@@ -77,14 +77,14 @@ mysqld:
     - require:
       - file: /etc/my.cnf
 
-set_localhost_root_password:
-  mysql_user.present:
-    - name: root
-    - host: localhost
-    - password: {{ pillar['mysql']['pwd'] }}
-    - connection_pass: ""
-    - require:
-      - service: mysqld
+#set_localhost_root_password:
+#  mysql_user.present:
+#    - name: root
+#    - host: localhost
+#    - password: {{ pillar['mysql']['pwd'] }}
+#    - connection_pass: ""
+#    - require:
+#      - service: mysqld
 
 
 # Replicate the functionality of mysql_secure_installation.

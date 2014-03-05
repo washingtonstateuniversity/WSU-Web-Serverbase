@@ -198,6 +198,12 @@ php-fpm:
     - required_in:
       - sls: finalize.restart
 
+ImageMagick:
+  pkg.installed:
+    - pkgs:
+      - php-pecl-imagick
+      - ImageMagick
+
 
 # Set php-fpm to run in levels 2345.
 php-fpm-reboot-auto:
@@ -207,12 +213,6 @@ php-fpm-reboot-auto:
     - user: root
     - require:
       - pkg: php-fpm
-
-ImageMagick:
-  pkg.installed:
-    - pkgs:
-      - php-pecl-imagick
-      - ImageMagick
 
       
 #***************************************      

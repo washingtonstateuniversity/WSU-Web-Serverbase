@@ -82,7 +82,7 @@ _RAWURL="https://raw.github.com"
 #                 have flaged it local.  By defualt we are on "production"
 #===============================================================================
 is_localhost() {
-  return 1
+  return ip addr show dev eth0 | grep "inet " | awk '{ print $2 }'  2>&1 | grep -qi "10.255.255"
 }
 
 #===  FUNCTION  ================================================================

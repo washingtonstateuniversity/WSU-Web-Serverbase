@@ -1,2 +1,4 @@
 fail2ban:
-   email:dev.hotseat@wsu.edu
+  email: dev.hotseat@wsu.edu
+mysql:
+  pass: sdislkeoweg

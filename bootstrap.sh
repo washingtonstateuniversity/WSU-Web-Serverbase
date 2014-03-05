@@ -228,7 +228,7 @@ load_app(){
 #   DESCRIPTION:  starts the booting of the provisioning.
 #===============================================================================
 init_provision(){
-    is_localhost && echo "working off a local development platform"
+    is_localhost && echo "working off a local development platform" || echo "working off a remote server" 
     #ensure the src bed
     [ -d /src/salt/serverbase ] || mkdir -p /src/salt/serverbase
     [ -d /srv/salt/base ] || mkdir -p /srv/salt/base

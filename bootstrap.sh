@@ -82,7 +82,7 @@ _RAWURL="https://raw.github.com"
 #                 have flaged it local.  By defualt we are on "production"
 #===============================================================================
 is_localhost() {
-  return 1
+  return ip addr show dev eth0 2>&1 | grep "inet " 2>&1 | awk '{ print $2 }' 2>&1 | grep -qi "10.255.255" && true || false
 }
 
 #===  FUNCTION  ================================================================
@@ -228,6 +228,7 @@ load_app(){
 #   DESCRIPTION:  starts the booting of the provisioning.
 #===============================================================================
 init_provision(){
+    is_localhost && echo "working off a local development platform" || echo "working off a remote server" 
     #ensure the src bed
     [ -d /src/salt/serverbase ] || mkdir -p /src/salt/serverbase
     [ -d /srv/salt/base ] || mkdir -p /srv/salt/base

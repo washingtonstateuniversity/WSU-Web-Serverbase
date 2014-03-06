@@ -161,8 +161,19 @@ nginx:
 ###########################################################
 # php-fpm
 ###########################################################
+
+# Remi has a repository specifically setup for PHP 5.5. This continues
+# to reply on the standard Remi repository for some packages.
+#remi-php55-repo:
+#  pkgrepo.managed:
+#    - humanname: Remi PHP 5.5 Repository
+#    - baseurl: http://rpms.famillecollet.com/enterprise/$releasever/php55/$basearch/
+#    - gpgcheck: 0
+#    - require_in:
+#      - pkg: php-fpm
+
 php-fpm:
-  pkg.installed:
+  pkg.latest:
     - pkgs:
       - php-fpm
       - php-cli
@@ -170,7 +181,7 @@ php-fpm:
       - php-pear
       - php-pdo
 {% if 'database' in grains.get('roles') %}
-      - php-mysql
+      - php-mysqlnd
 {% endif %}
       - php-mcrypt
       - php-imap
@@ -188,6 +199,12 @@ php-fpm:
     - required_in:
       - sls: finalize.restart
 
+ImageMagick:
+  pkg.installed:
+    - pkgs:
+      - php-pecl-imagick
+      - ImageMagick
+
 
 # Set php-fpm to run in levels 2345.
 php-fpm-reboot-auto:
@@ -197,12 +214,6 @@ php-fpm-reboot-auto:
     - user: root
     - require:
       - pkg: php-fpm
-
-ImageMagick:
-  pkg.installed:
-    - pkgs:
-      - php-pecl-imagick
-      - ImageMagick
 
       
 #***************************************      

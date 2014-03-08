@@ -48,7 +48,7 @@ Vagrant.configure("2") do |config|
 	# CentOS 6.4, 64 bit release
 	################################################################  
 		config.vm.box     = "centos-64-x64-puppetlabs"
-		config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box"
+		config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-65-x64-virtualbox-nocm.box"
 
 	#for dev
 	owner="washingtonstateuniversity"

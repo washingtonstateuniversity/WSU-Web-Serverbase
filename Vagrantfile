@@ -79,7 +79,7 @@ Vagrant.configure("2") do |config|
 							v.customize ["modifyvm", :id, "--vram", @server_obj[:vram].to_i]
 							v.customize ["modifyvm", :id, "--cpus", cores ]
 							if @server_obj[:host_64bit] == 'true'
-								v.customize ["modifyvm", :id, "--ioapic", "on"]
+								#v.customize ["modifyvm", :id, "--ioapic", "on"]
 							end
 						end
 					end

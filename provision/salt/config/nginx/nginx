@@ -85,7 +85,7 @@ force_reload() {
 }
 
 configtest() {
-  $nginx -t -c $NGINX_CONF_FILE
+	$nginx -t -q -c $NGINX_CONF_FILE
 }
 
 rh_status() {

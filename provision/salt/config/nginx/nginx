@@ -26,9 +26,28 @@ NGINX_CONF_FILE="/etc/nginx/nginx.conf"
 
 lockfile=/var/run/nginx.lock
 
+make_dirs() {
+   # make required directories
+   user=`$nginx -V 2>&1 | grep "configure arguments:" | sed 's/[^*]*--user=\([^ ]*\).*/\1/g' -`
+   if [ -z "`grep $user /etc/passwd`" ]; then
+       useradd -M -s /bin/nologin $user
+   fi
+   options=`$nginx -V 2>&1 | grep 'configure arguments:'`
+   for opt in $options; do
+       if [ `echo $opt | grep '.*-temp-path'` ]; then
+           value=`echo $opt | cut -d "=" -f 2`
+           if [ ! -d "$value" ]; then
+               # echo "creating" $value
+               mkdir -p $value && chown -R $user $value
+           fi
+       fi
+   done
+}
+
 start() {
     [ -x $nginx ] || exit 5
     [ -f $NGINX_CONF_FILE ] || exit 6
+	make_dirs
     echo -n $"Starting $prog: "
     daemon $nginx -c $NGINX_CONF_FILE
     retval=$?

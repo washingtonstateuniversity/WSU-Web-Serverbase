@@ -49,7 +49,7 @@ ini(){
 --sbin-path=/usr/sbin/nginx \
 --conf-path=/etc/nginx/nginx.conf \
 --pid-path=/var/run/nginx.pid \
---lock-path=/var/run/nginx.lock \
+--lock-path=/var/lock/subsys/nginx \
 --error-log-path=/var/log/nginx/error.log \
 --http-log-path=/var/log/nginx/access.log \
 --http-proxy-temp-path=/var/lib/nginx/proxy \

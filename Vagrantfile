@@ -26,7 +26,7 @@ require 'json'
 	#base dir
 	################################################################ 
 		@vagrant_dir = File.expand_path(File.dirname(__FILE__))
-	
+
 	# the sub projects :: writes out the salt "config data" and 
 	# sets up for vagrant.  The production is done by hand on purpose
 	###############################################################
@@ -66,7 +66,6 @@ Vagrant.configure("2") do |config|
 				bootstrap_path="#{owner}/WSU-Web-Serverbase/#{branch}"
 				load 'includes/vagrant_apps.rb'
 				load 'includes/automated_salt_setup.rb'
-				
 
 				# Virtualbox specific settings for the virtual machine.
 				################################################################ 
@@ -83,14 +82,14 @@ Vagrant.configure("2") do |config|
 							end
 						end
 					end
-				
+
 				# Set networking options
 				################################################################           
 					if !(@server_obj[:hostname].nil? || !@server_obj[:hostname].empty?)
 						vmConfig.vm.hostname = @server_obj[:hostname]
 					end
 					vmConfig.vm.network :private_network, ip: @server_obj[:ip]
-		
+
 				# register hosts for all hosts for apps and the server
 				################################################################
 				# Local Machine Hosts
@@ -110,10 +109,7 @@ Vagrant.configure("2") do |config|
 					vmConfig.vm.provision :hosts do |provisioner|
 					  provisioner.add_host '127.0.0.1', hosts
 					end
-		
 
-					
-		
 				# Provisioning: Salt 
 				################################################################              
 					$provision_script=""

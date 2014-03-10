@@ -22,6 +22,9 @@ base:
 {% if 'webcaching' in grains.get('roles') %}
     - caching
 {% endif %}
+{% if 'java' in grains.get('roles') %}
+    - java
+{% endif %}
 {% if isLocal == "true" %}
     - env.development
 {% else %}

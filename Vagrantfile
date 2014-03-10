@@ -117,7 +117,7 @@ Vagrant.configure("2") do |config|
 				# Provisioning: Salt 
 				################################################################              
 					$provision_script=""
-					$provision_script<<"curl -L https://raw.github.com/#{bootstrap_path}/bootstrap.sh | sudo sh -s -- "
+					$provision_script<<"curl -L https://raw.github.com/#{bootstrap_path}/server-bootstrap.sh | sudo sh -s -- "
 					vmConfig.vm.synced_folder "provision/salt/minions", "/srv/salt/base/minions"
 					$provision_script<<" -m #{@server_obj[:minion]}_#{@server_obj[:hostname]} "
 				

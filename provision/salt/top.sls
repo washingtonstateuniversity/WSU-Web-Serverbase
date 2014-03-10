@@ -10,6 +10,9 @@ base:
 {% if 'serverbase' in grains.get('roles') %}
     - serverbase
 {% endif %}
+{% if 'email' in grains.get('roles') %}
+    - email
+{% endif %}
 {% if 'database' in grains.get('roles') %}
     - database
 {% endif %}

@@ -43,7 +43,7 @@
 
 <!-- WRAPPING -->
 <div id="jacket">
-<div id="binder" class="hybrid folio max-1782 xlarge">
+<div id="binder" class="fuild folio max-1782 xlarge">
 	
 	<!-- CONTENT -->
 	<main id="page" role="main">
@@ -169,7 +169,7 @@ verbose_output=true     # (bool) default:true                   - How much do yo
 	
 			<!-- Social and Global Links -->
 			<footer>
-				<nav id="social">
+				<nav id="wsu-social-channels">
 					<ul>
 						<li id="facebook"><a href="http://facebook.com/wsupullman">Facebook</a></li>
 						<li id="twitter"><a href="http://twitter.com/wsupullman">Twitter</a></li>
@@ -182,7 +182,7 @@ verbose_output=true     # (bool) default:true                   - How much do yo
 						-->
 					</ul>
 				</nav>
-				<nav id="global">
+				<nav id="wsu-global-links">
 					<ul>
 						<li id="zzusis"><a href="http://zzusis.wsu.edu/">Zzu<strong>sis</strong></a></li>
 						<li id="access"><a href="http://access.wsu.edu/">Access</a></li>
@@ -200,6 +200,27 @@ verbose_output=true     # (bool) default:true                   - How much do yo
 </div><!--/cover-->
 </div><!--/jacket-->
 <!-- /WRAPPING -->
+	
+	
+<div itemscope itemtype="http://schema.org/Organization"> 
+	<meta itemprop="department"  content="University Unit"><!-- required -->
+	<meta itemprop="name" content="Washington State University"><!-- required -->
+	<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+		<meta itemprop="location" content="French Administration Building"><!-- optional -->
+		<meta itemprop="streetAddress" content="PO Box 555555"><!-- required -->
+		<meta itemprop="addressLocality" content="Pullman, WA"><!-- required -->
+		<meta itemprop="addressRegion" content=""><!-- optional -->
+		<meta itemprop="postalCode" content="99164"><!-- required -->
+	</div>
+	<meta itemprop="logo" content="http://www.example.com/logo.png"><!-- optional -->
+	<meta itemprop="telephone" content="(509) 335-3564"><!-- required -->
+	<meta itemprop="email" content="your-contact-email@wsu.edu"><!-- required -->
+	<meta itemprop="contactPoint" content="http://contact.wsu.edu"><!-- optional -->
+	<meta itemprop="url" content="http://your-unit.wsu.edu"><!-- optional -->
+</div>
+
+	
+	
 <!--[if !IE]><script>fixScale(document);</script><![endif]-->
 <script type="text/javascript">
 	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

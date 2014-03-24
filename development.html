@@ -55,7 +55,7 @@
 					<h1 class="header">WSU Serverbase development guide</h1>
 					<div class="wrapper markdown-body">
 						<h2 class="header">What is this for?</h2>
-						<p>This project is used in aiding your development and web design tasks. To achieve this result of a simple get up and running environment, we use <a href="#" target="_blank">Vagrant</a> along with a <a href="#" target="_blank">Salt</a> provisioner to set up the local server and deploy the web apps.</p>
+						<p>This project is used in aiding your development and web design tasks. To achieve this result of a simple get up and running environment, we use <a href="http://www.vagrantup.com/" target="_blank">Vagrant</a> along with a <a href="http://www.saltstack.com/" target="_blank">Salt</a> provisioner to set up the local server and deploy the web apps.  You have the option to edit the <code>Vagrantfile</code>, it is highly suggested to now alter the file in any way.  To set options for  <code>Vagrant</code> there are properties located in the <code>config.json</code>.  From this <code>config.json</code> you may load up any of the pre configured apps, adjust the way vagrant is run, and which environments are loaded with <code>Salt</code>.  </p>
 					</div>
 
 
@@ -65,7 +65,7 @@
 						<div class="wrapper markdown-body">
 							<p>At the top of the <code>config.json</code>, which is a json file, you have some options that you may use to change your environment that you are loading.</p>
 							<pre><code>{
-	"server2": {
+	"webserver": {								//</code><b>Name of the server being set up</b><code>
 		"ip":"10.255.255.2",					//</code><b>ip of the VirturalBox</b><code>
 		"branch":"master",						//</code><b>the git branch to use (optional)</b><code>
 		"owner":"washingtonstateuniversity",	//</code><b>the git owner to use (optional)</b><code>

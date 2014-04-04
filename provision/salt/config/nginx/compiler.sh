@@ -72,6 +72,7 @@ ini(){
 --with-sha1=/usr/include/openssl \
 --with-md5=/usr/include/openssl \
 --with-pcre \
+--with-ipv6 \
 --with-file-aio \
 --with-http_realip_module \
 --without-http_scgi_module \

@@ -52,7 +52,11 @@ ini(){
 --lock-path=/var/lock/subsys/nginx \
 --error-log-path=/var/log/nginx/error.log \
 --http-log-path=/var/log/nginx/access.log \
---http-proxy-temp-path=/var/lib/nginx/proxy \
+--http-client-body-temp-path=/var/cache/nginx/client_temp \
+--http-proxy-temp-path=/var/cache/nginx/proxy_temp \
+--http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
+--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
+--http-scgi-temp-path=/var/cache/nginx/scgi_temp \
 --with-http_auth_request_module \
 --with-http_sub_module \
 --with-http_mp4_module \

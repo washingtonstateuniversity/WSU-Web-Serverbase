@@ -35,10 +35,12 @@ ini(){
     cd "ngx_pagespeed-$pagespeedVer-beta/"
     wget -N https://dl.google.com/dl/page-speed/psol/$pagespeedVer.tar.gz
     tar -xzvf $pagespeedVer.tar.gz # expands to psol/
+	
     #mkdir /tmp/nginx-modules
     #cd /tmp/nginx-modules
     #wget https://github.com/agentzh/headers-more-nginx-module/archive/v0.19.tar.gz
     #tar -xzvf v0.19.tar.gz 
+	
     cd /src/nginx
 
     ./configure \
@@ -80,12 +82,13 @@ ini(){
 --add-module=/src/nginx/ngx_pagespeed-$pagespeedVer-beta
     make
     make install
-    resulting="Just finished installing nginx $nginxVersion"
+    
     return 1 #fix this this should be a grep for 'error' or something also this is backwards as non-0 is false yet it's treated as true
 }
 
 ini  2>&1 | grep -qi "complete"
 if [ $? -eq 1 ]; then
+	resulting="Just finished installing nginx $nginxVersion"
     echo "name=$name result=True changed=True comment='$resulting'"
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': True, 'comment': ''}"
 else

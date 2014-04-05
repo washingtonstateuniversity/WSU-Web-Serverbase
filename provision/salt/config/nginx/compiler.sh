@@ -33,7 +33,7 @@ ini(){
     #get page speed
     wget -N "ngx_pagespeed-$pagespeedVer-beta.zip" "https://github.com/pagespeed/ngx_pagespeed/archive/v$pagespeedVer-beta.zip"
     unzip -o "ngx_pagespeed-$pagespeedVer-beta.zip"  2>/dev/null # or unzip v1.7.30.2-beta
-    cd "ngx_pagespeed-$pagespeedVer-beta/"
+    cd "/src/nginx/ngx_pagespeed-$pagespeedVer-beta/"
     wget -N https://dl.google.com/dl/page-speed/psol/$pagespeedVer.tar.gz 2>/dev/null
     tar -xzvf $pagespeedVer.tar.gz  2>/dev/null # expands to psol/
     

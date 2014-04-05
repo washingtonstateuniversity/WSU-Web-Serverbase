@@ -16,22 +16,22 @@ nginxVersion="$1"
 ini(){
     cd /src
     #nginxVersion="1.5.8" # set the value here from nginx website
-    wget -N http://nginx.org/download/nginx-$nginxVersion.tar.gz 2>/dev/null
-    tar -xzf nginx-$nginxVersion.tar.gz >/dev/null
+    wget -N http://nginx.org/download/nginx-$nginxVersion.tar.gz
+    tar -xzf nginx-$nginxVersion.tar.gz
     ln -sf nginx-$nginxVersion nginx
     
     cd /src/nginx
 
     # Fetch openssl
-    wget -N http://www.openssl.org/source/openssl-1.0.1e.tar.gz 2>/dev/null
-    tar -xzf openssl-1.0.1e.tar.gz >/dev/null
+    wget -N http://www.openssl.org/source/openssl-1.0.1e.tar.gz
+    tar -xzf openssl-1.0.1e.tar.gz
     
     #get page speed
-    wget -N -O ngx_pagespeed-1.7.30.2-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.2-beta.zip 2>/dev/null
-    unzip -o ngx_pagespeed-1.7.30.2-beta.zip >/dev/null # or unzip v1.7.30.2-beta
+    wget -N -O ngx_pagespeed-1.7.30.2-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.2-beta.zip
+    unzip -o ngx_pagespeed-1.7.30.2-beta.zip # or unzip v1.7.30.2-beta
     cd ngx_pagespeed-1.7.30.2-beta/
-    wget -N https://dl.google.com/dl/page-speed/psol/1.7.30.2.tar.gz 2>/dev/null
-    tar -xzvf 1.7.30.2.tar.gz >/dev/null # expands to psol/
+    wget -N https://dl.google.com/dl/page-speed/psol/1.7.30.2.tar.gz
+    tar -xzvf 1.7.30.2.tar.gz # expands to psol/
     #mkdir /tmp/nginx-modules
     #cd /tmp/nginx-modules
     #wget https://github.com/agentzh/headers-more-nginx-module/archive/v0.19.tar.gz
@@ -69,6 +69,7 @@ ini(){
 --with-http_sub_module \
 --with-http_spdy_module \
 --with-http_ssl_module \
+--with-openssl=/tmp/openssl-1.0.1e \
 --with-sha1=/usr/include/openssl \
 --with-md5=/usr/include/openssl \
 --with-pcre \
@@ -77,14 +78,14 @@ ini(){
 --with-http_realip_module \
 --without-http_scgi_module \
 --without-http_uwsgi_module \
---add-module=/src/nginx/ngx_pagespeed-1.7.30.2-beta >/dev/null
-    make >/dev/null
-    make install >/dev/null
+--add-module=/src/nginx/ngx_pagespeed-1.7.30.2-beta
+    make
+    make install
     resulting="Just finished installing nginx $nginxVersion"
     return 1 #fix this this should be a grep for 'error' or something also this is backwards as non-0 is false yet it's treated as true
 }
 
-ini
+ini  2>&1 | grep -qi "complete"
 if [ $? -eq 1 ]; then
     echo "name=$name result=True changed=True comment='$resulting'"
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': True, 'comment': ''}"

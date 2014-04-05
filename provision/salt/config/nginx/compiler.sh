@@ -20,22 +20,22 @@ touch /failed_nginx_compile
 ini(){
 	cd /src
 	#nginxVersion="1.5.8" # set the value here from nginx website
-	wget -N http://nginx.org/download/nginx-$nginxVersion.tar.gz
-	tar -xzf nginx-$nginxVersion.tar.gz
+	wget -N http://nginx.org/download/nginx-$nginxVersion.tar.gz 2>/dev/null
+	tar -xzf nginx-$nginxVersion.tar.gz 2>/dev/null
 	ln -sf nginx-$nginxVersion nginx
 	
 	cd /src/nginx
 
 	# Fetch openssl
-	wget -N http://www.openssl.org/source/openssl-1.0.1e.tar.gz
-	tar -xzf openssl-1.0.1e.tar.gz
+	wget -N http://www.openssl.org/source/openssl-1.0.1e.tar.gz 2>/dev/null
+	tar -xzf openssl-1.0.1e.tar.gz 2>/dev/null
 	
 	#get page speed
 	wget -N -O "ngx_pagespeed-$pagespeedVer-beta.zip" "https://github.com/pagespeed/ngx_pagespeed/archive/v$pagespeedVer-beta.zip"
-	unzip -o "ngx_pagespeed-$pagespeedVer-beta.zip" # or unzip v1.7.30.2-beta
+	unzip -o "ngx_pagespeed-$pagespeedVer-beta.zip"  2>/dev/null # or unzip v1.7.30.2-beta
 	cd "ngx_pagespeed-$pagespeedVer-beta/"
-	wget -N https://dl.google.com/dl/page-speed/psol/$pagespeedVer.tar.gz
-	tar -xzvf $pagespeedVer.tar.gz # expands to psol/
+	wget -N https://dl.google.com/dl/page-speed/psol/$pagespeedVer.tar.gz 2>/dev/null
+	tar -xzvf $pagespeedVer.tar.gz  2>/dev/null # expands to psol/
 	
 	#mkdir /tmp/nginx-modules
 	#cd /tmp/nginx-modules

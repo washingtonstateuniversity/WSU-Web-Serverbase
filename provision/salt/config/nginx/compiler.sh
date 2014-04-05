@@ -71,7 +71,7 @@ ini(){
 --with-http_sub_module \
 --with-http_spdy_module \
 --with-http_ssl_module \
---with-openssl=/tmp/openssl-1.0.1e \
+--with-openssl=/src/nginx/openssl-1.0.1e \
 --with-sha1=/usr/include/openssl \
 --with-md5=/usr/include/openssl \
 --with-pcre \

@@ -87,7 +87,7 @@ ini(){
 
 LOGOUTPUT=$(ini)
 
-if [ $($LOGOUTPUT 2>&1 | grep -qi "make[1]: Leaving directory `/src/nginx-$nginxVersion'") ]; then
+if [ $(nginx -v 2>&1 | grep -qi "$nginx_version") ]; then
     resulting="Just finished installing nginx $nginxVersion"
     echo "name=$name result=True changed=True comment='$resulting'"
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': True, 'comment': ''}"

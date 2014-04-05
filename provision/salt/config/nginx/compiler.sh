@@ -85,15 +85,15 @@ ini(){
     make install
 }
 
-OUTPUT=$(ini)
+LOGOUTPUT=$(ini)
 
-if [ $($OUTPUT 2>&1 | grep -qi "make[1]: Leaving directory `/src/nginx-$nginxVersion'") ]; then
+if [ $($LOGOUTPUT 2>&1 | grep -qi "make[1]: Leaving directory `/src/nginx-$nginxVersion'") ]; then
     resulting="Just finished installing nginx $nginxVersion"
     echo "name=$name result=True changed=True comment='$resulting'"
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': True, 'comment': ''}"
 else
     resulting="Failed installing nginx $nginxVersion, check /failed_nginx_compile for details"
-    $OUTPUT >> /failed_nginx_compile
+    $LOGOUTPUT >> /failed_nginx_compile
     echo "name=$name result=False changed=False comment='$resulting'"
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': False, 'comment': ''}"
 fi

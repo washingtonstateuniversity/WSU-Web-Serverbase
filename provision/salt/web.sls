@@ -82,6 +82,15 @@ nginx-compiler-base:
       - cmd: nginx-compile
 
 # Provide the proxy directory for nginx
+/var/lib/nginx:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+	  
+# Provide the proxy directory for nginx
 /var/lib/nginx/proxy:
   file.directory:
     - user: root

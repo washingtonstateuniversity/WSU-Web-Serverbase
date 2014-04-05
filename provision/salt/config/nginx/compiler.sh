@@ -46,6 +46,7 @@ ini(){
     mkdir -p /var/log/nginx
 	mkdir -p /var/cache/nginx
 	mkdir -p /var/lock/subsys/nginx
+	mkdir -p /var/ngx_pagespeed_cache
 
     ./configure \
 --user=www-data \

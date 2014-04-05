@@ -108,7 +108,6 @@ nginx-compiler-base:
     - mode: 755
     - require_in:
       - cmd: nginx-compile
-	  
 
 # Adds the service file.
 /etc/init.d/nginx:
@@ -136,7 +135,7 @@ nginx-compiler-base:
 #   - user: root
 #   - group: root
 #   - mode: 755
-    
+
 # ensure compile script for Nginx exists
 nginx-compile-script:
   file.managed:

@@ -41,6 +41,8 @@ ini(){
     #just in case
     mkdir -p /var/lib/nginx/proxy
     mkdir -p /var/log/nginx
+	mkdir -p /var/cache/nginx
+	mkdir -p /var/lock/subsys/nginx
 
     ./configure \
 --user=www-data \

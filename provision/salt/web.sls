@@ -72,7 +72,7 @@ nginx-compiler-base:
     - require_in:
       - cmd: nginx-compile
 
-# Provide the cache directory for nginx
+# Provide the log directory for nginx
 /var/log/nginx:
   file.directory:
     - user: root
@@ -81,7 +81,7 @@ nginx-compiler-base:
     - require_in:
       - cmd: nginx-compile
 
-# Provide the cache directory for nginx
+# Provide the proxy directory for nginx
 /var/lib/nginx/proxy:
   file.directory:
     - user: root
@@ -91,7 +91,7 @@ nginx-compiler-base:
       - cmd: nginx-compile
 
 
-# Provide the cache directory for nginx
+# Provide the lock directory for nginx
 /var/lock/subsys/nginx:
   file.directory:
     - user: root
@@ -100,7 +100,7 @@ nginx-compiler-base:
     - require_in:
       - cmd: nginx-compile
 
-# Provide the cache directory for nginx
+# Provide the pagespeed cache directory for nginx
 /var/ngx_pagespeed_cache:
   file.directory:
     - user: root

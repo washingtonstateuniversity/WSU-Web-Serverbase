@@ -41,13 +41,6 @@ ini(){
     #tar -xzvf v0.19.tar.gz 
     cd /src/nginx
 
-    #just in case
-    mkdir -p /var/lib/nginx/proxy
-    mkdir -p /var/log/nginx
-	mkdir -p /var/cache/nginx
-	mkdir -p /var/lock/subsys/nginx
-	mkdir -p /var/ngx_pagespeed_cache
-
     ./configure \
 --user=www-data \
 --group=www-data \

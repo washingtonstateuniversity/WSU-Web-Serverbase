@@ -1,3 +1,3 @@
 nginx:
-   version: 1.5.8
+   version: 1.5.12
 web:

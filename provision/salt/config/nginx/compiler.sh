@@ -27,11 +27,11 @@ ini(){
     tar -xzf openssl-1.0.1e.tar.gz
     
     #get page speed
-    wget -N -O ngx_pagespeed-1.7.30.2-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.2-beta.zip
-    unzip -o ngx_pagespeed-1.7.30.2-beta.zip # or unzip v1.7.30.2-beta
+    wget -N -O ngx_pagespeed-1.7.30.4-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.4-beta.zip
+    unzip -o ngx_pagespeed-1.7.30.4-beta.zip # or unzip v1.7.30.2-beta
     cd ngx_pagespeed-1.7.30.2-beta/
-    wget -N https://dl.google.com/dl/page-speed/psol/1.7.30.2.tar.gz
-    tar -xzvf 1.7.30.2.tar.gz # expands to psol/
+    wget -N https://dl.google.com/dl/page-speed/psol/1.7.30.4.tar.gz
+    tar -xzvf 1.7.30.4.tar.gz # expands to psol/
     #mkdir /tmp/nginx-modules
     #cd /tmp/nginx-modules
     #wget https://github.com/agentzh/headers-more-nginx-module/archive/v0.19.tar.gz
@@ -78,7 +78,7 @@ ini(){
 --with-http_realip_module \
 --without-http_scgi_module \
 --without-http_uwsgi_module \
---add-module=/src/nginx/ngx_pagespeed-1.7.30.2-beta
+--add-module=/src/nginx/ngx_pagespeed-1.7.30.4-beta
     make
     make install
     resulting="Just finished installing nginx $nginxVersion"

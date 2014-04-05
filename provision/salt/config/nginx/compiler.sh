@@ -33,8 +33,8 @@ ini(){
     wget -N ngx_pagespeed-1.7.30.4-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.4-beta.zip
     unzip -o ngx_pagespeed-1.7.30.4-beta.zip  2>/dev/null # or unzip v1.7.30.2-beta
     cd /src/nginx/ngx_pagespeed-1.7.30.4-beta/
-    wget -N https://dl.google.com/dl/page-speed/psol/1.7.30.4.tar.gz 2>/dev/null
-    tar -xzvf 1.7.30.4.tar.gz  2>/dev/null # expands to psol/
+    wget -N page-speed-psol-1.7.30.4.tar.gz https://dl.google.com/dl/page-speed/psol/1.7.30.4.tar.gz 2>/dev/null
+    tar -xzvf page-speed-psol-1.7.30.4.tar.gz  2>/dev/null # expands to psol/
     
     #mkdir /tmp/nginx-modules
     #cd /tmp/nginx-modules

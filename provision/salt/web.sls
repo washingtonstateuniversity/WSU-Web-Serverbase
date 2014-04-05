@@ -100,6 +100,15 @@ nginx-compiler-base:
     - require_in:
       - cmd: nginx-compile
 
+# Provide the cache directory for nginx
+/var/ngx_pagespeed_cache:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+	  
 
 # Adds the service file.
 /etc/init.d/nginx:
@@ -128,7 +137,7 @@ nginx-compiler-base:
 #   - group: root
 #   - mode: 755
     
-# Run compiler
+# ensure compile script for Nginx exists
 nginx-compile-script:
   file.managed:
     - name: /src/compiler.sh

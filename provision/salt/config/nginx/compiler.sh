@@ -92,6 +92,7 @@ if [ $? -eq 1 ]; then
     echo "name=$name result=True changed=True comment='$resulting'"
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': True, 'comment': ''}"
 else
+	resulting="Failed installing nginx $nginxVersion"
     echo "name=$name result=False changed=False comment='$resulting'"
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': False, 'comment': ''}"
 fi

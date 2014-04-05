@@ -79,7 +79,7 @@ ini(){
 --with-http_realip_module \
 --without-http_scgi_module \
 --without-http_uwsgi_module \
---add-module=/src/nginx/ngx_pagespeed-$pagespeedVer-beta
+--add-module="/src/nginx/ngx_pagespeed-$pagespeedVer-beta"
     make
     make install
     

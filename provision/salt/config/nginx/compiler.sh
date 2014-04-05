@@ -18,33 +18,33 @@ touch /failed_nginx_compile
 #set the compiler to be quite
 #then return message only it it's a fail
 ini(){
-    cd /src
-    #nginxVersion="1.5.8" # set the value here from nginx website
-    wget -N http://nginx.org/download/nginx-$nginxVersion.tar.gz
-    tar -xzf nginx-$nginxVersion.tar.gz
-    ln -sf nginx-$nginxVersion nginx
-    
-    cd /src/nginx
-
-    # Fetch openssl
-    wget -N http://www.openssl.org/source/openssl-1.0.1e.tar.gz
-    tar -xzf openssl-1.0.1e.tar.gz
-    
-    #get page speed
-    wget -N -O "ngx_pagespeed-$pagespeedVer-beta.zip" "https://github.com/pagespeed/ngx_pagespeed/archive/v$pagespeedVer-beta.zip"
-    unzip -o "ngx_pagespeed-$pagespeedVer-beta.zip" # or unzip v1.7.30.2-beta
-    cd "ngx_pagespeed-$pagespeedVer-beta/"
-    wget -N https://dl.google.com/dl/page-speed/psol/$pagespeedVer.tar.gz
-    tar -xzvf $pagespeedVer.tar.gz # expands to psol/
+	cd /src
+	#nginxVersion="1.5.8" # set the value here from nginx website
+	wget -N http://nginx.org/download/nginx-$nginxVersion.tar.gz
+	tar -xzf nginx-$nginxVersion.tar.gz
+	ln -sf nginx-$nginxVersion nginx
 	
-    #mkdir /tmp/nginx-modules
-    #cd /tmp/nginx-modules
-    #wget https://github.com/agentzh/headers-more-nginx-module/archive/v0.19.tar.gz
-    #tar -xzvf v0.19.tar.gz 
-	
-    cd /src/nginx
+	cd /src/nginx
 
-    ./configure \
+	# Fetch openssl
+	wget -N http://www.openssl.org/source/openssl-1.0.1e.tar.gz
+	tar -xzf openssl-1.0.1e.tar.gz
+	
+	#get page speed
+	wget -N -O "ngx_pagespeed-$pagespeedVer-beta.zip" "https://github.com/pagespeed/ngx_pagespeed/archive/v$pagespeedVer-beta.zip"
+	unzip -o "ngx_pagespeed-$pagespeedVer-beta.zip" # or unzip v1.7.30.2-beta
+	cd "ngx_pagespeed-$pagespeedVer-beta/"
+	wget -N https://dl.google.com/dl/page-speed/psol/$pagespeedVer.tar.gz
+	tar -xzvf $pagespeedVer.tar.gz # expands to psol/
+	
+	#mkdir /tmp/nginx-modules
+	#cd /tmp/nginx-modules
+	#wget https://github.com/agentzh/headers-more-nginx-module/archive/v0.19.tar.gz
+	#tar -xzvf v0.19.tar.gz 
+	
+	cd /src/nginx
+
+	./configure \
 --user=www-data \
 --group=www-data \
 --prefix=/etc/nginx \
@@ -81,19 +81,19 @@ ini(){
 --without-http_scgi_module \
 --without-http_uwsgi_module \
 --add-module="/src/nginx/ngx_pagespeed-$pagespeedVer-beta"
-    make
-    make install
+	make
+	make install
 }
 
 OUTPUT=$(ini)
 
 if [ $($OUTPUT 2>&1 | grep -qi "make[1]: Leaving directory `/src/nginx-$nginxVersion'") ]; then
 	resulting="Just finished installing nginx $nginxVersion"
-    echo "name=$name result=True changed=True comment='$resulting'"
-    #echo "{'name': 'nginx-compile', 'changes': {}, 'result': True, 'comment': ''}"
+	echo "name=$name result=True changed=True comment='$resulting'"
+	#echo "{'name': 'nginx-compile', 'changes': {}, 'result': True, 'comment': ''}"
 else
 	resulting="Failed installing nginx $nginxVersion, check /failed_nginx_compile for details"
 	$OUTPUT >> /failed_nginx_compile
-    echo "name=$name result=False changed=False comment='$resulting'"
-    #echo "{'name': 'nginx-compile', 'changes': {}, 'result': False, 'comment': ''}"
+	echo "name=$name result=False changed=False comment='$resulting'"
+	#echo "{'name': 'nginx-compile', 'changes': {}, 'result': False, 'comment': ''}"
 fi

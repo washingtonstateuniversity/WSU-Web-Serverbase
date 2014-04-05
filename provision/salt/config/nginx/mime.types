@@ -62,6 +62,11 @@ types {
     application/vnd.openxmlformats-officedocument.spreadsheetml.sheet          xlsx;
     application/vnd.openxmlformats-officedocument.presentationml.presentation  pptx;
 
-
+    audio/midi                            mid midi kar;
+    audio/mpeg                            mp3;
+    audio/ogg                             ogg;
+    audio/x-m4a                           m4a;
+    audio/x-realaudio                     ra;
+	
 
 }

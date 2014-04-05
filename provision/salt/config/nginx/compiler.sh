@@ -11,6 +11,9 @@ name="nginx-compile"
 
 nginxVersion="$1"
 
+pagespeedVer="1.7.30.4"
+
+
 #set the compiler to be quite
 #then return message only it it's a fail
 ini(){
@@ -27,11 +30,11 @@ ini(){
     tar -xzf openssl-1.0.1e.tar.gz
     
     #get page speed
-    wget -N -O ngx_pagespeed-1.7.30.4-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.4-beta.zip
-    unzip -o ngx_pagespeed-1.7.30.4-beta.zip # or unzip v1.7.30.2-beta
-    cd ngx_pagespeed-1.7.30.2-beta/
-    wget -N https://dl.google.com/dl/page-speed/psol/1.7.30.4.tar.gz
-    tar -xzvf 1.7.30.4.tar.gz # expands to psol/
+    wget -N -O "ngx_pagespeed-$pagespeedVer-beta.zip" "https://github.com/pagespeed/ngx_pagespeed/archive/v$pagespeedVer-beta.zip"
+    unzip -o "ngx_pagespeed-$pagespeedVer-beta.zip" # or unzip v1.7.30.2-beta
+    cd "ngx_pagespeed-$pagespeedVer-beta/"
+    wget -N https://dl.google.com/dl/page-speed/psol/$pagespeedVer.tar.gz
+    tar -xzvf $pagespeedVer.tar.gz # expands to psol/
     #mkdir /tmp/nginx-modules
     #cd /tmp/nginx-modules
     #wget https://github.com/agentzh/headers-more-nginx-module/archive/v0.19.tar.gz

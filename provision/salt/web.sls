@@ -156,6 +156,15 @@ nginx:
     - require:
       - cmd: nginx-compile
 
+/etc/nginx/mime.types:
+  file.managed:
+    - source: salt://config/nginx/mime.types
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - cmd: nginx-compile
+
 
 ###########################################################  
 ###########################################################

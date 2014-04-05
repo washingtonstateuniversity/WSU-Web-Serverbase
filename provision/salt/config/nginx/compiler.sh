@@ -30,11 +30,11 @@ ini(){
     tar -xzf openssl-1.0.1e.tar.gz 2>/dev/null
 
     #get page speed
-    wget -N ngx_pagespeed-1.7.30.4-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.4-beta.zip
-    unzip -o ngx_pagespeed-1.7.30.4-beta.zip  2>/dev/null # or unzip v1.7.30.2-beta
-    cd /src/nginx/ngx_pagespeed-1.7.30.4-beta/
+    wget -N ngx_pagespeed.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.4-beta.zip
+    unzip -o ngx_pagespeed.zip 2>/dev/null # or unzip v1.7.30.2-beta
+    cd ngx_pagespeed/
     wget -N page-speed-psol-1.7.30.4.tar.gz https://dl.google.com/dl/page-speed/psol/1.7.30.4.tar.gz 2>/dev/null
-    tar -xzvf page-speed-psol-1.7.30.4.tar.gz  2>/dev/null # expands to psol/
+    tar -xzvf page-speed-psol-1.7.30.4.tar.gz 2>/dev/null # expands to psol/
     
     #mkdir /tmp/nginx-modules
     #cd /tmp/nginx-modules
@@ -79,7 +79,7 @@ ini(){
 --with-http_realip_module \
 --without-http_scgi_module \
 --without-http_uwsgi_module \
---add-module=/src/nginx/ngx_pagespeed-1.7.30.4-beta
+--add-module=/src/nginx/ngx_pagespeed
     make
     make install
 }
@@ -88,11 +88,11 @@ LOGOUTPUT=$(ini)
 
 if [ $(nginx -v 2>&1 | grep -qi "$nginx_version") ]; then
     resulting="Just finished installing nginx $nginxVersion"
-    echo "name=$name result=True changed=True comment='$resulting'"
+    echo "result=True changed=True comment='$resulting'"
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': True, 'comment': ''}"
 else
     resulting="Failed installing nginx $nginxVersion, check /failed_nginx_compile for details"
     $LOGOUTPUT >> /failed_nginx_compile
-    echo "name=$name result=False changed=False comment='$resulting'"
+    echo "result=False changed=False comment='$resulting'"
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': False, 'comment': ''}"
 fi

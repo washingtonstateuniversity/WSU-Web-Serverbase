@@ -60,6 +60,56 @@ nginx-compiler-base:
     - require:
       - sls: serverbase
 
+# ensure folders to run nginx
+###########################################################
+
+# Provide the cache directory for nginx
+/var/cache/nginx:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+
+# Provide the log directory for nginx
+/var/log/nginx:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+
+# Provide the proxy directory for nginx
+/var/lib/nginx/proxy:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+
+
+# Provide the lock directory for nginx
+/var/lock/subsys/nginx:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+
+# Provide the pagespeed cache directory for nginx
+/var/ngx_pagespeed_cache:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+	  
+
 # Adds the service file.
 /etc/init.d/nginx:
   file.managed:
@@ -87,7 +137,7 @@ nginx-compiler-base:
 #   - group: root
 #   - mode: 755
     
-# Run compiler
+# ensure compile script for Nginx exists
 nginx-compile-script:
   file.managed:
     - name: /src/compiler.sh

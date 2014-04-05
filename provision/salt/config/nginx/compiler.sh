@@ -11,7 +11,6 @@ name="nginx-compile"
 
 nginxVersion="$1"
 
-pagespeedVer="1.7.30.4"
 
 touch /failed_nginx_compile
 
@@ -31,11 +30,11 @@ ini(){
     tar -xzf openssl-1.0.1e.tar.gz 2>/dev/null
 
     #get page speed
-    wget -N "ngx_pagespeed-$pagespeedVer-beta.zip" "https://github.com/pagespeed/ngx_pagespeed/archive/v$pagespeedVer-beta.zip"
-    unzip -o "ngx_pagespeed-$pagespeedVer-beta.zip"  2>/dev/null # or unzip v1.7.30.2-beta
-    cd "/src/nginx/ngx_pagespeed-$pagespeedVer-beta/"
-    wget -N https://dl.google.com/dl/page-speed/psol/$pagespeedVer.tar.gz 2>/dev/null
-    tar -xzvf $pagespeedVer.tar.gz  2>/dev/null # expands to psol/
+    wget -N ngx_pagespeed-1.7.30.4-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.4-beta.zip
+    unzip -o ngx_pagespeed-1.7.30.4-beta.zip  2>/dev/null # or unzip v1.7.30.2-beta
+    cd /src/nginx/ngx_pagespeed-1.7.30.4-beta/
+    wget -N https://dl.google.com/dl/page-speed/psol/1.7.30.4.tar.gz 2>/dev/null
+    tar -xzvf 1.7.30.4.tar.gz  2>/dev/null # expands to psol/
     
     #mkdir /tmp/nginx-modules
     #cd /tmp/nginx-modules
@@ -80,7 +79,7 @@ ini(){
 --with-http_realip_module \
 --without-http_scgi_module \
 --without-http_uwsgi_module \
---add-module="/src/nginx/ngx_pagespeed-$pagespeedVer-beta"
+--add-module=/src/nginx/ngx_pagespeed-1.7.30.4-beta
     make
     make install
 }

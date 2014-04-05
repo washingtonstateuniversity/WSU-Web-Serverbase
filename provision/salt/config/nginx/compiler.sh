@@ -82,11 +82,11 @@ ini(){
 --add-module="/src/nginx/ngx_pagespeed-$pagespeedVer-beta"
     make
     make install
-    
-    return 1 #fix this this should be a grep for 'error' or something also this is backwards as non-0 is false yet it's treated as true
 }
 
-ini  2>&1 | grep -qi "complete"
+OUTPUT=$(ini)
+OUTPUT 2>&1 | grep -qi "complete"
+
 if [ $? -eq 1 ]; then
 	resulting="Just finished installing nginx $nginxVersion"
     echo "name=$name result=True changed=True comment='$resulting'"

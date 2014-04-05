@@ -82,6 +82,15 @@ nginx-compiler-base:
       - cmd: nginx-compile
 
 # Provide the proxy directory for nginx
+/var/lib/nginx:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+
+# Provide the proxy directory for nginx
 /var/lib/nginx/proxy:
   file.directory:
     - user: root
@@ -108,7 +117,6 @@ nginx-compiler-base:
     - mode: 755
     - require_in:
       - cmd: nginx-compile
-	  
 
 # Adds the service file.
 /etc/init.d/nginx:
@@ -136,7 +144,7 @@ nginx-compiler-base:
 #   - user: root
 #   - group: root
 #   - mode: 755
-    
+
 # ensure compile script for Nginx exists
 nginx-compile-script:
   file.managed:

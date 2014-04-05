@@ -65,7 +65,7 @@ ini(){
 --with-http_flv_module \
 --with-http_addition_module \
 --with-http_dav_module \
---with-http_gunzip_module\
+--with-http_gunzip_module \
 --with-http_gzip_static_module \
 --with-http_stub_status_module \
 --with-http_sub_module \

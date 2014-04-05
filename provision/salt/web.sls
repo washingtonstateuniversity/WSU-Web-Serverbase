@@ -153,6 +153,10 @@ nginx-compile-script:
     - user: root
     - group: root
     - mode: 755
+  cmd.run: #insure it's going to run on windows hosts.. note it's files as folders the git messes up
+    - name: dos2unix /src/compiler.sh
+    - require:
+      - pkg: dos2unix
     
 # Run compiler
 nginx-compile:

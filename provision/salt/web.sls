@@ -80,8 +80,16 @@ nginx-compiler-base:
     - mode: 755
     - require_in:
       - cmd: nginx-compile
-	  
-	  
+
+# Provide the cache directory for nginx
+/var/lib/nginx/proxy:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+
 
 # Adds the service file.
 /etc/init.d/nginx:

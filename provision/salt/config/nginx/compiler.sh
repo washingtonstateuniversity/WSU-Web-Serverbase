@@ -77,7 +77,7 @@ ini(){
 --with-http_realip_module \
 --without-http_scgi_module \
 --without-http_uwsgi_module \
---add-module=/src/nginx/ngx_pagespeed-1.7.30.4-beta
+--add-module=/src/nginx/ngx_pagespeed-$pagespeedVer-beta
     make
     make install
     resulting="Just finished installing nginx $nginxVersion"

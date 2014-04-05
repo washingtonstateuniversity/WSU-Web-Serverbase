@@ -13,6 +13,7 @@ nginxVersion="$1"
 
 pagespeedVer="1.7.30.4"
 
+touch /failed_nginx_compile
 
 #set the compiler to be quite
 #then return message only it it's a fail

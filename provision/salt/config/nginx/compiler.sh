@@ -85,7 +85,7 @@ ini(){
 }
 
 OUTPUT=$(ini)
-OUTPUT 2>&1 | grep -qi "complete"
+$OUTPUT 2>&1 | grep -qi "complete"
 
 if [ $? -eq 1 ]; then
 	resulting="Just finished installing nginx $nginxVersion"

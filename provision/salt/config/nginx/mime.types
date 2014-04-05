@@ -25,7 +25,11 @@ types {
     application/vnd.ms-fontobject         eot;
     font/x-woff                           woff;
 
-
+    text/mathml                           mml;
+    text/plain                            txt;
+    text/vnd.sun.j2me.app-descriptor      jad;
+    text/vnd.wap.wml                      wml;
+    text/x-component                      htc;
     
     application/java-archive              jar war ear;
     application/json                      json;

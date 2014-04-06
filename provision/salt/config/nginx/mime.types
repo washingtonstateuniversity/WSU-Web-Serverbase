@@ -39,7 +39,7 @@ types {
     application/postscript                ps eps ai;
     application/rtf                       rtf;
     application/vnd.ms-excel              xls;
-    application/vnd.ms-fontobject         eot;
+    #application/vnd.ms-fontobject         eot;
     application/vnd.ms-powerpoint         ppt;
     application/vnd.wap.wmlc              wmlc;
     application/vnd.google-earth.kml+xml  kml;

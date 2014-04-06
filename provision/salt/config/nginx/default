@@ -11,7 +11,9 @@ server {
 	#location /ngx_pagespeed_message { allow 127.0.0.1; deny all; }
 	#location /pagespeed_console { allow 127.0.0.1; deny all; }
 	
-	
+    ModSecurityEnabled on;
+    ModSecurityConfig modsecurity.conf;
+
     location / {
         index index.php;
         try_files $uri $uri/ /index.php?$args;

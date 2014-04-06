@@ -34,7 +34,7 @@ ini(){
     ./configure --enable-standalone-module
     make && make install
 
-
+    cd /src/nginx
 
     # Fetch openssl
     wget -N http://www.openssl.org/source/openssl-1.0.1e.tar.gz 2>/dev/null

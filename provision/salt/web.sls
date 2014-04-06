@@ -186,19 +186,6 @@ nginx-reboot-auto:
     - require:
       - cmd: nginx-compile
 
-# Start nginx
-nginx:
-  service.running:
-    - user: root
-    - require:
-      - cmd: nginx-compile
-      - user: www-data
-      - group: www-data
-    - watch:
-      - file: /etc/nginx/nginx.conf
-      - file: /etc/nginx/sites-enabled/default
-    - required_in:
-      - sls: finalize.restart
       
 #***************************************      
 # nginx files & configs
@@ -229,11 +216,6 @@ nginx:
       isLocal: {{ isLocal }}
       saltenv: {{ saltenv }}
 
-
-
-
-
-
 /etc/nginx/sites-enabled/default:
   file.managed:
     - source: salt://config/nginx/default
@@ -251,6 +233,22 @@ nginx:
     - mode: 644
     - require:
       - cmd: nginx-compile
+
+
+
+# Start nginx
+nginx:
+  service.running:
+    - user: root
+    - require:
+      - cmd: nginx-compile
+      - user: www-data
+      - group: www-data
+    - watch:
+      - file: /etc/nginx/nginx.conf
+      - file: /etc/nginx/sites-enabled/default
+    - required_in:
+      - sls: finalize.restart
 
 
 ###########################################################  

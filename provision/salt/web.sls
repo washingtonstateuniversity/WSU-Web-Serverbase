@@ -54,11 +54,77 @@ nginx-compiler-base:
       - gcc
       - gcc-c++
       - make
+      - automake
+      - autoconf
+      - libtool
       - zlib-devel
       - pcre-devel 
       - openssl-devel
+      - libxml2
+      - libxml2-devel
+      - httpd-devel
+      - curl
+      - libcurl-devel 
     - require:
       - sls: serverbase
+
+# ensure folders to run nginx
+###########################################################
+
+# Provide the cache directory for nginx
+/var/cache/nginx:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+
+# Provide the log directory for nginx
+/var/log/nginx:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+
+# Provide the proxy directory for nginx
+/var/lib/nginx:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+
+# Provide the proxy directory for nginx
+/var/lib/nginx/proxy:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+
+
+# Provide the lock directory for nginx
+/var/lock/subsys/nginx:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
+
+# Provide the pagespeed cache directory for nginx
+/var/ngx_pagespeed_cache:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - require_in:
+      - cmd: nginx-compile
 
 # Adds the service file.
 /etc/init.d/nginx:
@@ -86,8 +152,8 @@ nginx-compiler-base:
 #   - user: root
 #   - group: root
 #   - mode: 755
-    
-# Run compiler
+
+# ensure compile script for Nginx exists
 nginx-compile-script:
   file.managed:
     - name: /src/compiler.sh
@@ -95,6 +161,10 @@ nginx-compile-script:
     - user: root
     - group: root
     - mode: 755
+  cmd.run: #insure it's going to run on windows hosts.. note it's files as folders the git messes up
+    - name: dos2unix /src/compiler.sh
+    - require:
+      - pkg: dos2unix
     
 # Run compiler
 nginx-compile:
@@ -116,19 +186,6 @@ nginx-reboot-auto:
     - require:
       - cmd: nginx-compile
 
-# Start nginx
-nginx:
-  service.running:
-    - user: root
-    - require:
-      - cmd: nginx-compile
-      - user: www-data
-      - group: www-data
-    - watch:
-      - file: /etc/nginx/nginx.conf
-      - file: /etc/nginx/sites-enabled/default
-    - required_in:
-      - sls: finalize.restart
       
 #***************************************      
 # nginx files & configs
@@ -146,6 +203,18 @@ nginx:
       isLocal: {{ isLocal }}
       saltenv: {{ saltenv }}
 
+/etc/nginx/modsecurity.conf:
+  file.managed:
+    - source: salt://config/nginx/modsecurity.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - cmd: nginx-compile
+    - template: jinja
+    - context:
+      isLocal: {{ isLocal }}
+      saltenv: {{ saltenv }}
 
 /etc/nginx/sites-enabled/default:
   file.managed:
@@ -155,6 +224,31 @@ nginx:
     - mode: 644
     - require:
       - cmd: nginx-compile
+
+/etc/nginx/mime.types:
+  file.managed:
+    - source: salt://config/nginx/mime.types
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - cmd: nginx-compile
+
+
+
+# Start nginx
+nginx:
+  service.running:
+    - user: root
+    - require:
+      - cmd: nginx-compile
+      - user: www-data
+      - group: www-data
+    - watch:
+      - file: /etc/nginx/nginx.conf
+      - file: /etc/nginx/sites-enabled/default
+    - required_in:
+      - sls: finalize.restart
 
 
 ###########################################################  

@@ -54,9 +54,14 @@ nginx-compiler-base:
       - gcc
       - gcc-c++
       - make
+      - automake
+      - autoconf
+      - libtool
       - zlib-devel
       - pcre-devel 
       - openssl-devel
+      - libxml2
+      - libxml2-devel 
     - require:
       - sls: serverbase
 

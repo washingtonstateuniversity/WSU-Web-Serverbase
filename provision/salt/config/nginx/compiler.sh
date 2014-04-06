@@ -28,7 +28,7 @@ ini(){
     cd /src/nginx
 
     # Fetch modsecurity
-    wget -N https://github.com/SpiderLabs/ModSecurity/releases/download/v2.8.0-rc1/modsecurity-2.8.0-RC1.tar.gz
+    wget -N https://github.com/SpiderLabs/ModSecurity/releases/download/v2.8.0-rc1/modsecurity-2.8.0-RC1.tar.gz 2>/dev/null
     tar -xzf modsecurity-2.8.0-RC1.tar.gz
     cd modsecurity-2.8.0
     ./configure --enable-standalone-module
@@ -92,8 +92,7 @@ ini(){
 --without-http_uwsgi_module \
 --add-module=/src/nginx/ngx_pagespeed-1.7.30.4-beta \
 --add-module=/src/nginx/modsecurity-2.8.0/nginx/modsecurity
-    make
-    make install
+    make && make install
 }
 
 LOGOUTPUT=$(ini)
@@ -104,7 +103,7 @@ if [ $(nginx -v 2>&1 | grep -qi "$nginx_version") ]; then
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': True, 'comment': ''}"
 else
     resulting="Failed installing nginx $nginxVersion, check /failed_nginx_compile for details"
-    $LOGOUTPUT >> /failed_nginx_compile
+    echo $LOGOUTPUT >> /failed_nginx_compile
     echo "result=False changed=False comment='$resulting'"
     #echo "{'name': 'nginx-compile', 'changes': {}, 'result': False, 'comment': ''}"
 fi

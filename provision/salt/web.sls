@@ -63,6 +63,8 @@ nginx-compiler-base:
       - libxml2
       - libxml2-devel
       - httpd-devel
+      - curl
+      - curl-devel 
     - require:
       - sls: serverbase
 

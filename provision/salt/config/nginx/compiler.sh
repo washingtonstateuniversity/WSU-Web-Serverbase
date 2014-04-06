@@ -18,12 +18,23 @@ touch /failed_nginx_compile
 #then return message only it it's a fail
 ini(){
     cd /src
+
+
     #nginxVersion="1.5.8" # set the value here from nginx website
     wget -N http://nginx.org/download/nginx-$nginxVersion.tar.gz 2>/dev/null
     tar -xzf nginx-$nginxVersion.tar.gz 2>/dev/null
     ln -sf nginx-$nginxVersion nginx
     
     cd /src/nginx
+
+    # Fetch modsecurity
+    wget -N https://github.com/SpiderLabs/ModSecurity/releases/download/v2.8.0-rc1/modsecurity-2.8.0-RC1.tar.gz
+    tar -xzf modsecurity-2.8.0-RC1.tar.gz
+    cd modsecurity-2.8.0
+    ./configure --enable-standalone-module
+    make && make install
+
+
 
     # Fetch openssl
     wget -N http://www.openssl.org/source/openssl-1.0.1e.tar.gz 2>/dev/null
@@ -79,7 +90,8 @@ ini(){
 --with-http_realip_module \
 --without-http_scgi_module \
 --without-http_uwsgi_module \
---add-module=/src/nginx/ngx_pagespeed
+--add-module=/src/nginx/ngx_pagespeed-1.7.30.4-beta \
+--add-module=/src/nginx/modsecurity-2.8.0/nginx/modsecurity
     make
     make install
 }

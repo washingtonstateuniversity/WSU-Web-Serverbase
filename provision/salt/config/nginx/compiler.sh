@@ -30,10 +30,10 @@ ini(){
     tar -xzf openssl-1.0.1e.tar.gz 2>/dev/null
 
     #get page speed
-    wget -N -O https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.4-beta.zip
-    unzip -o v1.7.30.4-beta.zip 2>/dev/null # or unzip v1.7.30.2-beta
+    wget -N -O ngx_pagespeed-1.7.30.4-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.4-beta.zip 2>/dev/null
+    unzip -o ngx_pagespeed-1.7.30.4-beta.zip 2>/dev/null # or unzip v1.7.30.2-beta
     cd ngx_pagespeed-1.7.30.4-beta/
-    wget -N page-speed-psol-1.7.30.4.tar.gz https://dl.google.com/dl/page-speed/psol/1.7.30.4.tar.gz 2>/dev/null
+    wget -N -O page-speed-psol-1.7.30.4.tar.gz https://dl.google.com/dl/page-speed/psol/1.7.30.4.tar.gz 2>/dev/null
     tar -xzvf page-speed-psol-1.7.30.4.tar.gz 2>/dev/null # expands to psol/
     
     #mkdir /tmp/nginx-modules

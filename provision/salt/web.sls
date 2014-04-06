@@ -61,7 +61,8 @@ nginx-compiler-base:
       - pcre-devel 
       - openssl-devel
       - libxml2
-      - libxml2-devel 
+      - libxml2-devel
+      - httpd-devel
     - require:
       - sls: serverbase
 

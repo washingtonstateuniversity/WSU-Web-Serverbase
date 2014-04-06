@@ -216,6 +216,23 @@ nginx:
       isLocal: {{ isLocal }}
       saltenv: {{ saltenv }}
 
+/etc/nginx/modsecurity.conf:
+  file.managed:
+    - source: salt://config/nginx/modsecurity.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - cmd: nginx-compile
+    - template: jinja
+    - context:
+      isLocal: {{ isLocal }}
+      saltenv: {{ saltenv }}
+
+
+
+
+
 
 /etc/nginx/sites-enabled/default:
   file.managed:

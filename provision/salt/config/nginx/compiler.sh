@@ -28,7 +28,7 @@ ini(){
     cd /src/nginx
 
     # Fetch modsecurity
-    wget -N https://github.com/SpiderLabs/ModSecurity/releases/download/v2.8.0-rc1/modsecurity-2.8.0-RC1.tar.gz 2>/dev/null
+    wget -N -O modsecurity-2.8.0-RC1.tar.gz https://github.com/SpiderLabs/ModSecurity/releases/download/v2.8.0-rc1/modsecurity-2.8.0-RC1.tar.gz 2>/dev/null
     tar -xzf modsecurity-2.8.0-RC1.tar.gz
     cd modsecurity-2.8.0
     ./configure --enable-standalone-module

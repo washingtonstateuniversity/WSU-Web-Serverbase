@@ -28,7 +28,7 @@ ini(){
     cd /src/nginx
 
     # Fetch modsecurity
-    wget -N https://github.com/SpiderLabs/ModSecurity/releases/download/v2.8.0-rc1/modsecurity-2.8.0-RC1.tar.gz 2>/dev/null
+    wget -N -O modsecurity-2.8.0-RC1.tar.gz https://github.com/SpiderLabs/ModSecurity/releases/download/v2.8.0-rc1/modsecurity-2.8.0-RC1.tar.gz 2>/dev/null
     tar -xzf modsecurity-2.8.0-RC1.tar.gz
     cd modsecurity-2.8.0
     ./configure --enable-standalone-module
@@ -37,8 +37,8 @@ ini(){
     cd /src/nginx
 
     # Fetch openssl
-    wget -N http://www.openssl.org/source/openssl-1.0.1e.tar.gz 2>/dev/null
-    tar -xzf openssl-1.0.1e.tar.gz 2>/dev/null
+    wget -N http://www.openssl.org/source/openssl-1.0.1g.tar.gz 2>/dev/null
+    tar -xzf openssl-1.0.1g.tar.gz 2>/dev/null
 
     #get page speed
     wget -N -O ngx_pagespeed-1.7.30.4-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.4-beta.zip 2>/dev/null
@@ -81,7 +81,7 @@ ini(){
 --with-http_sub_module \
 --with-http_spdy_module \
 --with-http_ssl_module \
---with-openssl=/src/nginx/openssl-1.0.1e \
+--with-openssl=/src/nginx/openssl-1.0.1g \
 --with-sha1=/usr/include/openssl \
 --with-md5=/usr/include/openssl \
 --with-pcre \

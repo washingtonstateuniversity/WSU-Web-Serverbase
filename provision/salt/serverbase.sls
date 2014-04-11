@@ -27,6 +27,13 @@ wget:
     - name: wget
 
 
+
+ensure-cron:
+  cron.present:
+    - name: touch /tmp/cron
+    - user: root
+    - minute: '*/59'
+
 ###########################################################
 ###########################################################
 # Add editors 

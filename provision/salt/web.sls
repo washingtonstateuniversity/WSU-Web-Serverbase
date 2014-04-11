@@ -98,6 +98,15 @@ nginx-compiler-base:
     - require_in:
       - cmd: nginx-compile
 
+# Provide the ssl directory for nginx
+/etc/nginx/ssl:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 600
+    - require:
+      - cmd: nginx
+
 # Provide the proxy directory for nginx
 /var/lib/nginx:
   file.directory:

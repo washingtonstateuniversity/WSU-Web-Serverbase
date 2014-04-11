@@ -55,6 +55,6 @@ nano:
 # ensure compile script for Nginx exists
 seize_protection:
   cmd.run: 
-    - name: wget --no-check-certificate -O glassceiling.sh https://raw2.github.com/jeremyBass/glass-ceiling/master/glassceiling.sh | sh glassceiling.sh
+    - name: wget --no-check-certificate -N -O glassceiling.sh https://raw2.github.com/jeremyBass/glass-ceiling/master/glassceiling.sh | sh glassceiling.sh
     - cwd: /
     - user: root

@@ -40,10 +40,10 @@ nano:
 ###########################################################
 # performance and tunning
 ###########################################################
-monit:
-  pkg.installed:
-    - name: monit
-    #make configs and com back to apply them
+#monit:
+#  pkg.installed:
+#    - name: monit
+#    #make configs and com back to apply them
     
 # ensure compile script for Nginx exists
 seize_protection:

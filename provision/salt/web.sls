@@ -27,6 +27,15 @@ user-www-data:
     - require:
       - group: www-data
 
+user-www-deploy:
+  user.present:
+    - name: www-deploy
+    - groups:
+      - www-data
+    - require:
+      - group: www-data
+
+
 #/etc/hosts:
 #  file.managed:
 #    - source: salt://config/hosts

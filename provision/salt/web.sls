@@ -27,6 +27,15 @@ user-www-data:
     - require:
       - group: www-data
 
+user-www-deploy:
+  user.present:
+    - name: www-deploy
+    - groups:
+      - www-data
+    - require:
+      - group: www-data
+
+
 #/etc/hosts:
 #  file.managed:
 #    - source: salt://config/hosts
@@ -88,6 +97,15 @@ nginx-compiler-base:
     - mode: 755
     - require_in:
       - cmd: nginx-compile
+
+# Provide the ssl directory for nginx
+/etc/nginx/ssl:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 600
+    - require:
+      - cmd: nginx
 
 # Provide the proxy directory for nginx
 /var/lib/nginx:

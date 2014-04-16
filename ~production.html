@@ -1,54 +1,57 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-svg lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if IE 7]><html class="no-svg lt-ie9 lt-ie8" lang="en"> <![endif]-->
-<!--[if IE 8]><html class="no-svg lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--><html lang="en"><!--<![endif]-->
+<!--[if lt IE 7]> <html class="no-js no-svg lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="no-js no-svg lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="no-js no-svg lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="en"><!--<![endif]-->
 
 <head>
 
 	<meta charset="utf-8">
-	
+	<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 	<title>Wsumage-base | Washington State University</title>
 	
 	<!-- FAVICON -->
-	<link rel="shortcut icon" href="//repo.wsu.edu/spine/1/favicon.ico" />
+	<link rel="shortcut icon" href="//repo.wsu.edu/spine/1/images/icons/favicon.ico" />
 	
 	<!-- STYLESHEETS -->
-	<link href="//repo.wsu.edu/spine/1/spine.min.css" rel="stylesheet" type="text/css" />
+	<link href="//repo.wsu.edu/spine/1/spine.css" rel="stylesheet" type="text/css" />
 	<!-- Your custom stylesheets here -->
 	<link href="stylesheets/git_styles.css" rel="stylesheet" type="text/css" />
 	<!-- RESPOND -->
 	<meta name="viewport" content="width=device-width, user-scalable=yes">
 	
 	<!-- SCRIPTS -->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.js"></script>
 	<script src="//repo.wsu.edu/spine/1/spine.min.js"></script>
-	<!-- Your supplementary scripts here (jQuery Mobile, modernizr, site specific scripts, etcetera) -->
+	<!-- Your supplementary scripts here -->
 	
 	<!-- COMPATIBILITY -->
-	<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<noscript><style>#spine #spine-sitenav ul ul li { display: block !important; }</style></noscript>
+	<!--[if lt IE 9]><script src="//ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js">IE7_PNG_SUFFIX=".png";</script><![endif]--> 
 	
 	<!-- DOCS -->
-	<link type="text/plain" rel="author" href="http://repo.wsu.edu/spine/1/authors.txt">
-	<link type="text/html" rel="help" href="http://brand.wsu.edu">
+	<link type="text/plain" rel="author" href="//images.wsu.edu/spine/humans.txt" />
+	<link type="text/html" rel="docs" href="//identity.wsu.edu" />
 	
 	<!-- ANALYTICS -->
-
+	<!-- Your analytics code here -->
+	
 </head>
+
 <body>
-	<!-- WRAPPING -->
-	<div id="jacket">
-		<div id="binder" class="fluid folio max-1782 xlarge">
-			<!-- CONTENT -->
-			<main>
-			<!-- Responsive Sections -->
-			<section class="row sidebar">
-			
-				<div class="column one">
-									<article>
+
+<!-- WRAPPING -->
+<div id="jacket">
+<div id="binder" class="fluid folio max-1782 xlarge">
+	
+	<!-- CONTENT -->
+	<main id="page" role="main">
+	
+		<!-- Responsive Sections -->
+		<section class="row sidebar">
+			<div class="column one">
+				<article>
                     <h1 class="header">WSU Server Production Environment</h1>
                     <div class="wrapper markdown-body">
                         <h2 class="header">How to Put into production</h2>
@@ -59,10 +62,10 @@
 						<p><strong>Note:</strong> More to come. Thank you for reading.</p>
 					</section>
 				</article>
-				</div><!--/column-->
-			
-				<div class="column two">
-									<aside>
+			</div><!--/column-->
+		
+			<div class="column two">
+				<aside>
 					<section>
 						<h2>Download this project</h2>
 						<ul>
@@ -74,15 +77,16 @@
 						
 					</section>
 				</aside>
-				</div><!--/column-->
-			</section>
-			</main>
-			<!-- /CONTENT -->
-				<!-- SPINE -->
+			</div><!--/column-->
+		</section>
+	</main><!--/#page-->
+	<!-- /CONTENT -->
+
+	<!-- SPINE -->
 	<div id="spine" class="shelved bleed crimson">
 		<div id="glue" class="clearfix">
 		
-			<header><a href="http://www.wsu.edu/" id="wsu-signature">Washington State University</a></header>
+			<header><a href="http://www.wsu.edu/" id="wsu-signature">>Washington State University</a></header>
 			
 			<!-- ACTIONS -->
 			<section id="wsu-actions">
@@ -94,6 +98,24 @@
 				<li id="wsu-share-tab" class="closed"><button>Share</button></li>
 				<li id="wsu-print-tab" class="closed"><button>Print</button></li>
 			</ul>
+			
+				<!-- Search/Index ( In great FLUX ) -->
+				<section id="wsu-search" class="tools closed" data-default="site-search">
+				<!--
+				You can turn off default search functions by adding classes to #wsu-search
+				Options: .nix-index, .nix-site, .nix-wsu, .nix-facstaff, .nix-students
+				-->
+				
+				<form name="search" id="search">
+					<input id="searchterm" name="term" type="text" value="" placeholder="search">
+					<button id="submit-search">Submit</button>
+				</form>
+				
+				<div id="wsu-search-results" class="spine-results">
+					<div id="index-search-results" class="active"></div>
+				</div>
+					 
+				</section>
 			</section><!--/#wsu-actions-->
 	
 			<nav id="spine-navigation">
@@ -107,7 +129,7 @@
 								<li><a href="/WSU-Web-Serverbase/development.html#devAddApp">Load Web Apps</a></li>
 							</ul>
 						</li>
-						<li>
+						<li class="current">
 							<a href="/WSU-Web-Serverbase/production.html">Production</a>
 							<ul>
 								<li><a href="/WSU-Web-Serverbase/production.html#productionModsLoaded">Whats loaded?</a></li>
@@ -152,10 +174,31 @@
 	</div><!--/spine-->
 	<!-- /SPINE -->
 
-		</div><!--/cover-->
-	</div><!--/jacket-->
-	<!-- /WRAPPING -->
-	<!--[if !IE]><script>fixScale(document);</script><![endif]-->
+</div><!--/cover-->
+</div><!--/jacket-->
+<!-- /WRAPPING -->
+	
+	
+<div itemscope itemtype="http://schema.org/Organization"> 
+	<meta itemprop="department"  content="University Unit"><!-- required -->
+	<meta itemprop="name" content="Washington State University"><!-- required -->
+	<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+		<meta itemprop="location" content="French Administration Building"><!-- optional -->
+		<meta itemprop="streetAddress" content="PO Box 555555"><!-- required -->
+		<meta itemprop="addressLocality" content="Pullman, WA"><!-- required -->
+		<meta itemprop="addressRegion" content=""><!-- optional -->
+		<meta itemprop="postalCode" content="99164"><!-- required -->
+	</div>
+	<meta itemprop="logo" content="http://www.example.com/logo.png"><!-- optional -->
+	<meta itemprop="telephone" content="(509) 335-3564"><!-- required -->
+	<meta itemprop="email" content="your-contact-email@wsu.edu"><!-- required -->
+	<meta itemprop="contactPoint" content="http://contact.wsu.edu"><!-- optional -->
+	<meta itemprop="url" content="http://your-unit.wsu.edu"><!-- optional -->
+</div>
+
+	
+	
+<!--[if !IE]><script>fixScale(document);</script><![endif]-->
 <script type="text/javascript">
 	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));

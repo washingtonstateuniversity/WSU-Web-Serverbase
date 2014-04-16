@@ -46,24 +46,17 @@ module.exports = function(grunt) {
 		copy: {
 			main: {
 				files: [
-					{expand: true,flatten: true, src: ['pub/src/*.html'], dest: ''}
+					{expand: true,flatten: true, src: ['pub/build/*.html'], dest: ''}
 				]
 			}
 		},
 		includereplace: {
-			dist: {
-				options: {
-					globals: {
-						var1: 'one',
-						var2: 'two',
-						var3: 'three'
-					},
-				},
+			prep: {
 				// Files to perform replacements and includes with
-				src: 'src/*.html',
+				src: 'build/*.html',
 				// Destination directory to copy files to
 				dest: 'pub/'
-			}
+			},
 		},
 		preprocess : {
 			options: {
@@ -71,27 +64,25 @@ module.exports = function(grunt) {
 				context : {
 					DEBUG: true,
 					build_version : '<%= pkg.build_version %>',
-					MALFORMED : 'skip', // true or false is what is tested for
-					filledSearchTab : 'skip',
-					showLong : 'skip',
-					manyLinks : 'skip',
-					cropped : 'skip',
-					doubledContact : 'skip',
-					fluidGrid : 'skip',
-					hybridGrid: 'skip',
-					fixedGrid: 'skip',
 				}
 			},
-			js : {
-				//src: 'build/<%= pkg.build_version %>/spine.js'
-			},
-			html : {
-				/*src : 'test/preprocess/test.cat.pre.html',
-				dest : 'test/default.html',
+			index : {
+				src : 'src/index.html',
+				dest : 'build/index.html',
 				options : {
 					context : {
+						page : 'index'
 					}
-				}*/
+				}
+			},
+			production : {
+				src : 'src/index.html',
+				dest : 'build/production.html',
+				options : {
+					context : {
+						page : 'production'
+					}
+				}
 			},
 		}
 	});
@@ -113,8 +104,8 @@ module.exports = function(grunt) {
 	
 	grunt.registerTask('dev', [
 								'env:dev',
+								'preprocess',
 								'includereplace',
-								'preprocess:html',
 								'copy',
 								]);
 		

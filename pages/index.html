@@ -1,0 +1,55 @@
+				<article>
+            <h1>WSU Serverbase</h1>
+            <h2 class="header">Github : <a name="wsumage-base" href="https://github.com/washingtonstateuniversity/WSU-Web-Serverbase">WSU-Web-Serverbase</a></h2>
+            <div class="wrapper markdown-body">
+              <section>
+                  <h3>Overview</h3>
+                  <p>This is a project that is meant to create a server environment in one of two locations.  One is with a Vagrant controlling a headless VirtualBox, and the other is on a Centos 6.0+ server.  You can look through the <a href="https://github.com/washingtonstateuniversity/WSU-Web-Serverbase">WSU-Web-Serverbase repo</a> for details but this mirco site is meant to give you a simple overview of how to use and what is done.  This project may be loaded with web apps such as <code>Magento</code>,<code>Elasticsearch</code>,<code>Wordpress</code>, or any other app that has be set up to be provisioned.  To get the LEMP setup running for the first time, there are only a few step needed. </p>
+                  
+                  
+<h3>For Local deveploment</h3>
+                  <ol>
+<li>Install required applications:
+
+<ol>
+<li>
+Git (<a href="http://windows.github.com/">Windows</a> or <a href="http://mac.github.com/">OSX</a>) More infomation on <a href="http://git-scm.com/">Git</a> and <a href="http://git-scm.com/downloads">other client downloads</a>
+</li>
+<li><a href="http://www.vagrantup.com/">Vagrant</a></li>
+<li><a href="https://www.virtualbox.org/">VirtualBox</a></li>
+</ol>
+    <strong>NOTE:</strong> There has been versions of Vagrant and VirtualBox that do play well with each other.  We will try to keep up a list of combinations that had been noted to not work. 
+</li>
+<li>Clone the WSU Web Serverbase repository to a directory on your local machine.
+
+<pre>
+<code>$ git clone git@github.com:washingtonstateuniversity/WSU-Web-Serverbase.git wsuweb</code>
+</pre>
+
+<strong>Note:</strong>This can be a powershell/command line/terminal depending on what is installed on you system.
+<li>
+<p>At the command line, change to the new directory:</p>
+<pre>
+<code>$>_ cd wsuweb</code>
+</pre>
+</li>
+<li>
+<p>(optional) Add web apps to the server.  <strong>Example:</strong></p>
+<pre>
+<code>$>_ git clone git@github.com:washingtonstateuniversity/WSUMAGE-base.git app/store.wsu.edu</code>
+</pre>
+</li>
+<li>
+<p>Start the local server:</p>
+<pre>
+<code>$>_ vagrant up</code>
+</pre>
+
+<strong>NOTE:</strong> If you would like to do some logging of <code>Vagrant</code> setup, you can use <code>$>_ vagrant up | tee log.txt</code> instead.  There will be a log of the whole run located at <code>wsuweb/log.txt</code>
+
+</li>
+</ol>
+                  <p>Those are the steps for your local dev environment.  You may also highstate the project on its own, but it must be on a ready server.  That is <code>salt-call state.highstate env=base</code>. </p>
+						<p><strong>Note:</strong> More to come. Thank you for reading.</p>
+					</section>
+				</article>

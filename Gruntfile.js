@@ -42,45 +42,12 @@ module.exports = function(grunt) {
 					'build/<%= pkg.build_version %>/spine.min.css': ['build/<%= pkg.build_version %>/spine.css']
 				}
 			}
-		},
+		},*/
 		copy: {
 			main: {
 				files: [
-					{expand: true, dot:true, src: ['fonts/*'], dest: 'build/<%= pkg.build_version %>/'},
-					{expand: true, src: ['html/*'], dest: 'build/<%= pkg.build_version %>/'},
-					{expand: true, dot:true, src: ['icons/*'], dest: 'build/<%= pkg.build_version %>/'},
-					{expand: true, src: ['images/*'], dest: 'build/<%= pkg.build_version %>/'},
-					{expand: true, src: ['marks/*'], dest: 'build/<%= pkg.build_version %>/'},
-					{expand: true, src: ['scripts/*'], dest: 'build/<%= pkg.build_version %>/'},
-					{expand: true, src: ['styles/*'], dest: 'build/<%= pkg.build_version %>/'},
-					{expand: true, src: ['spine.html','spine.min.html','authors.txt','favicon.ico'], dest: 'build/<%= pkg.build_version %>/'},
+					{expand: true,flatten: true, src: ['pub/src/*.html'], dest: ''}
 				]
-			}
-		},*/
-		jshint: {
-			files: ['Gruntfile.js', 'scripts/*.js'],
-			options: {
-				// options here to override JSHint defaults
-				boss: true,
-				curly: true,
-				eqeqeq: true,
-				eqnull: true,
-				expr: true,
-				immed: true,
-				noarg: true,
-				onevar: true,
-				quotmark: "double",
-				smarttabs: true,
-				trailing: true,
-				undef: true,
-				unused: true,
-				globals: {
-					jQuery: true,
-					console: true,
-					module: true,
-					document: true,
-					window:true
-				}
 			}
 		},
 		includereplace: {
@@ -93,9 +60,9 @@ module.exports = function(grunt) {
 					},
 				},
 				// Files to perform replacements and includes with
-				src: '/src/*.html',
+				src: 'src/*.html',
 				// Destination directory to copy files to
-				dest: '/'
+				dest: 'pub/'
 			}
 		},
 		preprocess : {
@@ -144,15 +111,11 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['jshint']);
 	grunt.registerTask('prod', ['env:prod', 'concat','preprocess:js','cssmin','uglify','copy','includereplace','preprocess:html']);	
 	
-	grunt.registerTask('dev', ['jshint',
+	grunt.registerTask('dev', [
 								'env:dev',
-								'concat',
-								'preprocess:js',
-								'cssmin',
-								'uglify',
-								'copy',
 								'includereplace',
 								'preprocess:html',
+								'copy',
 								]);
 		
 		

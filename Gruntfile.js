@@ -92,8 +92,10 @@ module.exports = function(grunt) {
 						var3: 'three'
 					},
 				},
-				src: 'test/preprocess/test.pre.html',
-				dest: 'test/preprocess/test.cat.pre.html'
+				// Files to perform replacements and includes with
+				src: '/src/*.html',
+				// Destination directory to copy files to
+				dest: '/'
 			}
 		},
 		preprocess : {
@@ -114,15 +116,15 @@ module.exports = function(grunt) {
 				}
 			},
 			js : {
-				src: 'build/<%= pkg.build_version %>/spine.js'
+				//src: 'build/<%= pkg.build_version %>/spine.js'
 			},
 			html : {
-				src : 'test/preprocess/test.cat.pre.html',
+				/*src : 'test/preprocess/test.cat.pre.html',
 				dest : 'test/default.html',
 				options : {
 					context : {
 					}
-				}
+				}*/
 			},
 		}
 	});

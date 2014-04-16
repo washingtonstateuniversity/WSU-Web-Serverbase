@@ -84,6 +84,15 @@ module.exports = function(grunt) {
 					}
 				}
 			},
+			development : {
+				src : 'src/index.html',
+				dest : 'build/development.html',
+				options : {
+					context : {
+						page : 'development'
+					}
+				}
+			},
 		}
 	});
 

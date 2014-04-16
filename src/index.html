@@ -9,18 +9,16 @@
 			<section class="row sidebar">
 			
 				<div class="column one">
-					@@include('../pages/index.html', {})
+					@@include('../pages/<!-- @echo page -->.html', {"page":"<!-- @echo  -->"})
 				</div><!--/column-->
 			
 				<div class="column two">
 					@@include('../blocks/sidebar.html', {})
 				</div><!--/column-->
-			
 			</section>
-			
 			</main>
 			<!-- /CONTENT -->
-			@@include('../blocks/spine.html', {})
+			@@include('../blocks/spine.html', {"active":"<!-- @echo  -->"})
 		</div><!--/cover-->
 	</div><!--/jacket-->
 	<!-- /WRAPPING -->

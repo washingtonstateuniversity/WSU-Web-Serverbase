@@ -104,6 +104,7 @@ nginx-compiler-base:
     - user: root
     - group: root
     - mode: 600
+    - makedirs: true
     - require_in:
       - cmd: nginx-compile
 

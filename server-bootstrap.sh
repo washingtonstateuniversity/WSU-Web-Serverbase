@@ -74,7 +74,7 @@ SB_DEBUG=$SB_FALSE
 declare -A _RANENV=()
 
 _REPOURL="https://github.com"
-_RAWURL="https://raw.github.com"
+_RAWURL="https://raw.githubusercontent.com"
 
 #===  FUNCTION  ================================================================
 #          NAME:  is_localhost

@@ -275,7 +275,7 @@ init_json(){
 rm -fr /src/salt
     
 #ensure deployment is available
-[ $(gitploy -v 2>&1 | grep -qi "Version") ] || curl  https://raw.github.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
+[ $(gitploy -v 2>&1 | grep -qi "Version") ] || curl  https://raw.githubusercontent.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
 [ -h /usr/sbin/gitploy ] || echoerr "gitploy failed install"
 
 # Handle options

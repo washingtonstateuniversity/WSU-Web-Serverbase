@@ -104,8 +104,9 @@ nginx-compiler-base:
     - user: root
     - group: root
     - mode: 600
-    - require:
-      - cmd: nginx
+    - makedirs: true
+    - require_in:
+      - cmd: nginx-compile
 
 # Provide the proxy directory for nginx
 /var/lib/nginx:

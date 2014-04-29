@@ -19,11 +19,10 @@ types {
     image/svg+xml                         svg svgz;
     image/webp                            webp;
 
-	#application/font-woff                 woff;
+    application/font-woff                 woff;
     application/x-font-ttf                ttf;
     font/opentype                         otf;
     application/vnd.ms-fontobject         eot;
-    font/x-woff                           woff;
 
     text/mathml                           mml;
     text/plain                            txt;

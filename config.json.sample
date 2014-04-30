@@ -1,6 +1,6 @@
 {
 	"server2": {
-		"ip":"2", //10.255.255. is assumed and not optional
+		"ip":"2",
 		"branch":"master",
 		"owner":"washingtonstateuniversity",
 		"open_ports":"",

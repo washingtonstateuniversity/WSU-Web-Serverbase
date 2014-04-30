@@ -1,11 +1,9 @@
 # set up data first
 ###########################################################
 {%- set nginx_version = pillar['nginx']['version'] -%} 
-{%- set isLocal = "false" -%}
-{% for host,ip in salt['mine.get']('*', 'network.ip_addrs').items() -%}
-    {% if ip.startswith('10.255.255') %}
-        {%- set isLocal = "true" -%}
-    {%- endif %}
+{% set vars = {'isLocal': False} %}
+{% for ip in salt['grains.get']('ipv4') if ip.startswith('10.255.255') -%}
+    {% if vars.update({'isLocal': True}) %} {% endif %}
 {%- endfor %}
 {% set cpu_count = salt['grains.get']('num_cpus', '') %}
 
@@ -220,7 +218,7 @@ nginx-reboot-auto:
       - cmd: nginx-compile
     - template: jinja
     - context:
-      isLocal: {{ isLocal }}
+      isLocal: {{ vars.isLocal }}
       saltenv: {{ saltenv }}
       cpu_count: {{ cpu_count }}
 
@@ -234,7 +232,7 @@ nginx-reboot-auto:
       - cmd: nginx-compile
     - template: jinja
     - context:
-      isLocal: {{ isLocal }}
+      isLocal: {{ vars.isLocal }}
       saltenv: {{ saltenv }}
 
 
@@ -248,7 +246,7 @@ nginx-reboot-auto:
       - cmd: nginx-compile
     - template: jinja
     - context:
-      isLocal: {{ isLocal }}
+      isLocal: {{ vars.isLocal }}
       saltenv: {{ saltenv }}
 
 /etc/nginx/sites-enabled/default:

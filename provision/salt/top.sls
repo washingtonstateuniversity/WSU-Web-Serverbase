@@ -1,18 +1,7 @@
-{%- set isLocal = "false" -%}
-{% for host,ip in salt['mine.get']('*', 'network.ip_addrs').items() -%}
-    {% if ip.startswith('10.255.255') %}
-        {%- set isLocal = "true" -%}
-    {%- endif %}
+{% set vars = {'isLocal': False} %}
+{% for ip in salt['grains.get']('ipv4') if ip.startswith('10.255.255') -%}
+    {% if vars.update({'isLocal': True}) %} {% endif %}
 {%- endfor %}
-
-{% if isLocal == "true" %}
-    
-{% else %}
-   fail on local to see it's local
-{%- endif %}
-    
-
-
 
 base:
   '*':
@@ -41,7 +30,7 @@ base:
 {% if 'java' in grains.get('roles') %}
     - java
 {% endif %}
-{% if isLocal == "true" %}
+{% if vars.isLocal %}
     - env.development
 {% else %}
     - env.production

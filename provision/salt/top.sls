@@ -6,9 +6,9 @@
 {%- endfor %}
 
 {% if isLocal == "true" %}
-    fail on local
+    
 {% else %}
-
+   fail on local to see it's local
 {%- endif %}
     
 

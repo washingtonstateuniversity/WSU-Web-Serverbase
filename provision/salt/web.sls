@@ -7,6 +7,7 @@
         {%- set isLocal = "true" -%}
     {%- endif %}
 {%- endfor %}
+{% set cpu_count = salt['grains.get']('num_cpus', '') %}
 
 ###########################################################
 ###########################################################
@@ -221,6 +222,7 @@ nginx-reboot-auto:
     - context:
       isLocal: {{ isLocal }}
       saltenv: {{ saltenv }}
+      cpu_count: {{ cpu_count }}
 
 /etc/nginx/general-security.conf:
   file.managed:

@@ -88,7 +88,7 @@ Vagrant.configure("2") do |config|
 					if !(@server_obj[:hostname].nil? || !@server_obj[:hostname].empty?)
 						vmConfig.vm.hostname = @server_obj[:hostname]
 					end
-					vmConfig.vm.network :private_network, ip: @server_obj[:ip]
+					vmConfig.vm.network :private_network, ip: "10.255.255.#{@server_obj[:ip]}"
 
 				# register hosts for all hosts for apps and the server
 				################################################################

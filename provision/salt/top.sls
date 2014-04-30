@@ -4,6 +4,16 @@
         {%- set isLocal = "true" -%}
     {%- endif %}
 {%- endfor %}
+
+{% if isLocal == "true" %}
+    fail on local
+{% else %}
+
+{%- endif %}
+    
+
+
+
 base:
   '*':
     - os.centos

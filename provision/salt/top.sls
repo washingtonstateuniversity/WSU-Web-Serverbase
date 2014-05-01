@@ -6,6 +6,7 @@
 base:
   '*':
     - os.centos
+    - users
 {% if 'serverbase' in grains.get('roles') %}
     - serverbase
 {% endif %}

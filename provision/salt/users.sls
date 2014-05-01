@@ -3,6 +3,8 @@
     {% if vars.update({'isLocal': True}) %} {% endif %}
 {%- endfor %}
 
+
+{% if vars.isLocal %}
 #this maybe can be removed?  Look in to this.
 group-vagrant:
   group.present:
@@ -20,6 +22,7 @@ user-vagrant:
       - group: mysql
     - require_in:
       - pkg: mysql
+{%- endif %}
 
 
 

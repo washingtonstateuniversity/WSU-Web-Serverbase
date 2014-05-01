@@ -48,7 +48,7 @@ user-www-data:
 
 user-www-deploy:
   user.present:
-    - name: www-deploy
+    - name: deployment-admin
     - groups:
       - www-data
     - require:

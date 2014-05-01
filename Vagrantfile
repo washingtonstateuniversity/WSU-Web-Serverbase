@@ -88,7 +88,7 @@ Vagrant.configure("2") do |config|
 					if !(@server_obj[:hostname].nil? || !@server_obj[:hostname].empty?)
 						vmConfig.vm.hostname = @server_obj[:hostname]
 					end
-					vmConfig.vm.network :private_network, ip: @server_obj[:ip]
+					vmConfig.vm.network :private_network, ip: "10.255.255.#{@server_obj[:ip]}"
 
 				# register hosts for all hosts for apps and the server
 				################################################################
@@ -113,7 +113,7 @@ Vagrant.configure("2") do |config|
 				# Provisioning: Salt 
 				################################################################              
 					$provision_script=""
-					$provision_script<<"curl -L https://raw.github.com/#{bootstrap_path}/server-bootstrap.sh | sudo sh -s -- "
+					$provision_script<<"curl -L https://raw.githubusercontent.com/#{bootstrap_path}/server-bootstrap.sh | sudo sh -s -- "
 					vmConfig.vm.synced_folder "provision/salt/minions", "/srv/salt/base/minions"
 					$provision_script<<" -m #{@server_obj[:minion]}_#{@server_obj[:hostname]} "
 				

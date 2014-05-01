@@ -1,39 +1,13 @@
 # set up data first
 ###########################################################
 {%- set nginx_version = pillar['nginx']['version'] -%} 
-{%- set isLocal = "false" -%}
-{% for host,ip in salt['mine.get']('*', 'network.ip_addrs').items() -%}
-    {% if ip|replace("10.255.255", "LOCAL").split('LOCAL').count() == 2  %}
-        {%- set isLocal = "true" -%}
-    {%- endif %}
+{% set vars = {'isLocal': False} %}
+{% for ip in salt['grains.get']('ipv4') if ip.startswith('10.255.255') -%}
+    {% if vars.update({'isLocal': True}) %} {% endif %}
 {%- endfor %}
+{% set cpu_count = salt['grains.get']('num_cpus', '') %}
 
-###########################################################
-###########################################################
-# folder and users for web services
-###########################################################
-group-www-data:
-  group.present:
-    - name: www-data
-    - gid: 510
 
-user-www-data:
-  user.present:
-    - name: www-data
-    - uid: 510
-    - gid: 510
-    - groups:
-      - www-data
-    - require:
-      - group: www-data
-
-user-www-deploy:
-  user.present:
-    - name: www-deploy
-    - groups:
-      - www-data
-    - require:
-      - group: www-data
 
 
 #/etc/hosts:
@@ -104,8 +78,9 @@ nginx-compiler-base:
     - user: root
     - group: root
     - mode: 600
-    - require:
-      - cmd: nginx
+    - makedirs: true
+    - require_in:
+      - cmd: nginx-compile
 
 # Provide the proxy directory for nginx
 /var/lib/nginx:
@@ -218,8 +193,23 @@ nginx-reboot-auto:
       - cmd: nginx-compile
     - template: jinja
     - context:
-      isLocal: {{ isLocal }}
+      isLocal: {{ vars.isLocal }}
       saltenv: {{ saltenv }}
+      cpu_count: {{ cpu_count }}
+
+/etc/nginx/general-security.conf:
+  file.managed:
+    - source: salt://config/nginx/general-security.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - cmd: nginx-compile
+    - template: jinja
+    - context:
+      isLocal: {{ vars.isLocal }}
+      saltenv: {{ saltenv }}
+
 
 /etc/nginx/modsecurity.conf:
   file.managed:
@@ -231,7 +221,7 @@ nginx-reboot-auto:
       - cmd: nginx-compile
     - template: jinja
     - context:
-      isLocal: {{ isLocal }}
+      isLocal: {{ vars.isLocal }}
       saltenv: {{ saltenv }}
 
 /etc/nginx/sites-enabled/default:

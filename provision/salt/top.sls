@@ -36,4 +36,5 @@ base:
 {% else %}
     - env.production
 {%- endif %}
+    - cron
     - finalize.restart

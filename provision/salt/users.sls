@@ -26,6 +26,34 @@ user-vagrant:
 
 
 
+{% if 'web' in grains.get('roles') %}
+###########################################################
+###########################################################
+# folder and users for web services
+###########################################################
+group-www-data:
+  group.present:
+    - name: www-data
+    - gid: 510
+
+user-www-data:
+  user.present:
+    - name: www-data
+    - uid: 510
+    - gid: 510
+    - groups:
+      - www-data
+    - require:
+      - group: www-data
+
+user-www-deploy:
+  user.present:
+    - name: www-deploy
+    - groups:
+      - www-data
+    - require:
+      - group: www-data
+{% endif %}
 
 
 

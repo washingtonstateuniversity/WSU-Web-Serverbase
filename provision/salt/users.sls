@@ -1,3 +1,8 @@
+{% set vars = {'isLocal': False} %}
+{% for ip in salt['grains.get']('ipv4') if ip.startswith('10.255.255') -%}
+    {% if vars.update({'isLocal': True}) %} {% endif %}
+{%- endfor %}
+
 #this maybe can be removed?  Look in to this.
 group-vagrant:
   group.present:
@@ -15,6 +20,9 @@ user-vagrant:
       - group: mysql
     - require_in:
       - pkg: mysql
+
+
+
 
 
 

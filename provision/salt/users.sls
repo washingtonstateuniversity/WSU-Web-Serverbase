@@ -73,6 +73,21 @@ user-mysql:
       - pkg: mysql
 {% endif %}
 
+{% if 'webcaching' in grains.get('roles') %}
+group-memcached:
+  group.present:
+    - name: memcached
+
+user-memcached:
+  user.present:
+    - name: memcached
+    - groups:
+      - memcached
+    - require_in:
+      - pkg: memcached
+
+{% endif %}
+
 
 
 

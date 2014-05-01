@@ -1,3 +1,23 @@
+#this maybe can be removed?  Look in to this.
+group-vagrant:
+  group.present:
+    - name: vagrant
+
+user-vagrant:
+  user.present:
+    - name: vagrant
+    - groups:
+      - vagrant
+      - www-data
+      - mysql
+    - require:
+      - group: www-data
+      - group: mysql
+    - require_in:
+      - pkg: mysql
+
+
+
 
 
 {% if 'database' in grains.get('roles') %}
@@ -13,4 +33,7 @@ user-mysql:
     - require_in:
       - pkg: mysql
 {% endif %}
+
+
+
 

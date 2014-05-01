@@ -1,3 +1,6 @@
+
+
+{% if 'database' in grains.get('roles') %}
 group-mysql:
   group.present:
     - name: mysql
@@ -9,3 +12,5 @@ user-mysql:
       - mysql
     - require_in:
       - pkg: mysql
+{% endif %}
+

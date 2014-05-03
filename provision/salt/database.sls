@@ -1,3 +1,9 @@
+{% set vars = {'isLocal': False} %}
+{% for ip in salt['grains.get']('ipv4') if ip.startswith('10.255.255') -%}
+    {% if vars.update({'isLocal': True}) %} {% endif %}
+{%- endfor %}
+
+
 /var/log/mysql:
   file.directory:
     - user: mysql
@@ -67,3 +73,9 @@ mysql-secure-installation:
     - name: ""
     - require:
       - service: mysqld
+
+
+
+
+
+

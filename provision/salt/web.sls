@@ -31,25 +31,84 @@
 ###########################################################
 # nginx
 ###########################################################
+#nginx-compiler-base:
+#  pkg.installed:
+#    - pkgs:
+#      - gcc
+#      - gcc-c++
+#      - make
+#      - automake
+#      - autoconf
+#      - libtool
+#      - zlib-devel
+#      - pcre-devel 
+#      - openssl-devel
+#      - libxml2
+#      - libxml2-devel
+#      - httpd-devel
+#      - curl
+#      - libcurl-devel 
+
 nginx-compiler-base:
   pkg.installed:
-    - pkgs:
-      - gcc
-      - gcc-c++
-      - make
-      - automake
-      - autoconf
-      - libtool
-      - zlib-devel
-      - pcre-devel 
-      - openssl-devel
-      - libxml2
-      - libxml2-devel
-      - httpd-devel
-      - curl
-      - libcurl-devel 
-    - require:
-      - sls: serverbase
+    - name: gcc
+
+gcc:
+  pkg.installed:
+    - name: gcc
+
+gcc-c-plusplus:
+  pkg.installed:
+    - name: gcc-c++
+
+make:
+  pkg.installed:
+    - name: make
+
+automake:
+  pkg.installed:
+    - name: automake
+
+autoconf:
+  pkg.installed:
+    - name: autoconf
+
+libtool:
+  pkg.installed:
+    - name: libtool
+
+zlib-devel:
+  pkg.installed:
+    - name: zlib-devel
+
+pcre-devel:
+  pkg.installed:
+    - name: pcre-devel
+
+openssl-devel:
+  pkg.installed:
+    - name: openssl-devel
+
+libxml2:
+  pkg.installed:
+    - name: libxml2
+
+libxml2-devel:
+  pkg.installed:
+    - name: libxml2-devel
+
+httpd-devel:
+  pkg.installed:
+    - name: httpd-devel
+
+curl:
+  pkg.installed:
+    - name: curl
+
+libcurl-devel :
+  pkg.installed:
+    - name: libcurl-devel 
+
 
 # ensure folders to run nginx
 ###########################################################

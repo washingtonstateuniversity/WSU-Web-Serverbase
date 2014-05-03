@@ -101,10 +101,6 @@ httpd-devel:
   pkg.installed:
     - name: httpd-devel
 
-curl:
-  pkg.installed:
-    - name: curl
-
 libcurl-devel :
   pkg.installed:
     - name: libcurl-devel 

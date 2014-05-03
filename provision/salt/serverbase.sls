@@ -26,24 +26,6 @@ wget:
   pkg.installed:
     - name: wget
 
-# install Node.Js
-npm:
-  pkg.installed:
-    - name: npm
-
-# bypass self signing certs issues for npm
-update-npm:
-  cmd.run:
-    - name: npm config set ca=""
-  require:
-    - pkg: npm
-
-grunt:
-  cmd.run:
-    - name: npm install -g grunt-cli
-    - require:
-      - pkg: npm
-      - cmd: update-npm
 
 ###########################################################
 ###########################################################

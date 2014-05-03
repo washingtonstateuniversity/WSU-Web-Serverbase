@@ -25,6 +25,7 @@ base:
 {% if 'web' in grains.get('roles') %}
     - web
 {% endif %}
+    - node
 {% if 'webcaching' in grains.get('roles') %}
     - caching
 {% endif %}

@@ -1,0 +1,68 @@
+{
+	"server2": {
+		"vagrant":{
+			"ip":"2",
+			"branch":"master",
+			"owner":"washingtonstateuniversity",
+			"open_ports":"",
+			"hostname":"web_server",
+			"memory":"6144",
+			"vram":"8",
+			"cores":"2",
+			"host_64bit":"false",
+			"install_type":"testing",
+			"minion":"vagrant",
+			"verbose_output":"true",
+			"shared_folders":{
+				"/var/app":{
+					"dest":"/var/app",
+					"from":"app",
+					"user":"uid=510,gid=510",
+					"dmode":"dmode=775",
+					"fmode":"fmode=774"
+				}
+			},
+			"env":[
+				"serverbase",
+				"database",
+				"security",
+				"web",
+				"webcaching"
+			],
+		},
+		"remote":{
+			"env":[
+				"serverbase",
+				"database",
+				"security",
+				"web",
+				"webcaching"
+			],
+		},
+		"apps": {
+			"store.wsu.edu": {
+				"repo":"-b master https://github.com/washingtonstateuniversity/WSUMAGE-base.git",
+				"repoid":"jeremyBass/WSUMAGE-base",
+				"vagrant":{
+					"database_host":"2",
+					"sample_data":"true",
+					"hosts":[
+						"store.mage.dev",
+						"events.store.mage.dev",
+						"student.store.mage.dev",
+						"general.store.mage.dev",
+						"store.admin.mage.dev",
+						"tech.store.mage.dev"
+					]
+				},
+				"remote":{
+					"database_host":"10.255.255.3",
+					"sample_date":"false",
+					"hosts":[
+						"store.mage.dev"
+					]
+				},
+			}
+		}
+	}
+}

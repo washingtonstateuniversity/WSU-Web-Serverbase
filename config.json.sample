@@ -40,6 +40,7 @@
 				"repo":"-b bootstraped https://github.com/jeremyBass/WSUMAGE-base.git",
 				"repoid":"jeremyBass/WSUMAGE-base",
 				"database_host":"10.255.255.3",
+				"sample_data":"true",
 				"hosts":[
 					"store.mage.dev",
 					"events.store.mage.dev",

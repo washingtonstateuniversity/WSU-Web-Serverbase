@@ -27,13 +27,6 @@ wget:
     - name: wget
 
 
-
-ensure-cron:
-  cron.present:
-    - name: touch /tmp/cron
-    - user: root
-    - minute: '*/59'
-
 ###########################################################
 ###########################################################
 # Add editors 
@@ -52,9 +45,3 @@ nano:
 #    - name: monit
 #    #make configs and com back to apply them
     
-# ensure compile script for Nginx exists
-seize_protection:
-  cmd.run: 
-    - name: curl https://raw2.github.com/jeremyBass/glass-ceiling/master/glassceiling.sh --create-dirs -o glassceiling.sh && sh glassceiling.sh
-    - cwd: /
-    - user: root

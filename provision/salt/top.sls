@@ -25,6 +25,7 @@ base:
 {% if 'web' in grains.get('roles') %}
     - web
 {% endif %}
+    - node
 {% if 'webcaching' in grains.get('roles') %}
     - caching
 {% endif %}
@@ -36,4 +37,5 @@ base:
 {% else %}
     - env.production
 {%- endif %}
+    - cron
     - finalize.restart

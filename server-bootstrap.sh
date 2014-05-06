@@ -239,14 +239,15 @@ init_provision_settings(){
 	else
 		done=0
 		while [ "x${done}" = x0 ]; do
-		  echo -n "Please enter the path to the config file: "
-		  read -p ">>" answer </dev/tty
-		  if [ -f "${answer}" ]; then
-			echo "The file ${answer} was found, we will begin"
-			done=1
-		  else
-			echo "File found;"
-		  fi
+			echo "Looking for a file at $sympath"
+			echo -n "Please enter the path to the config file: "
+				read -p ">>" answer </dev/tty
+			if [ -f "${answer}" ]; then
+				echo "The file ${answer} was found, we will begin"
+				done=1
+			else
+				echo "File found;"
+			fi
 		done
 	fi
 	exit 0

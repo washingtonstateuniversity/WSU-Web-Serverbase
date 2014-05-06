@@ -235,7 +235,8 @@ init_provision_settings(){
 
 	if [ -h "$confg_file" ]
 	then
-		
+		echo "The file $confg_file was found, we will begin"
+	else
 		test_for_file(){
 			echo -n "Please enter the path to the config file: "
 			read var1
@@ -246,15 +247,12 @@ init_provision_settings(){
 			echo "No such file found"
 			test_for_file
 
-			if [  -h $var1 ]
+			if [ -h $var1 ]
 			then
 				echo "The file $var1 was found, we will begin"
 				break
 			fi
 		done
-		
-	else
-		echo "The file $confg_file was found, we will begin"
 	fi
 
 	exit 0

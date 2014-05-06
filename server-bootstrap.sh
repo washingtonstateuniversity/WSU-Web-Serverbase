@@ -226,8 +226,8 @@ load_app(){
 
 
 #===  FUNCTION  ================================================================
-#          NAME:  init_provision
-#   DESCRIPTION:  starts the booting of the provisioning.
+#          NAME:  init_provision_settings
+#   DESCRIPTION:  sets all the setting needed for provisioning.
 #===============================================================================
 init_provision_settings(){
 	sympath=/src/salt/serverbase
@@ -240,7 +240,7 @@ init_provision_settings(){
 		done=0
 		while [ "x${done}" = x0 ]; do
 		  echo -n "Please enter the path to the config file: "
-		  read answer
+		  read -p ">>" answer
 		  if [ -f "${answer}" ]; then
 			echo "The file ${answer} was found, we will begin"
 			done=1
@@ -249,16 +249,8 @@ init_provision_settings(){
 		  fi
 		done
 	fi
-
-
-
-
-
-
 	exit 0
 }
-
-
 
 #===  FUNCTION  ================================================================
 #          NAME:  init_provision

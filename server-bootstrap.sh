@@ -267,7 +267,7 @@ init_provision_settings(){
 			fi
 		done
 	fi
-	exit 0
+	return 0
 }
 
 #===  FUNCTION  ================================================================

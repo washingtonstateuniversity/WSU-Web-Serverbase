@@ -239,7 +239,7 @@ init_provision_settings(){
 	else
 		test_for_file(){
 			echo -n "Please enter the path to the config file: "
-			read var1
+			read -p ">" var1
 		}
 		
 		while true

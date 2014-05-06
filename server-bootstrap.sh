@@ -237,14 +237,10 @@ init_provision_settings(){
 	then
 		echo "The file $confg_file was found, we will begin"
 	else
-		test_for_file(){
-			echo -n "Please enter the path to the config file: "
-			read -p ">" var1
-		}
-		
 		while true
 		do
-			test_for_file
+			echo -n "Please enter the path to the config file: "
+			read -p ">" var1
 			if [ -f "$var1" ]
 			then
 				echo "The file $var1 was found, we will begin"

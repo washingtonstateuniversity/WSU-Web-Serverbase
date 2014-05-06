@@ -289,13 +289,9 @@ init_provision(){
 	#git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
 	git_cmd="gitploy ${_BRANCH} ${_TAG} serverbase https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
 	cd /src/salt/serverbase
-	$(gitploy init 2>&1 | grep -qi "already initialized") || gitploy init
-	if $(gitploy ls 2>&1 | grep -qi "serverbase");
-	then
-		eval "gitploy up ${_BRANCH} ${_TAG} serverbase"
-	else
-		eval $git_cmd
-	fi
+	$(gitploy init 2>&1 | grep -qi "already initialized") && echo "" || gitploy init
+	$(gitploy ls 2>&1 | grep -qi "serverbase") && eval "gitploy up ${_BRANCH} ${_TAG} serverbase" || eval $git_cmd
+
 	[ -h /srv/salt/base/ ] || ln -s /src/salt/serverbase/provision/salt/* /srv/salt/base/
 
 	#start provisioning

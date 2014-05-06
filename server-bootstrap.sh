@@ -271,8 +271,6 @@ init_provision(){
 	
 	is_localhost && echo "vagrant settings" || init_provision_settings
 	
-	
-	echo "made it work out well"
 	exit 0
 	
 	#ensure the src bed

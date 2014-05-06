@@ -237,6 +237,7 @@ init_provision_settings(){
 	then
 		echo "The file $confg_file was found, we will begin"
 	else
+		done=0
 		while [ "x${done}" = x0 ]; do
 		  echo -n "Please enter the path to the config file: "
 		  read answer

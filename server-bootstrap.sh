@@ -237,19 +237,22 @@ init_provision_settings(){
 	then
 		echo "The file $confg_file was found, we will begin"
 	else
-		while true
-		do
-			echo -n "Please enter the path to the config file: "
-			read -p ">" var1
-			if [ -f "$var1" ]
-			then
-				echo "The file $var1 was found, we will begin"
-				break
-			else
-				echo "No such file found"
-			fi
+		while [ "x${done}" = x0 ]; do
+		  echo -n "Please enter the path to the config file: "
+		  read answer
+		  if [ -f "${answer}" ]; then
+			echo "The file ${answer} was found, we will begin"
+			done=1
+		  else
+			echo "No such file found"
+		  fi
 		done
 	fi
+
+
+
+
+
 
 	exit 0
 }

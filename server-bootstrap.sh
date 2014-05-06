@@ -303,7 +303,7 @@ init_provision(){
 	sh /srv/salt/base/boot/bootstrap-salt.sh
 	
 
-	if [ is_localhost ];
+	if is_localhost;
 	then
 		cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
 		echo "vagrant settings"

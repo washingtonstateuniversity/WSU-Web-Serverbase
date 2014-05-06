@@ -301,12 +301,18 @@ init_provision(){
 	
 	[ -d /etc/salt/minion.d ] || mkdir -p /etc/salt/minion.d
 	sh /srv/salt/base/boot/bootstrap-salt.sh
-	cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
-
-	is_localhost && echo "vagrant settings" || init_provision_settings
 	
-	echo $(hostname --long) 
-	get_config_data 
+
+	if[ is_localhost ]
+	then
+		cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
+		echo "vagrant settings"
+	else
+		init_provision_settings
+		echo $(hostname --long) 
+		get_config_data "local_env"
+	fi
+
 	exit 0
 
 	

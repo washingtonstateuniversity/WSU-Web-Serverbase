@@ -295,7 +295,7 @@ init_provision(){
 		eval "gitploy up ${_BRANCH} ${_TAG} serverbase"
 	else
 		eval $git_cmd
-	if
+	fi
 	[ -h /srv/salt/base/ ] || ln -s /src/salt/serverbase/provision/salt/* /srv/salt/base/
 
 	#start provisioning

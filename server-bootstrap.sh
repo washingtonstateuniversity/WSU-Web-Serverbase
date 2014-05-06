@@ -279,7 +279,7 @@ init_provision(){
 	
 	is_localhost && echo "vagrant settings" || init_provision_settings
 	
-	
+	echo $(hostname --long) 
 	get_config_data 
 	exit 0
 	

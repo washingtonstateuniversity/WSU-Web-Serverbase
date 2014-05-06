@@ -234,7 +234,7 @@ init_provision_settings(){
 	confg_file=$(cat sympath/config.json)
 
 
-	if [ -f $confg_file ]; then
+	if [ -f "$confg_file" ]; then
 		echo "No such file found"
 		func(){
 			echo -n "Please enter the path to the config file: "
@@ -275,7 +275,7 @@ init_provision(){
 	is_localhost && echo "working off a local development platform" || echo "working off a remote server"
 	
 	
-	is_localhost || init_provision_settings()
+	is_localhost && echo "vagrant settings" || init_provision_settings()
 	
 	
 	echo "made it work out well"

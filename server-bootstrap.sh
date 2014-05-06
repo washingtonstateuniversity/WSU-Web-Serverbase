@@ -240,7 +240,7 @@ init_provision_settings(){
 		done=0
 		while [ "x${done}" = x0 ]; do
 		  echo -n "Please enter the path to the config file: "
-		  read -p ">>" answer
+		  read -p ">>" answer </dev/tty
 		  if [ -f "${answer}" ]; then
 			echo "The file ${answer} was found, we will begin"
 			done=1

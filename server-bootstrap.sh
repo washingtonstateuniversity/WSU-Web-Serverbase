@@ -76,6 +76,9 @@ declare -A _RANENV=()
 _REPOURL="https://github.com"
 _RAWURL="https://raw.githubusercontent.com"
 
+sympath=/src/salt/serverbase
+_CONFDATA=""
+
 #===  FUNCTION  ================================================================
 #          NAME:  is_localhost
 #   DESCRIPTION:  Will check if this is a local devlopment by checking if we 
@@ -224,16 +227,30 @@ load_app(){
 
 
 
+#===  FUNCTION  ================================================================
+#          NAME:  set_config_data
+#   DESCRIPTION:  sets the global data value.
+#===============================================================================
+set_config_data(){
+	_CONFDATA=$(cat "$sympath/config.json")
+	$_CONFDATA | jq '.'
+}
+
+#===  FUNCTION  ================================================================
+#          NAME:  get_config_data
+#   DESCRIPTION:  gets the global data value.
+#===============================================================================
+get_config_data(){
+	setting="$1"
+	$_CONFDATA | jq ".${setting}"
+}
 
 #===  FUNCTION  ================================================================
 #          NAME:  init_provision_settings
 #   DESCRIPTION:  sets all the setting needed for provisioning.
 #===============================================================================
 init_provision_settings(){
-	sympath=/src/salt/serverbase
-	confg_file=$(cat $sympath/config.json)
-
-	if [ -f "$confg_file" ]
+	if [ -f "$sympath" ]
 	then
 		echo "The file $confg_file was found, we will begin"
 	else
@@ -245,8 +262,7 @@ init_provision_settings(){
 			if [ -f "${answer}" ]; then
 				echo "The file ${answer} was found, we will begin"
 				done=1
-			else
-				echo "File found;"
+				set_config_data
 			fi
 		done
 	fi
@@ -263,6 +279,8 @@ init_provision(){
 	
 	is_localhost && echo "vagrant settings" || init_provision_settings
 	
+	
+	get_config_data 
 	exit 0
 	
 	#ensure the src bed
@@ -300,7 +318,8 @@ init_provision(){
 #   DESCRIPTION:  adds needed json support to the system.
 #===============================================================================
 init_json(){
-	wget http://stedolan.github.io/jq/download/linux64/jq
+	cd /
+	[ -f "jq" ] || wget http://stedolan.github.io/jq/download/linux64/jq
 	chmod +x ./jq
 	cp jq /usr/bin
 }

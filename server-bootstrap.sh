@@ -233,18 +233,18 @@ init_provision_settings(){
 	sympath=/src/salt/serverbase
 	confg_file=$(cat sympath/config.json)
 
-
-	if [ -f "$confg_file" ]; then
+	if [ -h "$confg_file" ]
+	then
 		echo "No such file found"
-		func(){
+		test_for_file(){
 			echo -n "Please enter the path to the config file: "
 			read var1
 		}
 		
 		while true
 		do
-			func
-	
+			test_for_file
+
 			if [[ $var1 == "yes" ]]
 			then
 				echo "The file $var1 was found, we will begin"
@@ -253,16 +253,10 @@ init_provision_settings(){
 		done
 		
 	else
-	
 		echo "The file $confg_file was found, we will begin"
-	
 	fi
 
-
 	exit 0
-
-
-
 }
 
 
@@ -275,7 +269,7 @@ init_provision(){
 	is_localhost && echo "working off a local development platform" || echo "working off a remote server"
 	
 	
-	is_localhost && echo "vagrant settings" || init_provision_settings()
+	is_localhost && echo "vagrant settings" || init_provision_settings
 	
 	
 	echo "made it work out well"

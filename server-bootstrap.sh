@@ -234,28 +234,29 @@ init_provision_settings(){
 	confg_file=$(cat sympath/config.json)
 
 
-if [ -f $confg_file ]
-	echo "No such file found"
-	func(){
-		echo -n "Please enter the path to the config file: "
-		read var1
-	}
+	if [ -f $confg_file ]; then
+		echo "No such file found"
+		func(){
+			echo -n "Please enter the path to the config file: "
+			read var1
+		}
+		
+		while true
+		do
+			func
 	
-	while true
-	do
-		func
-
-		if [[ $var1 == "yes" ]]
-		then
-			echo "The file $var1 was found, we will begin"
-			break
-		fi
-	done
-else
-
-	echo "The file $confg_file was found, we will begin"
-
-fi
+			if [[ $var1 == "yes" ]]
+			then
+				echo "The file $var1 was found, we will begin"
+				break
+			fi
+		done
+		
+	else
+	
+		echo "The file $confg_file was found, we will begin"
+	
+	fi
 
 
 

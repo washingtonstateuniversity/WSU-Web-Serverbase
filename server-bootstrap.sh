@@ -76,7 +76,7 @@ declare -A _RANENV=()
 _REPOURL="https://github.com"
 _RAWURL="https://raw.githubusercontent.com"
 
-sympath=/src/salt/serverbase
+provisionpath=/srv/salt/base/
 _CONFDATA=""
 
 #===  FUNCTION  ================================================================
@@ -232,7 +232,7 @@ load_app(){
 #   DESCRIPTION:  loads the settings to global data value.
 #===============================================================================
 load_config_data(){
-	_CONFDATA=$(cat "$sympath/config.json")
+	_CONFDATA=$(cat "${provisionpath}config.json")
 	$_CONFDATA | jq '.'
 }
 
@@ -250,16 +250,17 @@ get_config_data(){
 #   DESCRIPTION:  sets all the setting needed for provisioning.
 #===============================================================================
 init_provision_settings(){
-	if [ -f "$sympath" ]
+    confg_file="${provisionpath}config.json"
+	if [ -f "$confg_file" ]
 	then
 		echo "The file $confg_file was found, we will begin"
 	else
 		done=0
 		while [ "x${done}" = x0 ]; do
-			echo "Looking for a file at $sympath"
+			echo "Looking for a file at ${provisionpath}"
 			echo -n "Please enter the path to the config file: "
 				read -p ">>" answer </dev/tty
-			if [ -f "${answer}" ]; then
+			if [ -f "${provisionpath}${answer}" ]; then
 				echo "The file ${answer} was found, we will begin"
 				done=1
 				load_config_data

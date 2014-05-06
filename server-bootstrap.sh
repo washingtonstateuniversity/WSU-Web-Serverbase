@@ -310,7 +310,7 @@ init_provision(){
 	else
 		init_provision_settings
 		echo $(hostname --long) 
-		get_config_data "local_env"
+		echo $(get_config_data "local_env")
 	fi
 
 	exit 0

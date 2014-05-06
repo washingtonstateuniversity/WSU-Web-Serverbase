@@ -228,10 +228,10 @@ load_app(){
 
 
 #===  FUNCTION  ================================================================
-#          NAME:  set_config_data
-#   DESCRIPTION:  sets the global data value.
+#          NAME:  load_config_data
+#   DESCRIPTION:  loads the settings to global data value.
 #===============================================================================
-set_config_data(){
+load_config_data(){
 	_CONFDATA=$(cat "$sympath/config.json")
 	$_CONFDATA | jq '.'
 }
@@ -262,7 +262,7 @@ init_provision_settings(){
 			if [ -f "${answer}" ]; then
 				echo "The file ${answer} was found, we will begin"
 				done=1
-				set_config_data
+				load_config_data
 			fi
 		done
 	fi

@@ -276,13 +276,6 @@ init_provision_settings(){
 init_provision(){
 	is_localhost && echo "working off a local development platform" || echo "working off a remote server"
 	
-	
-	is_localhost && echo "vagrant settings" || init_provision_settings
-	
-	echo $(hostname --long) 
-	get_config_data 
-	exit 0
-	
 	#ensure the src bed
 	[ -d /src/salt/serverbase ] || mkdir -p /src/salt/serverbase
 	[ -d /srv/salt/base ] || mkdir -p /srv/salt/base
@@ -308,6 +301,13 @@ init_provision(){
 	[ -d /etc/salt/minion.d ] || mkdir -p /etc/salt/minion.d
 	sh /srv/salt/base/boot/bootstrap-salt.sh
 	cp -fu /srv/salt/base/minions/${_MINION}.conf /etc/salt/minion.d/${_MINION}.conf
+
+	is_localhost && echo "vagrant settings" || init_provision_settings
+	
+	echo $(hostname --long) 
+	get_config_data 
+	exit 0
+
 	
 	provision_env $_ENV
 	return 0

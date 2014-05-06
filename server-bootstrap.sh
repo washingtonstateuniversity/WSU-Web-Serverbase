@@ -233,7 +233,7 @@ init_provision_settings(){
 	sympath=/src/salt/serverbase
 	confg_file=$(cat $sympath/config.json)
 
-	if [ -h "$confg_file" ]
+	if [ -f "$confg_file" ]
 	then
 		echo "The file $confg_file was found, we will begin"
 	else
@@ -244,13 +244,13 @@ init_provision_settings(){
 		
 		while true
 		do
-			echo "No such file found"
 			test_for_file
-
-			if [ -h $var1 ]
+			if [ -f "$var1" ]
 			then
 				echo "The file $var1 was found, we will begin"
 				break
+			else
+				echo "No such file found"
 			fi
 		done
 	fi

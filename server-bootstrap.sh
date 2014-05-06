@@ -231,11 +231,11 @@ load_app(){
 #===============================================================================
 init_provision_settings(){
 	sympath=/src/salt/serverbase
-	confg_file=$(cat sympath/config.json)
+	confg_file=$(cat $sympath/config.json)
 
 	if [ -h "$confg_file" ]
 	then
-		echo "No such file found"
+		
 		test_for_file(){
 			echo -n "Please enter the path to the config file: "
 			read var1
@@ -243,9 +243,10 @@ init_provision_settings(){
 		
 		while true
 		do
+			echo "No such file found"
 			test_for_file
 
-			if [[ $var1 == "yes" ]]
+			if [  -h $var1 ]
 			then
 				echo "The file $var1 was found, we will begin"
 				break

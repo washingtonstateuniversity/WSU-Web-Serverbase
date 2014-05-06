@@ -245,7 +245,7 @@ init_provision_settings(){
 			echo "The file ${answer} was found, we will begin"
 			done=1
 		  else
-			echo "No such file found"
+			echo "File found;"
 		  fi
 		done
 	fi

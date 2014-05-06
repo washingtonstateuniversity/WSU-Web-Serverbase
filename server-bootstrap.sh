@@ -259,7 +259,7 @@ init_provision_settings(){
 	fi
 
 
-
+	exit 0
 
 
 

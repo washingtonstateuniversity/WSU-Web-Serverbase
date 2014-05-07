@@ -282,10 +282,11 @@ get_config_data(){
 #   DESCRIPTION:  sets all the setting needed for provisioning.
 #===============================================================================
 init_provision_settings(){
-    confg_file="${provisionpath}config.json on ${_server_id}"
+    confg_file="${provisionpath}config.json"
+	
 	if [ -f "$confg_file" ]
 	then
-		echo "The file $confg_file was found, we will begin"
+		echo "The file $confg_file was found, we will begin on ${_server_id}"
 		load_config_data
 	else
 		done=0
@@ -294,7 +295,7 @@ init_provision_settings(){
 			echo -n "Please enter the path to the config file: "
 				read -p ">>" answer </dev/tty
 			if [ -f "${provisionpath}${answer}" ]; then
-				echo "The file ${answer} was found, we will begin"
+				echo "The file ${answer} was found, we will begin on ${_server_id}"
 				load_config_data
 				done=1
 				

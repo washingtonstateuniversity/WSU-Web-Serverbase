@@ -233,7 +233,7 @@ load_app(){
 #===============================================================================
 load_config_data(){
 	file="${provisionpath}config.json"
-	_CONFDATA=`cat $file` | jq '.'
+	_CONFDATA=`cat $file`
 }
 
 #===  FUNCTION  ================================================================
@@ -242,7 +242,7 @@ load_config_data(){
 #===============================================================================
 get_config_data(){
 	setting="$1"
-	$_CONFDATA | jq ".${setting}"
+	echo $_CONFDATA | jq ".${setting}"
 }
 
 #===  FUNCTION  ================================================================
@@ -314,6 +314,7 @@ init_provision(){
 		echo $(hostname --long) 
 		echo $_CONFDATA
 		echo $(get_config_data "local_env")
+
 	fi
 
 	exit 0

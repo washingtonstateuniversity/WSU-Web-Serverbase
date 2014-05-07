@@ -195,11 +195,14 @@ provision_env(){
 #   DESCRIPTION:  sets up the minion file to be used.
 #===============================================================================
 build_minions(){
-	minionfile="${provisionpath}/minions/${_server_id}.conf"
-	cp -fu --remove-destination "${provisionpath}/minions/_template.conf" "${provisionpath}/minions/${_server_id}.conf"
-	match='file_roots\:'
-	insert="\ \ base\:\n\ \ \ \ -\ @${provisionpath}@"
-	sed -i -n "s/$match/$match\n$insert/" $minionfile
+	minionfile="${provisionpath}minions/${_server_id}.conf"
+	cp -fu --remove-destination "${provisionpath}minions/_template.conf" "${minionfile}"
+	match='file_roots:'
+	insert="$match\n\ \ base:\n\ \ \ \ -\ ${provisionpath}"
+	echo $insert
+	echo $match
+	sed -i -n "s@$match@$insert@" $minionfile
+	echo `cat $minionfile`
 	exit 0
 	return 0
 }

@@ -233,6 +233,7 @@ load_app(){
 #===============================================================================
 load_config_data(){
 	_CONFDATA=$(cat "${provisionpath}config.json")
+	echo $_CONFDATA
 	$_CONFDATA | jq '.'
 }
 

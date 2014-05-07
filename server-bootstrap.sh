@@ -282,7 +282,7 @@ get_config_data(){
 #   DESCRIPTION:  sets all the setting needed for provisioning.
 #===============================================================================
 init_provision_settings(){
-    confg_file="${provisionpath}config.json"
+    confg_file="${provisionpath}config.json on ${_server_id}"
 	if [ -f "$confg_file" ]
 	then
 		echo "The file $confg_file was found, we will begin"

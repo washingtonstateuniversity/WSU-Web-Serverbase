@@ -76,6 +76,8 @@ declare -A _RANENV=()
 _REPOURL="https://github.com"
 _RAWURL="https://raw.githubusercontent.com"
 
+_server_id=$(hostname --long) 
+
 provisionpath=/srv/salt/base/
 _CONFDATA=""
 
@@ -242,7 +244,7 @@ load_config_data(){
 #===============================================================================
 get_config_data(){
 	setting="$1"
-	echo $_CONFDATA | jq ".${setting}"
+	echo $_CONFDATA | jq "${setting}"
 }
 
 #===  FUNCTION  ================================================================
@@ -311,9 +313,8 @@ init_provision(){
 		echo "vagrant settings"
 	else
 		init_provision_settings
-		echo $(hostname --long) 
 		echo $_CONFDATA
-		get_config_data "local_env"
+		get_config_data ".${_server_id}.local_env"
 		exit 0
 	fi
 
@@ -335,6 +336,7 @@ init_json(){
 	cp jq /usr/bin
 }
 [ $(which jq 2>&1 | grep -qi "/usr/bin/jq") ] || init_json
+
 
 
 #this is very lazy but it's just for now

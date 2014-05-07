@@ -314,7 +314,7 @@ init_provision(){
 	else
 		init_provision_settings
 		echo $_CONFDATA
-		get_config_data '.["'$_server_id'"].local_env'
+		echo $(get_config_data '.["'$_server_id'"].local_env')
 		exit 0
 	fi
 

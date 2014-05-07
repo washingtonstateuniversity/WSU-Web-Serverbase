@@ -78,7 +78,14 @@ _RAWURL="https://raw.githubusercontent.com"
 
 _server_id=$(hostname --long) 
 
-provisionpath=/srv/salt/base/
+saltpath=/srv/salt/
+provisionpath="${saltpath}base/"
+
+app_file_roots=""
+app_pillar_roots=""
+
+
+
 _CONFDATA=""
 
 #===  FUNCTION  ================================================================
@@ -198,12 +205,13 @@ build_minions(){
 	minionfile="${provisionpath}minions/${_server_id}.conf"
 	cp -fu --remove-destination "${provisionpath}minions/_template.conf" "${minionfile}"
 	match='file_roots\:'
-	insert="$match\n\ \ base\:\n\ \ \ \ -\ ${provisionpath}"
-	echo $insert
-	echo $match
+	insert="$match\n\ \ base\:\n\ \ \ \ -\ ${provisionpath}${app_file_roots}"
 	sed -i "s@$match@$insert@" $minionfile
-	echo $minionfile
-	echo `cat $minionfile`
+
+	match='pillar_roots\:'
+	insert="$match\n\ \ base\:\n\ \ \ \ -\ ${provisionpath}${app_pillar_roots}"
+	sed -i "s@$match@$insert@" $minionfile
+
 	exit 0
 	return 0
 }
@@ -223,6 +231,9 @@ load_app(){
 	modname=${appname//[-._]/}
 	repopath=${app[1]}
 	sympath="/srv/salt/${appname}/"
+	
+	app_file_roots="${app_file_roots}\n\ \ ${appname}\:\n\ \ \ \ -\ ${saltpath}${appname}/"
+	app_pillar_roots="${app_pillar_roots}\n\ \ ${appname}\:\n\ \ \ \ -\ ${saltpath}${appname}/pillar/"
 	
 	[ -d /var/app ] || mkdir -p /var/app
 	cd /var/app
@@ -334,8 +345,12 @@ init_provision(){
 		echo "vagrant settings"
 	else
 		init_provision_settings
-		envs=$(get_config_data '.["'$_server_id'"].local_env[]')
-		echo $envs
+		roles=$(get_config_data '.["'$_server_id'"].local_env[]')
+		echo $roles
+		
+		#load_app 
+		
+		
 		build_minions
 	fi
 	

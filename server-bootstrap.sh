@@ -197,10 +197,8 @@ provision_env(){
 build_minions(){
 	minionfile="${provisionpath}/minions/${_server_id}.conf"
 	cp -fu --remove-destination "${provisionpath}/minions/_template.conf" "${provisionpath}/minions/${_server_id}.conf"
-	match='file_roots:'
-	insert="\ \ base:\n\ \ \ \ -\ ${provisionpath}"
-	file='file.txt'
-	
+	match='file_roots\:'
+	insert="\ \ base\:\n\ \ \ \ -\ ${provisionpath}"
 	sed -i -n "s/$match/$match\n$insert/" $minionfile
 	exit 0
 	return 0

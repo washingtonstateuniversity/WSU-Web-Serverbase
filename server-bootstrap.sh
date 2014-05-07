@@ -264,7 +264,9 @@ init_provision_settings(){
 				read -p ">>" answer </dev/tty
 			if [ -f "${provisionpath}${answer}" ]; then
 				echo "The file ${answer} was found, we will begin"
-				load_config_data
+	file="${provisionpath}config.json"
+	_CONFDATA=`cat $file`
+	echo $_CONFDATA
 				done=1
 			fi
 		done

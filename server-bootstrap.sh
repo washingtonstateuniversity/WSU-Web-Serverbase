@@ -243,8 +243,7 @@ load_config_data(){
 #   DESCRIPTION:  gets the global data value.
 #===============================================================================
 get_config_data(){
-	setting="$1"
-	echo $_CONFDATA | jq ${setting}
+	echo $_CONFDATA | jq ${1}
 }
 
 #===  FUNCTION  ================================================================

@@ -316,7 +316,6 @@ init_provision(){
 		init_provision_settings
 		envs=$(get_config_data '.["'$_server_id'"].local_env[]')
 		echo $envs
-		exit 0
 	fi
 
 	

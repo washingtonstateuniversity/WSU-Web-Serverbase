@@ -236,6 +236,7 @@ load_app(){
 load_config_data(){
 	file="${provisionpath}config.json"
 	_CONFDATA=`cat $file`
+	echo $_CONFDATA
 }
 
 #===  FUNCTION  ================================================================

@@ -314,12 +314,8 @@ init_provision(){
 		echo "vagrant settings"
 	else
 		init_provision_settings
-		echo $_CONFDATA
-		echo $(get_config_data '.["'$_server_id'"].local_env[]')
-		get_config_data '.["'$_server_id'"].local_env[]'
-		echo '.["'$_server_id'"].local_env[]'
-		$_CONFDATA | jq '.["'$_server_id'"].local_env[]'
-		echo $_CONFDATA | jq '.["'$_server_id'"].local_env[]'
+		envs=$(get_config_data '.["'$_server_id'"].local_env[]')
+		echo $envs
 		exit 0
 	fi
 

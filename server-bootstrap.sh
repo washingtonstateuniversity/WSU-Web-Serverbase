@@ -364,7 +364,7 @@ init_provision(){
 #===============================================================================
 init_json(){
 	cd /
-	[ -f "jq" ] || wget http://stedolan.github.io/jq/download/linux64/jq
+	[ -f "jq" ] && echo "jq was already loaded" || wget http://stedolan.github.io/jq/download/linux64/jq
 	chmod +x ./jq
 	cp jq /usr/bin
 }

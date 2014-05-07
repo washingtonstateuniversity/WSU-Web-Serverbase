@@ -236,7 +236,6 @@ load_app(){
 load_config_data(){
 	file="${provisionpath}config.json"
 	_CONFDATA=`cat $file`
-	echo $_CONFDATA
 }
 
 #===  FUNCTION  ================================================================
@@ -256,6 +255,7 @@ init_provision_settings(){
 	if [ -f "$confg_file" ]
 	then
 		echo "The file $confg_file was found, we will begin"
+		load_config_data
 	else
 		done=0
 		while [ "x${done}" = x0 ]; do
@@ -264,10 +264,9 @@ init_provision_settings(){
 				read -p ">>" answer </dev/tty
 			if [ -f "${provisionpath}${answer}" ]; then
 				echo "The file ${answer} was found, we will begin"
-	file="${provisionpath}config.json"
-	_CONFDATA=`cat $file`
-	echo $_CONFDATA
+				load_config_data
 				done=1
+				
 			fi
 		done
 	fi

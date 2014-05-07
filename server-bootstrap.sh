@@ -232,7 +232,7 @@ load_app(){
 #   DESCRIPTION:  loads the settings to global data value.
 #===============================================================================
 load_config_data(){
-	_CONFDATA=$(<"${provisionpath}config.json")
+	_CONFDATA=`cat ${provisionpath}config.json`
 	echo $_CONFDATA
 	$_CONFDATA | jq '.'
 }

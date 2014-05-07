@@ -370,9 +370,7 @@ init_json(){
 }
 
 
-
-
-
+[ $(which wget 2>&1 | grep -qi "/usr/bin/wget") ] || yum install -y wget
 [ $(which jq 2>&1 | grep -qi "/usr/bin/jq") ] && echo "jq was already loaded" || init_json
 
 

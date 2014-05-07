@@ -313,11 +313,11 @@ init_provision(){
 		init_provision_settings
 		echo $(hostname --long) 
 		echo $_CONFDATA
-		echo $(get_config_data "local_env")
-
+		get_config_data "local_env"
+		exit 0
 	fi
 
-	exit 0
+	
 
 	
 	provision_env $_ENV

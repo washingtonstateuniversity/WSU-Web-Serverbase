@@ -211,7 +211,7 @@ build_minions(){
 	match='pillar_roots\:'
 	insert="$match\n\ \ base\:\n\ \ \ \ -\ ${provisionpath}${app_pillar_roots}"
 	sed -i "s@$match@$insert@" $minionfile
-
+	echo `cat $minionfile`
 	exit 0
 	return 0
 }

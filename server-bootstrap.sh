@@ -191,6 +191,24 @@ provision_env(){
 }
 
 #===  FUNCTION  ================================================================
+#          NAME:  build_minions
+#   DESCRIPTION:  sets up the minion file to be used.
+#===============================================================================
+build_minions(){
+	minionfile="${provisionpath}/minions/${_server_id}.conf"
+	[ -f $minionfile ] || cp -fu --remove-destination "${provisionpath}/minions/_template.conf" "${provisionpath}/minions/${_server_id}.conf"
+	match='file_roots:'
+	insert="\s\sbase:\n\s\s\s\s-\s${provisionpath}"
+	file='file.txt'
+	
+	sed -i "s/$match/$match\n$insert/" $minionfile
+	exit 0
+	return 0
+}
+
+
+
+#===  FUNCTION  ================================================================
 #          NAME:  load_app
 #   DESCRIPTION:  load web app for the server.
 #===============================================================================
@@ -316,10 +334,8 @@ init_provision(){
 		init_provision_settings
 		envs=$(get_config_data '.["'$_server_id'"].local_env[]')
 		echo $envs
+		build_minions
 	fi
-
-	
-
 	
 	provision_env $_ENV
 	return 0

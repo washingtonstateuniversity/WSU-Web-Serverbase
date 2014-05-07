@@ -368,7 +368,7 @@ init_json(){
 	chmod +x ./jq
 	cp jq /usr/bin
 }
-[ $(which jq 2>&1 | grep -qi "/usr/bin/jq") ] || init_json
+[ $(which jq 2>&1 | grep -qi "/usr/bin/jq") ] && echo "jq was already loaded" || init_json
 
 
 

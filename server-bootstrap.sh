@@ -185,9 +185,9 @@ provision_env(){
 	do
 		echo "looking for ${env}"
 		if [ ! -z ${_RANENV["$env"]:-} ]; then
-			echo "skipping ${env}"
+			echoinfo "skipping ${env}"
 		else
-			echo "running environment ${env}"
+			echoinfo "running environment ${env}"
 			[ -h "/srv/salt/${env}" ] || ln -s /var/app/${env}/provision/salt /srv/salt/${env}
 			salt-call state.clear_cache
 			salt-call --log-level=info state.highstate env=${env}
@@ -215,9 +215,9 @@ build_minions(){
 	match='roles\:'
 	for role in `get_config_data '.["'$_server_id'"].local_env[]'`
 	do
-		echo $role
+		echoinfo $role
 		insert="$match\n\ \ \ \ -\ ${role}"
-		echo $insert
+		echoinfo $insert
 		sed -i "s@$match@$insert@" $minionfile
 	done
 	

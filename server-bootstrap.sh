@@ -214,12 +214,11 @@ build_minions(){
 	
 	match='roles\:'
 	insert="$match"
-	for role in `echo $_CONFDATA | jq -r ".[\"$_server_id\"].local_env[]"`
+	for role in `echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].local_env[]"`
 	do
 		echoinfo $role
 		insert="$insert\n\ \ \ \ -\ ${role}"
 		echoinfo $insert
-		
 	done
 	echoinfo $insert
 	sed -i "s@$match@$insert@" $minionfile
@@ -360,7 +359,7 @@ init_provision(){
 	else
 		init_provision_settings
 		roles=$(get_config_data '.["'$_server_id'"].local_env[]')
-		echo $roles
+		#echo $roles
 		
 		#load_app 
 		

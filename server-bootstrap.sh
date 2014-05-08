@@ -211,6 +211,13 @@ build_minions(){
 	match='pillar_roots\:'
 	insert="$match\n\ \ base\:\n\ \ \ \ -\ ${provisionpath}${app_pillar_roots}"
 	sed -i "s@$match@$insert@" $minionfile
+	
+	match='roles\:'
+	for role in $(get_config_data '.["'$_server_id'"].local_env[]')
+		insert="$match\n\ \ \ \ -\ ${role}"
+		sed -i "s@$match@$insert@" $minionfile
+	done
+	
 	echo `cat $minionfile`
 	exit 0
 	return 0

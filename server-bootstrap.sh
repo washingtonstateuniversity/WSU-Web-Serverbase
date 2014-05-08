@@ -287,7 +287,7 @@ get_config_data(){
 	if [ -z "${2}" ]; then
 		run="jq ${1}"
 	else
-		run="jq ${1} ${2}"
+		run="jq ${2} ${1}"
 	fi
 	echo $_CONFDATA | `$run`
 }

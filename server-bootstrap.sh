@@ -284,7 +284,12 @@ load_config_data(){
 #   DESCRIPTION:  gets the global data value.
 #===============================================================================
 get_config_data(){
-	echo $_CONFDATA | jq ${1}
+	if [ -z "${2}" ]; then
+		run="jq ${1}"
+	else
+		run="jq ${1} ${2}"
+	fi
+	echo $_CONFDATA | `$run`
 }
 
 #===  FUNCTION  ================================================================

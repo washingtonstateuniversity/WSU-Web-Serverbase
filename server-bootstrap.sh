@@ -215,6 +215,7 @@ build_minions(){
 	match='roles\:'
 	for role in `get_config_data '.["'$_server_id'"].local_env[]'`
 	do
+		echo $role
 		insert="$match\n\ \ \ \ -\ ${role}"
 		sed -i "s@$match@$insert@" $minionfile
 	done

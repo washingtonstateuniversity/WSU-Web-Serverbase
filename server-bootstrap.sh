@@ -217,6 +217,7 @@ build_minions(){
 	do
 		echo $role
 		insert="$match\n\ \ \ \ -\ ${role}"
+		echo $insert
 		sed -i "s@$match@$insert@" $minionfile
 	done
 	

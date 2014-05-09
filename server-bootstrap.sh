@@ -83,7 +83,7 @@ provisionpath="${saltpath}base/"
 
 app_file_roots=""
 app_pillar_roots=""
-
+app_env=""
 
 
 _CONFDATA=""
@@ -223,6 +223,10 @@ build_minions(){
 	done
 	sed -i "s@$match@$insert@" $minionfile
 	
+	match='env\:'
+	insert="$match\n\ \ \ \ -\ base\:${app_env}"
+	sed -i "s@$match@$insert@" $minionfile
+	
 	echo `cat $minionfile`
 	exit 0
 	return 0
@@ -246,6 +250,7 @@ load_app(){
 	
 	app_file_roots="${app_file_roots}\n\ \ ${appname}\:\n\ \ \ \ -\ ${saltpath}${appname}/"
 	app_pillar_roots="${app_pillar_roots}\n\ \ ${appname}\:\n\ \ \ \ -\ ${saltpath}${appname}/pillar/"
+	app_env="${app_env}\n\ \ \ \ -\ ${appname}"
 	
 	[ -d /var/app ] || mkdir -p /var/app
 	cd /var/app

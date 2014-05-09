@@ -78,7 +78,14 @@ _RAWURL="https://raw.githubusercontent.com"
 
 _server_id=$(hostname --long) 
 
-provisionpath=/srv/salt/base/
+saltpath=/srv/salt/
+provisionpath="${saltpath}base/"
+
+app_file_roots=""
+app_pillar_roots=""
+app_env=""
+
+
 _CONFDATA=""
 
 #===  FUNCTION  ================================================================
@@ -178,9 +185,9 @@ provision_env(){
 	do
 		echo "looking for ${env}"
 		if [ ! -z ${_RANENV["$env"]:-} ]; then
-			echo "skipping ${env}"
+			echoinfo "skipping ${env}"
 		else
-			echo "running environment ${env}"
+			echoinfo "running environment ${env}"
 			[ -h "/srv/salt/${env}" ] || ln -s /var/app/${env}/provision/salt /srv/salt/${env}
 			salt-call state.clear_cache
 			salt-call --log-level=info state.highstate env=${env}
@@ -189,6 +196,44 @@ provision_env(){
 	done
 	return 0
 }
+
+#===  FUNCTION  ================================================================
+#          NAME:  build_minions
+#   DESCRIPTION:  sets up the minion file to be used.
+#===============================================================================
+build_minions(){
+	minionfile="${provisionpath}minions/${_server_id}.conf"
+	cp -fu --remove-destination "${provisionpath}minions/_template.conf" "${minionfile}"
+	match='file_roots\:'
+	insert="$match\n\ \ base\:\n\ \ \ \ -\ ${provisionpath}${app_file_roots}"
+	sed -i "s@$match@$insert@" $minionfile
+
+	match='pillar_roots\:'
+	insert="$match\n\ \ base\:\n\ \ \ \ -\ ${provisionpath}pillar/${app_pillar_roots}"
+	sed -i "s@$match@$insert@" $minionfile
+	
+	match='roles\:'
+	insert="$match"
+	roles=`echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].local_env[]"`
+	IFS=$'\n' read -d '' -a ns <<< $roles
+	IFS=' ' read -a array <<< "${ns}"
+	for role in "${array[@]}"
+	do
+		insert="$insert\n\ \ \ \ -\ ${role}"
+	done
+	sed -i "s@$match@$insert@" $minionfile
+	
+	match='env\:'
+	insert="$match\n\ \ \ \ -\ base${app_env}"
+	sed -i "s@$match@$insert@" $minionfile
+	
+	cp -fu $minionfile /etc/salt/minion.d/${_server_id}.conf
+	#echo `cat $minionfile`
+	#exit 0
+	return 0
+}
+
+
 
 #===  FUNCTION  ================================================================
 #          NAME:  load_app
@@ -203,6 +248,10 @@ load_app(){
 	modname=${appname//[-._]/}
 	repopath=${app[1]}
 	sympath="/srv/salt/${appname}/"
+	
+	app_file_roots="${app_file_roots}\n\ \ ${appname}\:\n\ \ \ \ -\ ${saltpath}${appname}/"
+	app_pillar_roots="${app_pillar_roots}\n\ \ ${appname}\:\n\ \ \ \ -\ ${saltpath}${appname}/pillar/"
+	app_env="${app_env}\n\ \ \ \ -\ ${appname}"
 	
 	[ -d /var/app ] || mkdir -p /var/app
 	cd /var/app
@@ -243,7 +292,7 @@ load_config_data(){
 #   DESCRIPTION:  gets the global data value.
 #===============================================================================
 get_config_data(){
-	echo $_CONFDATA | jq ${1}
+	echo $_CONFDATA 
 }
 
 #===  FUNCTION  ================================================================
@@ -252,9 +301,10 @@ get_config_data(){
 #===============================================================================
 init_provision_settings(){
     confg_file="${provisionpath}config.json"
+	
 	if [ -f "$confg_file" ]
 	then
-		echo "The file $confg_file was found, we will begin"
+		echo "The file $confg_file was found, we will begin on ${_server_id}"
 		load_config_data
 	else
 		done=0
@@ -263,7 +313,7 @@ init_provision_settings(){
 			echo -n "Please enter the path to the config file: "
 				read -p ">>" answer </dev/tty
 			if [ -f "${provisionpath}${answer}" ]; then
-				echo "The file ${answer} was found, we will begin"
+				echo "The file ${answer} was found, we will begin on ${_server_id}"
 				load_config_data
 				done=1
 				
@@ -314,13 +364,18 @@ init_provision(){
 		echo "vagrant settings"
 	else
 		init_provision_settings
-		envs=$(get_config_data '.["'$_server_id'"].local_env[]')
-		echo $envs
+		apps=`echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].apps | keys | .[]"`
+
+		for app in $apps
+		do
+			echo $app
+			repoid=`echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].apps[\"$app\"].repoid"`
+			echo $repoid
+			load_app "$app:$repoid"
+		done
+		build_minions
 	fi
-
-	
-
-	
+	#exit 0
 	provision_env $_ENV
 	return 0
 }
@@ -331,11 +386,15 @@ init_provision(){
 #===============================================================================
 init_json(){
 	cd /
-	[ -f "jq" ] || wget http://stedolan.github.io/jq/download/linux64/jq
+	#[ -f "jq" ] && echo "jq was already downloaded" || 
+	wget http://stedolan.github.io/jq/download/linux64/jq
 	chmod +x ./jq
 	cp jq /usr/bin
 }
-[ $(which jq 2>&1 | grep -qi "/usr/bin/jq") ] || init_json
+
+
+[ $(which wget 2>&1 | grep -qi "/usr/bin/wget") ] || yum install -y wget
+[ $(which jq 2>&1 | grep -qi "/usr/bin/jq") ] && echo "jq was already loaded" || init_json
 
 
 
@@ -343,7 +402,8 @@ init_json(){
 rm -fr /src/salt
 	
 #ensure deployment is available
-gitploy -v 2>&1 | grep -qi "Version" && echo "" || curl  https://raw.githubusercontent.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
+#gitploy -v 2>&1 | grep -qi "Version" && echo "" || 
+curl  https://raw.githubusercontent.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
 [ -h /usr/sbin/gitploy ] || echoerr "gitploy failed install"
 
 # Handle options

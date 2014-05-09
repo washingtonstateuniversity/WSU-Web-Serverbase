@@ -227,6 +227,7 @@ build_minions(){
 	insert="$match\n\ \ \ \ -\ base${app_env}"
 	sed -i "s@$match@$insert@" $minionfile
 	
+	cp -fu $minionfile /etc/salt/minion.d/${_server_id}.conf
 	#echo `cat $minionfile`
 	#exit 0
 	return 0

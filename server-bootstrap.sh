@@ -227,7 +227,7 @@ build_minions(){
 	insert="$match\n\ \ \ \ -\ base${app_env}"
 	sed -i "s@$match@$insert@" $minionfile
 	
-	echo `cat $minionfile`
+	#echo `cat $minionfile`
 	#exit 0
 	return 0
 }
@@ -374,7 +374,7 @@ init_provision(){
 		done
 		build_minions
 	fi
-	exit 0
+	#exit 0
 	provision_env $_ENV
 	return 0
 }

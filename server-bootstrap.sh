@@ -363,8 +363,8 @@ init_provision(){
 		echo "vagrant settings"
 	else
 		init_provision_settings
-		roles=$(get_config_data '.["'$_server_id'"].local_env[]')
-		#echo $roles
+		apps=$(get_config_data '.["'$_server_id'"].apps[].name')
+		echo $apps
 		
 		#load_app 
 		

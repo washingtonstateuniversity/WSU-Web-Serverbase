@@ -215,16 +215,12 @@ build_minions(){
 	match='roles\:'
 	insert="$match"
 	roles=`echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].local_env[]"`
-	echo $roles
 	IFS=$'\n' read -d '' -a ns <<< $roles
 	IFS=' ' read -a array <<< "${ns}"
 	for role in "${array[@]}"
 	do
-		echoinfo $role
 		insert="$insert\n\ \ \ \ -\ ${role}"
-		echoinfo $insert
 	done
-	echoinfo $insert
 	sed -i "s@$match@$insert@" $minionfile
 	
 	echo `cat $minionfile`

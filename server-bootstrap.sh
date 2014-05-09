@@ -214,7 +214,8 @@ build_minions(){
 	
 	match='roles\:'
 	insert="$match"
-	for role in `echo $_CONFDATA | jq -r "[.[\"$_server_id\"].local_env[]]"`
+	IFS=', ' read -a array <<< `echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].local_env[],"`
+	for role in "${array[@]}"
 	do
 		echoinfo $role
 		insert="$insert\n\ \ \ \ -\ ${role}"

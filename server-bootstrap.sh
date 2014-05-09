@@ -363,7 +363,7 @@ init_provision(){
 		echo "vagrant settings"
 	else
 		init_provision_settings
-		apps=`echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].apps[].property"`
+		apps=`echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].apps[] | keys"`
 		echo $apps
 		
 		#load_app 

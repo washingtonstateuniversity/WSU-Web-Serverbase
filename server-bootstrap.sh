@@ -368,7 +368,9 @@ init_provision(){
 		for app in $apps
 		do
 			echo $app
-			load_app $app
+			repoid=`echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].apps[\"$app\"].repoid"`
+			echo $repoid
+			load_app "$app:$repoid"
 		done
 		#load_app 
 		

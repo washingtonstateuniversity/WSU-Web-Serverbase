@@ -365,7 +365,7 @@ init_provision(){
 		init_provision_settings
 		apps=`echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].apps | keys"`
 		echo $apps
-		for $app in $apps
+		for app in $apps
 		do
 			echo $app
 			load_app $app

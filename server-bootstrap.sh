@@ -209,7 +209,7 @@ build_minions(){
 	sed -i "s@$match@$insert@" $minionfile
 
 	match='pillar_roots\:'
-	insert="$match\n\ \ base\:\n\ \ \ \ -\ ${provisionpath}${app_pillar_roots}"
+	insert="$match\n\ \ base\:\n\ \ \ \ -\ ${provisionpath}/pillar/${app_pillar_roots}"
 	sed -i "s@$match@$insert@" $minionfile
 	
 	match='roles\:'
@@ -363,7 +363,7 @@ init_provision(){
 		echo "vagrant settings"
 	else
 		init_provision_settings
-		apps=`echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].apps[].name"`
+		apps=`echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].apps[]"`
 		echo $apps
 		
 		#load_app 

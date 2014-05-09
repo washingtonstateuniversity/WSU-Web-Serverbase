@@ -209,7 +209,7 @@ build_minions(){
 	sed -i "s@$match@$insert@" $minionfile
 
 	match='pillar_roots\:'
-	insert="$match\n\ \ base\:\n\ \ \ \ -\ ${provisionpath}/pillar/${app_pillar_roots}"
+	insert="$match\n\ \ base\:\n\ \ \ \ -\ ${provisionpath}pillar/${app_pillar_roots}"
 	sed -i "s@$match@$insert@" $minionfile
 	
 	match='roles\:'
@@ -228,7 +228,7 @@ build_minions(){
 	sed -i "s@$match@$insert@" $minionfile
 	
 	echo `cat $minionfile`
-	exit 0
+	#exit 0
 	return 0
 }
 
@@ -364,7 +364,7 @@ init_provision(){
 	else
 		init_provision_settings
 		apps=`echo $_CONFDATA | jq -r -c ".[\"$_server_id\"].apps | keys | .[]"`
-		echo $apps
+
 		for app in $apps
 		do
 			echo $app
@@ -372,12 +372,9 @@ init_provision(){
 			echo $repoid
 			load_app "$app:$repoid"
 		done
-		#load_app 
-		
-		
 		build_minions
 	fi
-	
+	exit 0
 	provision_env $_ENV
 	return 0
 }

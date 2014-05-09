@@ -224,7 +224,7 @@ build_minions(){
 	sed -i "s@$match@$insert@" $minionfile
 	
 	match='env\:'
-	insert="$match\n\ \ \ \ -\ base\:${app_env}"
+	insert="$match\n\ \ \ \ -\ base${app_env}"
 	sed -i "s@$match@$insert@" $minionfile
 	
 	echo `cat $minionfile`

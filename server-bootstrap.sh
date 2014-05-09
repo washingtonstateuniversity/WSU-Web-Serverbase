@@ -386,7 +386,8 @@ init_provision(){
 #===============================================================================
 init_json(){
 	cd /
-	[ -f "jq" ] && echo "jq was already downloaded" || wget http://stedolan.github.io/jq/download/linux64/jq
+	#[ -f "jq" ] && echo "jq was already downloaded" || 
+	wget http://stedolan.github.io/jq/download/linux64/jq
 	chmod +x ./jq
 	cp jq /usr/bin
 }
@@ -401,7 +402,8 @@ init_json(){
 rm -fr /src/salt
 	
 #ensure deployment is available
-gitploy -v 2>&1 | grep -qi "Version" && echo "" || curl  https://raw.githubusercontent.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
+#gitploy -v 2>&1 | grep -qi "Version" && echo "" || 
+curl  https://raw.githubusercontent.com/jeremyBass/gitploy/master/gitploy | sudo sh -s -- install
 [ -h /usr/sbin/gitploy ] || echoerr "gitploy failed install"
 
 # Handle options

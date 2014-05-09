@@ -6,7 +6,7 @@
     {% if vars.update({'isLocal': True}) %} {% endif %}
 {%- endfor %}
 
-postfix:
+email_postfix:
     pkg:
         - installed
     service:
@@ -28,7 +28,7 @@ mailutils:
     pkg:
         - installed
         - require:
-            - pkg: postfix
+            - pkg: email_postfix
             - cmd: newaliases
 
 /etc/postfix:
@@ -37,7 +37,7 @@ mailutils:
         - group: root
         - mode: 755
         - require:
-            - pkg: postfix
+            - pkg: email_postfix
 
 /etc/postfix/main.cf:
     file.managed:
@@ -47,7 +47,7 @@ mailutils:
         - group: root
         - mode: 644
         - require:
-            - pkg: postfix
+            - pkg: email_postfix
             - file: /etc/postfix
 
 /etc/postfix/sasl_password:
@@ -58,7 +58,7 @@ mailutils:
         - group: root
         - mode: 644
         - require:
-            - pkg: postfix
+            - pkg: email_postfix
             - file: /etc/postfix
 
 make_sasl_password.db:
@@ -70,7 +70,7 @@ make_sasl_password.db:
         - watch:
             - file: /etc/postfix/sasl_password
         - require:
-            - pkg: postfix
+            - pkg: email_postfix
             - file: /usr/local/bin/newer_than
 
 /etc/postfix/generic:
@@ -81,7 +81,7 @@ make_sasl_password.db:
         - group: root
         - mode: 644
         - require:
-            - pkg: postfix
+            - pkg: email_postfix
             - file: /etc/postfix
 
 make_generic.db:
@@ -93,7 +93,7 @@ make_generic.db:
         - watch:
             - file: /etc/postfix/generic
         - require:
-            - pkg: postfix
+            - pkg: email_postfix
             - file: /usr/local/bin/newer_than
 
 /etc/aliases:
@@ -104,7 +104,7 @@ make_generic.db:
         - group: root
         - mode: 644
         - require:
-            - pkg: postfix
+            - pkg: email_postfix
 
 newaliases:
     cmd:
@@ -114,5 +114,5 @@ newaliases:
         - watch:
             - file: /etc/aliases
         - require:
-            - pkg: postfix
+            - pkg: email_postfix
             - file: /usr/local/bin/newer_than

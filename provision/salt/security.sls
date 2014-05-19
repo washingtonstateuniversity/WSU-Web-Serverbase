@@ -56,7 +56,7 @@ fail2ban:
     - mode: 600
 
 # Provide the actions directory for fail2ban
-/etc/fail2ban/actions.d/
+/etc/fail2ban/actions.d:
   file.directory:
     - user: root
     - group: root

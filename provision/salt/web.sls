@@ -53,7 +53,7 @@ nginx-compiler-base:
 
 # ensure folders to run nginx
 ###########################################################
-# Provide the cache directory for nginx
+# Provide the sites directory for nginx
 /etc/nginx/sites-enabled/
   file.directory:
     - user: root

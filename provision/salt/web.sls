@@ -53,6 +53,15 @@ nginx-compiler-base:
 
 # ensure folders to run nginx
 ###########################################################
+# Provide the sites directory for nginx
+/etc/nginx/sites-enabled/
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 600
+    - makedirs: true
+    - require_in:
+      - cmd: nginx-compile
 
 # Provide the cache directory for nginx
 /var/cache/nginx:

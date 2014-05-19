@@ -54,7 +54,16 @@ fail2ban:
     - user: root
     - group: root
     - mode: 600
-    
+
+# Provide the actions directory for fail2ban
+/etc/fail2ban/actions.d/
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 600
+    - makedirs: true
+
+
 /etc/fail2ban/actions.d/mail.-nmap.conf:
   file.managed:
     - source: salt://config/fail2ban/actions.d/mail.-nmap.conf

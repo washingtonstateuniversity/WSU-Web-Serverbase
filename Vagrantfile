@@ -116,7 +116,9 @@ Vagrant.configure("2") do |config|
 					$provision_script<<"curl -L https://raw.githubusercontent.com/#{bootstrap_path}/server-bootstrap.sh | sudo sh -s -- "
 					vmConfig.vm.synced_folder "provision/salt/minions", "/srv/salt/base/minions"
 					$provision_script<<" -m #{@server_obj[:minion]}_#{@server_obj[:hostname]} "
-				
+
+					vmConfig.vm.provision :shell, :inline => "cp /vagrant/config.json /srv/salt/base/config.json"
+
 				# Set up the web apps
 				################################################################  
 				

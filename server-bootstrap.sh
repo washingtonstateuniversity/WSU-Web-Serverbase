@@ -223,7 +223,7 @@ build_minions(){
 	IFS=' ' read -a array <<< "${ns}"
 	for role in "${array[@]}"
 	do
-		if [ ! $(grep -q "    - ${role}" $minionfile) ];then
+		if [ ! $(grep "    - ${role}" $minionfile) ];then
 			insert="$insert\n\ \ \ \ -\ ${role}"
 		fi
 	done

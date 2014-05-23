@@ -210,9 +210,10 @@ build_minions(){
 
 	match='pillar_roots\:'
 	insert="$match\n\ \ base\:\n\ \ \ \ -\ ${provisionpath}pillar/${app_pillar_roots}"
-	if [ ! grep -q "${insert}" $minionfile ];then
-		sed -i "s@$match@$insert@" $minionfile
-	fi
+	sed -i "s@$match@$insert@" $minionfile
+	#if [ ! grep -q "${insert}" $minionfile ];then
+	#	sed -i "s@$match@$insert@" $minionfile
+	#fi
 	
 	
 	match='roles\:'
@@ -222,7 +223,7 @@ build_minions(){
 	IFS=' ' read -a array <<< "${ns}"
 	for role in "${array[@]}"
 	do
-		if [ ! grep "\- ${role}" $minionfile ];then
+		if [ ! grep -q "    - ${role}" $minionfile ];then
 			insert="$insert\n\ \ \ \ -\ ${role}"
 		fi
 	done

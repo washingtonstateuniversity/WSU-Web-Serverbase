@@ -1,5 +1,5 @@
 {
-	"server2": {
+	"web_server": {
 		"ip":"2",
 		"branch":"master",
 		"owner":"washingtonstateuniversity",

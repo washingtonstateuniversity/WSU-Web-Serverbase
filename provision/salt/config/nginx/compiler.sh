@@ -41,11 +41,11 @@ ini(){
     tar -xzf openssl-1.0.1g.tar.gz 2>/dev/null
 
     #get page speed
-    wget -N -O ngx_pagespeed-1.7.30.4-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.4-beta.zip 2>/dev/null
-    unzip -o ngx_pagespeed-1.7.30.4-beta.zip 2>/dev/null # or unzip v1.7.30.2-beta
-    cd ngx_pagespeed-1.7.30.4-beta/
-    wget -N -O page-speed-psol-1.7.30.4.tar.gz https://dl.google.com/dl/page-speed/psol/1.7.30.4.tar.gz 2>/dev/null
-    tar -xzvf page-speed-psol-1.7.30.4.tar.gz 2>/dev/null # expands to psol/
+    wget -N -O ngx_pagespeed-1.8.31.3-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.8.31.3-beta.zip 2>/dev/null
+    unzip -o ngx_pagespeed-1.8.31.3-beta.zip 2>/dev/null # or unzip v1.7.30.2-beta
+    cd ngx_pagespeed-1.8.31.3-beta/
+    wget -N -O page-speed-psol-1.8.31.3.tar.gz https://dl.google.com/dl/page-speed/psol/1.8.31.3.tar.gz 2>/dev/null
+    tar -xzvf page-speed-psol-1.8.31.3.tar.gz 2>/dev/null # expands to psol/
     
     #mkdir /tmp/nginx-modules
     #cd /tmp/nginx-modules
@@ -90,7 +90,7 @@ ini(){
 --with-http_realip_module \
 --without-http_scgi_module \
 --without-http_uwsgi_module \
---add-module=/src/nginx/ngx_pagespeed-1.7.30.4-beta \
+--add-module=/src/nginx/ngx_pagespeed-1.8.31.3-beta \
 --add-module=/src/nginx/modsecurity-2.8.0/nginx/modsecurity
     make && make install
 }

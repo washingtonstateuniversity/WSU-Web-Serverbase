@@ -388,6 +388,7 @@ init_provision(){
 init_json(){
 	cd /
 	#[ -f "jq" ] && echo "jq was already downloaded" || 
+	yum -y install libc6
 	wget http://stedolan.github.io/jq/download/linux64/jq
 	chmod +x ./jq
 	cp jq /usr/bin

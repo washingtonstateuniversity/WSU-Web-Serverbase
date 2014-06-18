@@ -289,6 +289,7 @@ php-fpm:
       - php-fpm
       - php-cli
       - php-common
+      - soap
       - php-pear
       - php-pdo
 {% if 'database' in grains.get('roles') %}

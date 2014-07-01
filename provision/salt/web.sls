@@ -299,6 +299,7 @@ php-fpm:
       - php-imap
       - php-gd
       - php-mbstring
+      - php-ldap
       - php-pecl-zendopcache
       - php-pecl-memcached
     - require:

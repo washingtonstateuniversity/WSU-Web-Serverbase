@@ -20,6 +20,7 @@ ini(){
 	./xt_geoip_dl
 	./xt_geoip_build GeoIPCountryWhois.csv
 	mkdir -p /usr/share/xt_geoip/
+	rm -rf /usr/share/xt_geoip/*
 	cp -r {BE,LE} /usr/share/xt_geoip/
 
 	# Iptables configuration script

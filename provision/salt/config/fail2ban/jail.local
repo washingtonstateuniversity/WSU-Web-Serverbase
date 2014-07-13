@@ -3,6 +3,12 @@
 ignoreip = 127.0.0.1
 bantime  = 3600
 maxretry = 3 
+destemail = web.support@wsu.edu
+sender = no.reply@wsu.edu
+mta = sendmail
+
+
+
 
 [ssh]
 enabled = true

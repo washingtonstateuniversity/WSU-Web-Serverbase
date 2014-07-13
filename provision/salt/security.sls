@@ -45,7 +45,16 @@ fail2ban:
     - user: root
     - group: root
     - mode: 600
-    
+
+#we want to store the ip blocked
+/etc/fail2ban/ip.blacklist:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 600
+
+
+
 # set up so passive filters that look for some we app logs like spam from WP and Magento
 # this are only example defaults.  Should be altered to best fit with least amount Ad hoc
 /etc/fail2ban/filter.d/spam-log.conf:

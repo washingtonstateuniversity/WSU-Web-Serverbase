@@ -8,8 +8,6 @@ sender = no.reply@wsu.edu
 mta = sendmail
 
 
-
-
 [ssh]
 enabled = true
 logfile = /var/log/auth.log
@@ -38,4 +36,16 @@ action   = iptables[name=SSH, port=ssh, protocol=tcp]
            sendmail-whois[name=SSH, dest=web.support@wsu.edu, sender=no.reply@wsu.edu]
 logpath  = /var/log/secure
            /var/log/auth.log
+maxretry = 3
+
+#http://tscadfx.com/permanently-ban-repeat-offenders-with-fail2ban/
+[repeatoffender]
+enabled  = true
+filter   = repeatoffender
+action   = repeatoffender[name=repeatoffender]
+           sendmail-whois[name=Repeat-Offender, dest=web.support@wsu.edu, sender=no.reply@wsu.edu]
+logpath  = /var/log/fail2ban.log
 maxretry = 5
+findtime = 31536000
+bantime  = -1
+

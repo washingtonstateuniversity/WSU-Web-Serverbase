@@ -29,8 +29,7 @@ bantime  = 86400
 enabled  = true
 filter   = sshd
 action   = iptables[name=SSH, port=ssh, protocol=tcp]
-           sendmail-whois[name=SSH, dest=root, sender=deatrats@wsu.edu]
-           mail-nmap[name=SSH, dest=deatrats@wsu.edu]
+           sendmail-whois[name=SSH, dest=web.support@wsu.edu, sender=no.reply@wsu.edu]
 logpath  = /var/log/secure
            /var/log/auth.log
 maxretry = 5

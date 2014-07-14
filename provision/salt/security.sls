@@ -45,7 +45,24 @@ fail2ban:
     - user: root
     - group: root
     - mode: 600
-    
+
+/etc/fail2ban/fail2ban.conf:
+  file.managed:
+    - source: salt://config/fail2ban/fail2ban.conf
+    - user: root
+    - group: root
+    - mode: 600
+
+
+#we want to store the ip blocked
+/etc/fail2ban/ip.blacklist:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 600
+
+
+
 # set up so passive filters that look for some we app logs like spam from WP and Magento
 # this are only example defaults.  Should be altered to best fit with least amount Ad hoc
 /etc/fail2ban/filter.d/spam-log.conf:
@@ -54,6 +71,14 @@ fail2ban:
     - user: root
     - group: root
     - mode: 600
+
+/etc/fail2ban/filter.d/repeatoffender.conf:
+  file.managed:
+    - source: salt://config/fail2ban/filter.d/repeatoffender.conf
+    - user: root
+    - group: root
+    - mode: 600
+
 
 # Provide the actions directory for fail2ban
 /etc/fail2ban/actions.d:
@@ -70,7 +95,29 @@ fail2ban:
     - user: root
     - group: root
     - mode: 600
-    
+
+
+/etc/fail2ban/actions.d/iptables-multiport.conf:
+  file.managed:
+    - source: salt://config/fail2ban/actions.d/iptables-multiport.conf
+    - user: root
+    - group: root
+    - mode: 600
+
+/etc/fail2ban/actions.d/repeatoffender.conf:
+  file.managed:
+    - source: salt://config/fail2ban/actions.d/repeatoffender.conf
+    - user: root
+    - group: root
+    - mode: 600
+
+
+/etc/logrotate.d/fail2ban:
+  file.managed:
+    - source: salt://config/fail2ban/logrotate.d/fail2ban
+    - user: root
+    - group: root
+    - mode: 600
 
 # Set fail2ban to run in levels 2345.
 fail2ban-reboot-auto:

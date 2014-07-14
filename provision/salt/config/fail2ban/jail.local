@@ -3,6 +3,10 @@
 ignoreip = 127.0.0.1
 bantime  = 3600
 maxretry = 3 
+destemail = web.support@wsu.edu
+sender = no.reply@wsu.edu
+mta = sendmail
+
 
 [ssh]
 enabled = true
@@ -29,8 +33,19 @@ bantime  = 86400
 enabled  = true
 filter   = sshd
 action   = iptables[name=SSH, port=ssh, protocol=tcp]
-           sendmail-whois[name=SSH, dest=root, sender=deatrats@wsu.edu]
-           mail-nmap[name=SSH, dest=deatrats@wsu.edu]
+           sendmail-whois[name=SSH, dest=web.support@wsu.edu, sender=no.reply@wsu.edu]
 logpath  = /var/log/secure
            /var/log/auth.log
+maxretry = 3
+
+#http://tscadfx.com/permanently-ban-repeat-offenders-with-fail2ban/
+[repeatoffender]
+enabled  = true
+filter   = repeatoffender
+action   = repeatoffender[name=repeatoffender]
+           sendmail-whois[name=Repeat-Offender, dest=web.support@wsu.edu, sender=no.reply@wsu.edu]
+logpath  = /var/log/fail2ban.log
 maxretry = 5
+findtime = 31536000
+bantime  = -1
+

@@ -10,9 +10,9 @@ ini(){
 	rpm -i http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-2.el6.rf.i686.rpm
 	yum -y install perl-Text-CSV_XS
 
-	wget http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons/1.37/xtables-addons-1.37.tar.xz
-	tar xvf xtables-addons-1.37.tar.xz
-	cd xtables-addons-1.37/
+	wget http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons/2.5/xtables-addons-2.5.tar.xz
+	tar xvf xtables-addons-2.5.tar.xz
+	cd xtables-addons-2.5/
 	./configure
 	make && make install
 
@@ -20,6 +20,7 @@ ini(){
 	./xt_geoip_dl
 	./xt_geoip_build GeoIPCountryWhois.csv
 	mkdir -p /usr/share/xt_geoip/
+	rm -rf /usr/share/xt_geoip/*
 	cp -r {BE,LE} /usr/share/xt_geoip/
 
 	# Iptables configuration script

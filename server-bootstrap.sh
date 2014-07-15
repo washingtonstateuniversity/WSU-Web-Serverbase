@@ -268,7 +268,7 @@ load_app(){
 		else
 			gitploy init
 			#bring it in with modgit
-			gitploy ${modname} "https://github.com/${repopath}.git"
+			gitploy -q add ${modname} "https://github.com/${repopath}.git"
 		fi
 		ln -s /var/app/${appname}/provision/salt/ ${sympath} && echostd "linked /var/app/${appname}/provision/salt/ ${sympath}"
 	fi

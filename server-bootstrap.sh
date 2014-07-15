@@ -339,25 +339,12 @@ init_provision(){
 	
 	local ssh_agent_dec="Defaults    env_keep+=SSH_AUTH_SOCK"
 	local sudoFile=/etc/sudoers 
-	if grep -Fxq "$ssh_agent_dec" $sudoFile
-	then
-		# code if found
-	else
-		echo $ssh_agent_dec >> sudoFile
-	fi
-	
+	grep -Fxq "$ssh_agent_dec" $sudoFile || echo $ssh_agent_dec >> sudoFile
+
 	local gitHostSSHconfig="Host github.com"
 	local ssh_configFile=~/.ssh/config 
-	if grep -Fxq "$gitHostSSHconfig" $ssh_configFile
-	then
-		# code if found
-	else
-		echo "Host github.com\rHostname ssh.github.com\rPort 443" >> sudoFile
-	fi
-	
-	
-	
-	
+	grep -Fxq "$gitHostSSHconfig" $ssh_configFile || echo "Host github.com\rHostname ssh.github.com\rPort 443" >> sudoFile
+
 	#start cloning it the provisioner
 	[[ -z "${_BRANCH}" ]] || _BRANCH=' -b '$_BRANCH
 	[[ -z "${_TAG}" ]] || _TAG=' -t '$_TAG

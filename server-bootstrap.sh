@@ -335,6 +335,29 @@ init_provision(){
 	[ -d /src/salt/serverbase ] || mkdir -p /src/salt/serverbase
 	[ -d /srv/salt/base ] || mkdir -p /srv/salt/base
 	
+	 
+	
+	local ssh_agent_dec="Defaults    env_keep+=SSH_AUTH_SOCK"
+	local sudoFile=/etc/sudoers 
+	if grep -Fxq "$ssh_agent_dec" $sudoFile
+	then
+		# code if found
+	else
+		echo $ssh_agent_dec >> sudoFile
+	fi
+	
+	local gitHostSSHconfig="Host github.com"
+	local ssh_configFile=~/.ssh/config 
+	if grep -Fxq "$gitHostSSHconfig" $ssh_configFile
+	then
+		# code if found
+	else
+		echo "Host github.com\rHostname ssh.github.com\rPort 443" >> sudoFile
+	fi
+	
+	
+	
+	
 	#start cloning it the provisioner
 	[[ -z "${_BRANCH}" ]] || _BRANCH=' -b '$_BRANCH
 	[[ -z "${_TAG}" ]] || _TAG=' -t '$_TAG

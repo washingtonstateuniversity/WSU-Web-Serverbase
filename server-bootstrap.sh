@@ -344,6 +344,7 @@ init_provision(){
 
 	local gitHostSSHconfig="Host github.com"
 	local ssh_configFile=~/.ssh/config 
+	touch ~/.ssh/config
 	grep -Fxq "$gitHostSSHconfig" $ssh_configFile || echo "Host github.com\rHostname ssh.github.com\rPort 443" >> sudoFile
 
 	#start cloning it the provisioner

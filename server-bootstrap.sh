@@ -95,7 +95,11 @@ _CONFDATA=""
 #===============================================================================
 is_localhost() {
   echo $(ip addr show dev eth1 2>&1 | grep "inet " 2>&1 | awk '{ print $2 }' 2>&1)
-  return ip addr show dev eth1 2>&1 | grep "inet " 2>&1 | awk '{ print $2 }' 2>&1 | grep -qi "10.255.255" && 0 || 1
+  if $(ip addr show dev eth1 2>&1 | grep "inet " 2>&1 | awk '{ print $2 }' 2>&1 | grep -qi "10.255.255")
+  	return 0
+  else
+  	return 1
+  fi
 }
 
 #===  FUNCTION  ================================================================

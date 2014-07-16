@@ -94,7 +94,7 @@ _CONFDATA=""
 #                 have flaged it local.  By defualt we are on "production"
 #===============================================================================
 is_localhost() {
-  return ip addr show dev eth0 2>&1 | grep "inet " 2>&1 | awk '{ print $2 }' 2>&1 | grep -qi "10.255.255" && true || false
+  return ip addr show dev eth1 2>&1 | grep "inet " 2>&1 | awk '{ print $2 }' 2>&1 | grep -qi "10.255.255" && true || false
 }
 
 #===  FUNCTION  ================================================================

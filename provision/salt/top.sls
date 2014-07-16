@@ -16,12 +16,9 @@ base:
 {% if 'database' in grains.get('roles') %}
     - database
 {% endif %}
-{% if vars.isLocal %}
-{% else %}
 {% if 'security' in grains.get('roles') %}
     - security
 {% endif %}
-{%- endif %}
 {% if 'ssl' in grains.get('roles') %}
     - ssl
 {% endif %}

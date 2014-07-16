@@ -268,7 +268,7 @@ load_app(){
 		else
 			gitploy init
 			#bring it in with modgit
-			gitploy ${modname} "https://github.com/${repopath}.git"
+			gitploy -q add ${modname} "https://github.com/${repopath}.git"
 		fi
 		ln -s /var/app/${appname}/provision/salt/ ${sympath} && echostd "linked /var/app/${appname}/provision/salt/ ${sympath}"
 	fi
@@ -335,6 +335,16 @@ init_provision(){
 	[ -d /src/salt/serverbase ] || mkdir -p /src/salt/serverbase
 	[ -d /srv/salt/base ] || mkdir -p /srv/salt/base
 	
+	 
+	
+	local ssh_agent_dec="Defaults    env_keep+=SSH_AUTH_SOCK"
+	local sudoFile=/etc/sudoers 
+	grep -Fxq "$ssh_agent_dec" $sudoFile || echo $ssh_agent_dec >> sudoFile
+
+	local gitHostSSHconfig="Host github.com"
+	local ssh_configFile=~/.ssh/config 
+	grep -Fxq "$gitHostSSHconfig" $ssh_configFile || echo "Host github.com\rHostname ssh.github.com\rPort 443" >> sudoFile
+
 	#start cloning it the provisioner
 	[[ -z "${_BRANCH}" ]] || _BRANCH=' -b '$_BRANCH
 	[[ -z "${_TAG}" ]] || _TAG=' -t '$_TAG
@@ -356,7 +366,7 @@ init_provision(){
 	fi
 	
 	[ -d /etc/salt/minion.d ] || mkdir -p /etc/salt/minion.d
-	sh /srv/salt/base/boot/bootstrap-salt.sh
+	sh /srv/salt/base/boot/bootstrap-salt.sh git v2014.1.7
 	
 
 	if is_localhost;
@@ -388,7 +398,7 @@ init_provision(){
 init_json(){
 	cd /
 	#[ -f "jq" ] && echo "jq was already downloaded" || 
-	wget http://stedolan.github.io/jq/download/linux64/jq-1.3/jq
+	wget http://stedolan.github.io/jq/download/linux64/jq
 	chmod +x ./jq
 	cp jq /usr/bin
 }

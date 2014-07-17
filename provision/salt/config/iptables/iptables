@@ -19,9 +19,11 @@ iptables -P OUTPUT DROP
 # Allow incoming HTTP
 iptables -A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -o eth0 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
+{% if 'ssl' in grains.get('roles') %}
 # Allow incoming HTTPS
 iptables -A INPUT -i eth0 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
+{% endif %}
 {% endif %}
 
 

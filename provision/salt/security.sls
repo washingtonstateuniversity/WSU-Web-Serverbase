@@ -19,12 +19,12 @@
     - user: root
     - group: root
     - mode: 600
-  cmd.run: #insure it's going to run on windows hosts.. note it's files as folders the git messes up
-    - name: dos2unix /etc/sysconfig/iptables
     - template: jinja
     - context:
       isLocal: {{ vars.isLocal }}
       saltenv: {{ saltenv }}
+  cmd.run: #insure it's going to run on windows hosts.. note it's files as folders the git messes up
+    - name: dos2unix /etc/sysconfig/iptables
     - require:
       - pkg: dos2unix
     

@@ -27,6 +27,9 @@ iptables -A OUTPUT -o lo -j ACCEPT
 # if eth1 is connected to external network (internet)
 # if eth0 is connected to internal network (192.168.1.x)
 iptables -A FORWARD -i eth0 -o eth1 -j ACCEPT
+# c
+iptables -A OUTPUT -p udp -o eth0 --dport 53 -j ACCEPT
+iptables -A INPUT -p udp -i eth0 --sport 53 -j ACCEPT
 
 
 

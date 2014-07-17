@@ -11,6 +11,9 @@ iptables -A INPUT -p tcp --dport 80,443 -m limit --limit 5/minute --limit-burst 
 # Syn-flood protection
 iptables -A FORWARD -p tcp --syn -m limit --limit 1/s -j ACCEPT
 
+# Furtive port scanner
+iptables -A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST \
+
 
 
 # Log dropped packets

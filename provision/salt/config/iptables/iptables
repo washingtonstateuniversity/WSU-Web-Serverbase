@@ -23,6 +23,10 @@ iptables -A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j AC
 # Allow loopback access
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
+# Allow packets from internal network to reach external network.
+# if eth1 is connected to external network (internet)
+# if eth0 is connected to internal network (192.168.1.x)
+iptables -A FORWARD -i eth0 -o eth1 -j ACCEPT
 
 
 

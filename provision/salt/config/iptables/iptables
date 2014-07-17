@@ -7,6 +7,8 @@
 
 # protection based on http://thelowedown.wordpress.com/2008/07/03/iptables-how-to-use-the-limits-module/
 # and https://gist.github.com/virtualstaticvoid/1024546
+# and http://www.cyberciti.biz/tips/howto-limit-linux-syn-attacks.html
+
 
 # Prevent DoS attack
 iptables -A INPUT -p tcp --dport 22 -m limit --limit 5/minute --limit-burst 10 -j ACCEPT
@@ -18,8 +20,16 @@ iptables -A FORWARD -p tcp --syn -m limit --limit 1/s -j ACCEPT
 # Furtive port scanner
 iptables -A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST \
 
+
 # Ping of death
 iptables -A FORWARD -p icmp --icmp-type echo-request -m limit \ --limit 1/s -j ACCEPT
+
+# Limiting the incoming icmp ping request
+iptables -A INPUT -p icmp -m limit --limit  1/s --limit-burst 1 -j ACCEPT
+iptables -A INPUT -p icmp -m limit --limit 1/s --limit-burst 1 -j LOG --log-prefix PING-DROP:
+iptables -A INPUT -p icmp -j DROP
+iptables -A OUTPUT -p icmp -j ACCEPT
+
 
 
 

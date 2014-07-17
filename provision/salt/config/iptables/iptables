@@ -14,12 +14,14 @@
 iptables -P INPUT DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT DROP
+
 # Allow incoming HTTP
 iptables -A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -o eth0 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
 # Allow incoming HTTPS
 iptables -A INPUT -i eth0 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
+
 # Allow loopback access
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
@@ -27,9 +29,18 @@ iptables -A OUTPUT -o lo -j ACCEPT
 # if eth1 is connected to external network (internet)
 # if eth0 is connected to internal network (192.168.1.x)
 iptables -A FORWARD -i eth0 -o eth1 -j ACCEPT
-# c
+# Allow outbound DNS
 iptables -A OUTPUT -p udp -o eth0 --dport 53 -j ACCEPT
 iptables -A INPUT -p udp -i eth0 --sport 53 -j ACCEPT
+
+{% if 'database' in grains.get('roles') %}
+#---------------------------------------------------------
+# DATABASE Connections
+#---------------------------------------------------------
+# Allow MySQL connection only from a specific network
+iptables -A INPUT -i eth0 -p tcp -s 192.168.200.0/24 --dport 3306 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --sport 3306 -m state --state ESTABLISHED -j ACCEPT
+{% endif %}
 
 
 

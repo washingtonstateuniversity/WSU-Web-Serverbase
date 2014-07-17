@@ -3,5 +3,16 @@
 :INPUT ACCEPT [81:5076]
 :FORWARD ACCEPT [0:0]
 :OUTPUT ACCEPT [44:3868]
+
+
+
+
+
+iptables -N LOGGING
+iptables -A INPUT -j LOGGING
+iptables -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7
+iptables -A LOGGING -j DROP
+
+
 COMMIT
 # End

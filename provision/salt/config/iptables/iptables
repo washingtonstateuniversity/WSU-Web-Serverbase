@@ -57,6 +57,9 @@ iptables -A syn_flood -j DROP
 
 # Furtive port scanner
 iptables -A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST \
+iptables -A port-scan -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j RETURN
+iptables -A port-scan -j DROP
+
 
 # Ping of death
 iptables -A FORWARD -p icmp --icmp-type echo-request -m limit \ --limit 1/s -j ACCEPT

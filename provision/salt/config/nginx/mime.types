@@ -30,6 +30,7 @@ types {
     text/vnd.wap.wml                      wml;
     text/x-component                      htc;
     
+    application/ogg                       ogg;
     application/java-archive              jar war ear;
     application/json                      json;
     application/mac-binhex40              hqx;
@@ -38,7 +39,7 @@ types {
     application/postscript                ps eps ai;
     application/rtf                       rtf;
     application/vnd.ms-excel              xls;
-    #application/vnd.ms-fontobject         eot;
+    #application/vnd.ms-fontobject        eot;
     application/vnd.ms-powerpoint         ppt;
     application/vnd.wap.wmlc              wmlc;
     application/vnd.google-earth.kml+xml  kml;
@@ -74,10 +75,12 @@ types {
 
     audio/midi                            mid midi kar;
     audio/mpeg                            mp3;
-    audio/ogg                             ogg;
+    audio/ogg                             oga;
     audio/x-m4a                           m4a;
     audio/x-realaudio                     ra;
-	
+
+    video/ogg                             ogv;
+    video/3gpp                            3gpp 3gp;
     video/3gpp                            3gpp 3gp;
     video/mp4                             mp4;
     video/mpeg                            mpeg mpg;
@@ -89,6 +92,5 @@ types {
     video/x-ms-asf                        asx asf;
     video/x-ms-wmv                        wmv;
     video/x-msvideo                       avi;
-	
-	
+
 }

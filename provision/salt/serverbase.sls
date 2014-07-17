@@ -31,7 +31,7 @@ incron:
     - name: incron
 
 # Set incron to run in levels 2345.
-php-fpm-reboot-auto:
+incrond-reboot-auto:
   cmd.run:
     - name: chkconfig --level 2345 incrond on
     - cwd: /

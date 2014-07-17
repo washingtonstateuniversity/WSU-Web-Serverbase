@@ -30,7 +30,14 @@ incron:
   pkg.installed:
     - name: incron
 
-
+# Set incron to run in levels 2345.
+php-fpm-reboot-auto:
+  cmd.run:
+    - name: chkconfig --level 2345 incrond on
+    - cwd: /
+    - user: root
+    - require:
+      - pkg: incrond
 
 ###########################################################
 ###########################################################

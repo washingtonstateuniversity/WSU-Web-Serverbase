@@ -79,9 +79,9 @@
 
 # limit ssh to 10 connections in 10mins
 #---------------------------------------------------------
--I INPUT -p tcp -s 0/0 -d $SERVER_IP --sport 513:65535 --dport 22 -m state --state NEW,ESTABLISHED -m recent --set -j ACCEPT
+-I INPUT -p tcp -s 0/0 -d {{ ip }} --sport 513:65535 --dport 22 -m state --state NEW,ESTABLISHED -m recent --set -j ACCEPT
 -I INPUT -p tcp --dport 22 -m state --state NEW -m recent --update --seconds 600 --hitcount 11 -j DROP
--A OUTPUT -p tcp -s $SERVER_IP -d 0/0 --sport 22 --dport 513:65535 -m state --state ESTABLISHED -j ACCEPT
+-A OUTPUT -p tcp -s {{ ip }} -d 0/0 --sport 22 --dport 513:65535 -m state --state ESTABLISHED -j ACCEPT
 
 
 #---------------------------------------------------------
@@ -90,7 +90,8 @@
 # Prevent general DoS attack
 #---------------------------------------------------------
 -A INPUT -p tcp --dport 22 -m limit --limit 5/minute --limit-burst 10 -j ACCEPT
--A INPUT -p tcp --dport 80,443 -m limit --limit 5/minute --limit-burst 100 -j ACCEPT
+-A INPUT -p tcp --dport 80 -m limit --limit 5/minute --limit-burst 100 -j ACCEPT
+-A INPUT -p tcp --dport 443 -m limit --limit 5/minute --limit-burst 100 -j ACCEPT
 
 # Syn-flood protection
 #---------------------------------------------------------
@@ -105,14 +106,14 @@
 
 # Furtive port scanner
 #---------------------------------------------------------
--A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST \
--A port-scan -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j RETURN
--A port-scan -j DROP
+#-A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST \
+#-A port-scan -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j RETURN
+#-A port-scan -j DROP
 
 
 # Ping of death
 #---------------------------------------------------------
--A FORWARD -p icmp --icmp-type echo-request -m limit \ --limit 1/s -j ACCEPT
+#-A FORWARD -p icmp --icmp-type echo-request -m limit \ --limit 1/s -j ACCEPT
 
 # Limiting the incoming icmp ping request
 #---------------------------------------------------------

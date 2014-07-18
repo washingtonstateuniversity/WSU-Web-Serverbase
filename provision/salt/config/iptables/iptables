@@ -1,53 +1,66 @@
 # Allow all traffic.
-#*filter
-#:INPUT ACCEPT [81:5076]
-#:FORWARD ACCEPT [0:0]
-#:OUTPUT ACCEPT [44:3868]
+#---------------------------------------------------------
+*filter
+:INPUT ACCEPT [81:5076]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [44:3868]
 
-
+#---------------------------------------------------------
 # protection based on http://thelowedown.wordpress.com/2008/07/03/iptables-how-to-use-the-limits-module/
 # and https://gist.github.com/virtualstaticvoid/1024546
 # and http://www.cyberciti.biz/tips/howto-limit-linux-syn-attacks.html
+#---------------------------------------------------------
+
 #---------------------------------------------------------
 # General rules
 #---------------------------------------------------------
 # it is gerenally view as best practice to drop all and add
 # just what is needed.  Drop and reject to prevent abuse 
 # of the system and sour the milk
-iptables -P INPUT DROP
-iptables -P FORWARD DROP
-iptables -P OUTPUT DROP
+#---------------------------------------------------------
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT DROP
 
 {% if 'web' in grains.get('roles') %}
 # Allow incoming HTTP
-iptables -A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -o eth0 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
+#---------------------------------------------------------
+-A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A OUTPUT -o eth0 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
+
 {% if 'ssl' in grains.get('roles') %}
 # Allow incoming HTTPS
-iptables -A INPUT -i eth0 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
+#---------------------------------------------------------
+-A INPUT -i eth0 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
 {% endif %}
 {% endif %}
 
 
 # Allow loopback access
-iptables -A INPUT -i lo -j ACCEPT
-iptables -A OUTPUT -o lo -j ACCEPT
+#---------------------------------------------------------
+-A INPUT -i lo -j ACCEPT
+-A OUTPUT -o lo -j ACCEPT
+
 # Allow packets from internal network to reach external network.
 # if eth1 is connected to external network (internet)
 # if eth0 is connected to internal network (192.168.1.x)
-iptables -A FORWARD -i eth0 -o eth1 -j ACCEPT
+#---------------------------------------------------------
+-A FORWARD -i eth0 -o eth1 -j ACCEPT
+
 # Allow outbound DNS
-iptables -A OUTPUT -p udp -o eth0 --dport 53 -j ACCEPT
-iptables -A INPUT -p udp -i eth0 --sport 53 -j ACCEPT
+#---------------------------------------------------------
+-A OUTPUT -p udp -o eth0 --dport 53 -j ACCEPT
+-A INPUT -p udp -i eth0 --sport 53 -j ACCEPT
 
 {% if 'database' in grains.get('roles') %}
 #---------------------------------------------------------
 # DATABASE Connections
 #---------------------------------------------------------
 # Allow MySQL connection only from a specific network
-iptables -A INPUT -i eth0 -p tcp -s 192.168.200.0/24 --dport 3306 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -o eth0 -p tcp --sport 3306 -m state --state ESTABLISHED -j ACCEPT
+#---------------------------------------------------------
+-A INPUT -i eth0 -p tcp -s 192.168.200.0/24 --dport 3306 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A OUTPUT -o eth0 -p tcp --sport 3306 -m state --state ESTABLISHED -j ACCEPT
 {% endif %}
 
 
@@ -55,56 +68,69 @@ iptables -A OUTPUT -o eth0 -p tcp --sport 3306 -m state --state ESTABLISHED -j A
 # SSH
 #---------------------------------------------------------
 # Allow ALL incoming SSH
-iptables -A INPUT -i eth0 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -o eth0 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+#---------------------------------------------------------
+-A INPUT -i eth0 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A OUTPUT -o eth0 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+
 # Allow outgoing SSH
-iptables -A OUTPUT -o eth0 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT -i eth0 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+#---------------------------------------------------------
+-A OUTPUT -o eth0 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -i eth0 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+
 # limit ssh to 10 connections in 10mins
-iptables -I INPUT -p tcp -s 0/0 -d $SERVER_IP --sport 513:65535 --dport 22 -m state --state NEW,ESTABLISHED -m recent --set -j ACCEPT
-iptables -I INPUT -p tcp --dport 22 -m state --state NEW -m recent --update --seconds 600 --hitcount 11 -j DROP
-iptables -A OUTPUT -p tcp -s $SERVER_IP -d 0/0 --sport 22 --dport 513:65535 -m state --state ESTABLISHED -j ACCEPT
+#---------------------------------------------------------
+-I INPUT -p tcp -s 0/0 -d $SERVER_IP --sport 513:65535 --dport 22 -m state --state NEW,ESTABLISHED -m recent --set -j ACCEPT
+-I INPUT -p tcp --dport 22 -m state --state NEW -m recent --update --seconds 600 --hitcount 11 -j DROP
+-A OUTPUT -p tcp -s $SERVER_IP -d 0/0 --sport 22 --dport 513:65535 -m state --state ESTABLISHED -j ACCEPT
 
 
 #---------------------------------------------------------
 # DoS
 #---------------------------------------------------------
 # Prevent general DoS attack
-iptables -A INPUT -p tcp --dport 22 -m limit --limit 5/minute --limit-burst 10 -j ACCEPT
-iptables -A INPUT -p tcp --dport 80,443 -m limit --limit 5/minute --limit-burst 100 -j ACCEPT
+#---------------------------------------------------------
+-A INPUT -p tcp --dport 22 -m limit --limit 5/minute --limit-burst 10 -j ACCEPT
+-A INPUT -p tcp --dport 80,443 -m limit --limit 5/minute --limit-burst 100 -j ACCEPT
 
 # Syn-flood protection
-iptables -A FORWARD -p tcp --syn -m limit --limit 1/s -j ACCEPT
+#---------------------------------------------------------
+-A FORWARD -p tcp --syn -m limit --limit 1/s -j ACCEPT
+
 # Interface 0 incoming syn-flood protection
-iptables -N syn_flood
-iptables -A INPUT -p tcp --syn -j syn_flood
-iptables -A syn_flood -m limit --limit 1/s --limit-burst 3 -j RETURN
-iptables -A syn_flood -j DROP
+#---------------------------------------------------------
+-N syn_flood
+-A INPUT -p tcp --syn -j syn_flood
+-A syn_flood -m limit --limit 1/s --limit-burst 3 -j RETURN
+-A syn_flood -j DROP
 
 # Furtive port scanner
-iptables -A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST \
-iptables -A port-scan -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j RETURN
-iptables -A port-scan -j DROP
+#---------------------------------------------------------
+-A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST \
+-A port-scan -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j RETURN
+-A port-scan -j DROP
 
 
 # Ping of death
-iptables -A FORWARD -p icmp --icmp-type echo-request -m limit \ --limit 1/s -j ACCEPT
+#---------------------------------------------------------
+-A FORWARD -p icmp --icmp-type echo-request -m limit \ --limit 1/s -j ACCEPT
 
 # Limiting the incoming icmp ping request
-iptables -A INPUT -p icmp -m limit --limit  1/s --limit-burst 1 -j ACCEPT
-iptables -A INPUT -p icmp -m limit --limit 1/s --limit-burst 1 -j LOG --log-prefix PING-DROP:
-iptables -A INPUT -p icmp -j DROP
-iptables -A OUTPUT -p icmp -j ACCEPT
+#---------------------------------------------------------
+-A INPUT -p icmp -m limit --limit  1/s --limit-burst 1 -j ACCEPT
+-A INPUT -p icmp -m limit --limit 1/s --limit-burst 1 -j LOG --log-prefix PING-DROP:
+-A INPUT -p icmp -j DROP
+-A OUTPUT -p icmp -j ACCEPT
 
 
 #---------------------------------------------------------
 # Logging
 #---------------------------------------------------------
 # Log dropped packets
-iptables -N LOGGING
-iptables -A INPUT -j LOGGING
-iptables -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7
-iptables -A LOGGING -j DROP
+#---------------------------------------------------------
+-N LOGGING
+-A INPUT -j LOGGING
+-A LOGGING -m limit --limit 2/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7
+-A LOGGING -j DROP
 
 
 

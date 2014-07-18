@@ -13,12 +13,27 @@
 ###########################################################
 # Server Variables
 ###########################################################
+# example custom
 # Set incron to run in levels 2345.
-set-SERVER_IP:
-  cmd.run:
-    - name: echo 'export SERVER_IP="10.255.255.2"' >> /etc/profile
-    - cwd: /
+#set-SERVER_IP:
+#  cmd.run:
+#    - name: echo 'export SERVER_IP="10.255.255.2"' >> /etc/profile
+#    - cwd: /
+#    - user: root
+
+/etc/profile.d/system_vars.sh:
+  file.managed:
+    - source: salt://config/iptables/profile.d/system_vars.sh
     - user: root
+    - group: root
+    - mode: 600
+    - template: jinja
+    - context:
+      isLocal: {{ vars.isLocal }}
+      ip: {{ vars.ip }}
+      saltenv: {{ saltenv }}
+
+
 
 ###########################################################
 ###########################################################

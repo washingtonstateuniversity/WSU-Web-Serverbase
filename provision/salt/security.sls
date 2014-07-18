@@ -4,6 +4,7 @@
 {% set vars = {'isLocal': False} %}
 {% for ip in salt['grains.get']('ipv4') if ip.startswith('10.255.255') -%}
     {% if vars.update({'isLocal': True}) %} {% endif %}
+    {% if vars.update({'ip': ip}) %} {% endif %}
 {%- endfor %}
 {% set cpu_count = salt['grains.get']('num_cpus', '') %}
 
@@ -22,6 +23,7 @@
     - template: jinja
     - context:
       isLocal: {{ vars.isLocal }}
+      ip: {{ vars.ip }}
       saltenv: {{ saltenv }}
   cmd.run: #insure it's going to run on windows hosts.. note it's files as folders the git messes up
     - name: dos2unix /etc/sysconfig/iptables

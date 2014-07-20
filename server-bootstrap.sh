@@ -94,7 +94,13 @@ _CONFDATA=""
 #                 have flaged it local.  By defualt we are on "production"
 #===============================================================================
 is_localhost() {
-  return ip addr show dev eth0 2>&1 | grep "inet " 2>&1 | awk '{ print $2 }' 2>&1 | grep -qi "10.255.255" && true || false
+  echo $(ip addr show dev eth1 2>&1 | grep "inet " 2>&1 | awk '{ print $2 }' 2>&1)
+  if $(ip addr show dev eth1 2>&1 | grep "inet " 2>&1 | awk '{ print $2 }' 2>&1 | grep -qi "10.255.255");
+  then
+  	return 0
+  else
+  	return 1
+  fi
 }
 
 #===  FUNCTION  ================================================================
@@ -343,6 +349,7 @@ init_provision(){
 
 	local gitHostSSHconfig="Host github.com"
 	local ssh_configFile=~/.ssh/config 
+	mkdir -p $(dirname ~/.ssh/) && touch ~/.ssh/config
 	grep -Fxq "$gitHostSSHconfig" $ssh_configFile || echo "Host github.com\rHostname ssh.github.com\rPort 443" >> sudoFile
 
 	#start cloning it the provisioner

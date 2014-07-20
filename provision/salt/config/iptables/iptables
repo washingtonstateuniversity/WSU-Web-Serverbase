@@ -1,9 +1,9 @@
 # Allow all traffic.
 #---------------------------------------------------------
 *filter
-#:INPUT ACCEPT [81:5076]
-#:FORWARD ACCEPT [0:0]
-#:OUTPUT ACCEPT [44:3868]
+:INPUT ACCEPT [81:5076]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [44:3868]
 
 #---------------------------------------------------------
 # protection based on http://thelowedown.wordpress.com/2008/07/03/iptables-how-to-use-the-limits-module/
@@ -18,29 +18,29 @@
 # just what is needed.  Drop and reject to prevent abuse 
 # of the system and sour the milk
 #---------------------------------------------------------
--P INPUT DROP
--P FORWARD DROP
--P OUTPUT DROP
+#-P INPUT DROP
+#-P FORWARD DROP
+#-P OUTPUT DROP
 
 {% if 'web' in grains.get('roles') %}
 # Allow incoming HTTP
 #---------------------------------------------------------
--A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
--A OUTPUT -o eth0 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
+#-A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+#-A OUTPUT -o eth0 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
 
 {% if 'ssl' in grains.get('roles') %}
 # Allow incoming HTTPS
 #---------------------------------------------------------
--A INPUT -i eth0 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
--A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
+#-A INPUT -i eth0 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
+#-A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
 {% endif %}
 {% endif %}
 
 
 # Allow loopback access
 #---------------------------------------------------------
--A INPUT -i lo -j ACCEPT
--A OUTPUT -o lo -j ACCEPT
+#-A INPUT -i lo -j ACCEPT
+#-A OUTPUT -o lo -j ACCEPT
 
 # Allow packets from internal network to reach external network.
 # if eth1 is connected to external network (internet)
@@ -69,13 +69,13 @@
 #---------------------------------------------------------
 # Allow ALL incoming SSH
 #---------------------------------------------------------
--A INPUT -i eth0 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
--A OUTPUT -o eth0 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+#-A INPUT -i eth0 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+#-A OUTPUT -o eth0 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
 
 # Allow outgoing SSH
 #---------------------------------------------------------
--A OUTPUT -o eth0 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
--A INPUT -i eth0 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+#-A OUTPUT -o eth0 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+#-A INPUT -i eth0 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
 
 # limit ssh to 10 connections in 10mins
 #---------------------------------------------------------

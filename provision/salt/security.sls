@@ -45,6 +45,15 @@ iptables-reboot-auto:
 
 
 
+# Turn off iptables for install
+iptables-stopped:
+  cmd.run:
+    - name: service iptables stop
+    - cwd: /
+
+
+
+
 ###########################################################
 ###########################################################
 # fail2ban

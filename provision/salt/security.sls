@@ -33,9 +33,7 @@
 iptables:
   pkg.installed:
     - name: iptables
-  service.running:
-    - watch:
-      - file: /etc/sysconfig/iptables
+
 
 # Set iptables to run in levels 2345.
 iptables-reboot-auto:

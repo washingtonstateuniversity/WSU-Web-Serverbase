@@ -39,6 +39,6 @@ clear-workers:
 # Turn off iptables for install
 iptables-start:
   cmd.run:
-    - name: service start stop
+    - name: service iptables start
     - cwd: /
 {% endif %}

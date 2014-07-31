@@ -33,3 +33,12 @@ clear-workers:
     - require:
       - sls: web
 {% endif %}
+
+
+{% if 'security' in grains.get('roles') %}
+# Turn off iptables for install
+iptables-start:
+  cmd.run:
+    - name: service iptables start
+    - cwd: /
+{% endif %}

@@ -16,9 +16,6 @@ base:
 {% if 'database' in grains.get('roles') %}
     - database
 {% endif %}
-{% if 'security' in grains.get('roles') %}
-    - security
-{% endif %}
 {% if 'ssl' in grains.get('roles') %}
     - ssl
 {% endif %}
@@ -37,5 +34,8 @@ base:
 {% else %}
     - env.production
 {%- endif %}
+{% if 'security' in grains.get('roles') %}
+    - security
+{% endif %}
     - cron
     - finalize.restart

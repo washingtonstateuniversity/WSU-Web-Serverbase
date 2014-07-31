@@ -28,6 +28,107 @@
 #    - group: root
 #    - mode: 644
 
+
+
+###########################################################  
+###########################################################
+# php-fpm
+###########################################################
+
+# Remi has a repository specifically setup for PHP 5.5. This continues
+# to reply on the standard Remi repository for some packages.
+#remi-php55-repo:
+#  pkgrepo.managed:
+#    - humanname: Remi PHP 5.5 Repository
+#    - baseurl: http://rpms.famillecollet.com/enterprise/$releasever/php55/$basearch/
+#    - gpgcheck: 0
+#    - require_in:
+#      - pkg: php-fpm
+
+php-fpm:
+  pkg.latest:
+    - pkgs:
+      - php-fpm
+      - php-cli
+      - php-common
+      - php-soap
+      - php-pear
+      - php-pdo
+{% if 'database' in grains.get('roles') %}
+      - php-mysqlnd
+{% endif %}
+      - php-mcrypt
+      - php-imap
+      - php-gd
+      - php-mbstring
+      - php-ldap
+      - php-pecl-zendopcache
+      - php-pecl-memcached
+    - require:
+      - sls: serverbase
+  service.running:
+    - require:
+      - pkg: php-fpm
+    - watch:
+      - file: /etc/php-fpm.d/www.conf
+    - required_in:
+      - sls: finalize.restart
+
+ImageMagick:
+  pkg.installed:
+    - pkgs:
+      - php-pecl-imagick
+      - ImageMagick
+
+
+# Set php-fpm to run in levels 2345.
+php-fpm-reboot-auto:
+  cmd.run:
+    - name: chkconfig --level 2345 php-fpm on
+    - cwd: /
+    - user: root
+    - require:
+      - pkg: php-fpm
+
+      
+#***************************************      
+# php-fpm files & configs
+#***************************************    
+/etc/php-fpm.d/www.conf:
+  file.managed:
+    - source: salt://config/php-fpm/www.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - pkg: php-fpm
+
+/etc/php.ini:
+  file.managed:
+    - source: salt://config/php-fpm/php.ini
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - pkg: php-fpm
+
+/etc/php.d/opcache.ini:
+  file.managed:
+    - source: salt://config/php-fpm/opcache.ini
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - pkg: php-fpm
+
+
+
+
+
+
+
+
+
 ###########################################################
 ###########################################################
 # nginx
@@ -267,98 +368,6 @@ nginx:
       - file: /etc/nginx/sites-enabled/default
     - required_in:
       - sls: finalize.restart
-
-
-###########################################################  
-###########################################################
-# php-fpm
-###########################################################
-
-# Remi has a repository specifically setup for PHP 5.5. This continues
-# to reply on the standard Remi repository for some packages.
-#remi-php55-repo:
-#  pkgrepo.managed:
-#    - humanname: Remi PHP 5.5 Repository
-#    - baseurl: http://rpms.famillecollet.com/enterprise/$releasever/php55/$basearch/
-#    - gpgcheck: 0
-#    - require_in:
-#      - pkg: php-fpm
-
-php-fpm:
-  pkg.latest:
-    - pkgs:
-      - php-fpm
-      - php-cli
-      - php-common
-      - php-soap
-      - php-pear
-      - php-pdo
-{% if 'database' in grains.get('roles') %}
-      - php-mysqlnd
-{% endif %}
-      - php-mcrypt
-      - php-imap
-      - php-gd
-      - php-mbstring
-      - php-ldap
-      - php-pecl-zendopcache
-      - php-pecl-memcached
-    - require:
-      - sls: serverbase
-  service.running:
-    - require:
-      - pkg: php-fpm
-    - watch:
-      - file: /etc/php-fpm.d/www.conf
-    - required_in:
-      - sls: finalize.restart
-
-ImageMagick:
-  pkg.installed:
-    - pkgs:
-      - php-pecl-imagick
-      - ImageMagick
-
-
-# Set php-fpm to run in levels 2345.
-php-fpm-reboot-auto:
-  cmd.run:
-    - name: chkconfig --level 2345 php-fpm on
-    - cwd: /
-    - user: root
-    - require:
-      - pkg: php-fpm
-
-      
-#***************************************      
-# php-fpm files & configs
-#***************************************    
-/etc/php-fpm.d/www.conf:
-  file.managed:
-    - source: salt://config/php-fpm/www.conf
-    - user: root
-    - group: root
-    - mode: 644
-    - require:
-      - pkg: php-fpm
-
-/etc/php.ini:
-  file.managed:
-    - source: salt://config/php-fpm/php.ini
-    - user: root
-    - group: root
-    - mode: 644
-    - require:
-      - pkg: php-fpm
-
-/etc/php.d/opcache.ini:
-  file.managed:
-    - source: salt://config/php-fpm/opcache.ini
-    - user: root
-    - group: root
-    - mode: 644
-    - require:
-      - pkg: php-fpm
 
 
 ###########################################################

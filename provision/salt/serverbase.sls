@@ -23,7 +23,7 @@
 
 /etc/profile.d/system_vars.sh:
   file.managed:
-    - source: salt://config/iptables/profile.d/system_vars.sh
+    - source: salt://config/profile/profile.d/system_vars.sh
     - user: root
     - group: root
     - mode: 600

@@ -64,6 +64,7 @@ php-fpm:
       - php-ldap
       - php-pecl-zendopcache
       - php-pecl-memcached
+      - php-pecl-oauth
     - require:
       - sls: serverbase
   service.running:

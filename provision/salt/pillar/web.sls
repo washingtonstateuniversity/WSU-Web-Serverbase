@@ -1,3 +1,3 @@
 nginx:
-   version: 1.7.3
+   version: 1.7.6
 web:

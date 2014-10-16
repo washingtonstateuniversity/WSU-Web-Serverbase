@@ -10,7 +10,7 @@ name="nginx-compile"
 #fi
 
 nginxVersion="$1"
-
+opensseVersion="1.0.1j"
 
 touch /failed_nginx_compile
 
@@ -37,8 +37,6 @@ ini(){
     cd /src/nginx
 
     # Fetch openssl
-	opensseVersion="1.0.1j"
-	
     wget -N http://www.openssl.org/source/openssl-$opensseVersion.tar.gz 2>/dev/null
     tar -xzf openssl-$opensseVersion.tar.gz 2>/dev/null
 

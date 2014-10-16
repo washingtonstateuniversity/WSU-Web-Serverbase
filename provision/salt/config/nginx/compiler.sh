@@ -10,8 +10,9 @@ name="nginx-compile"
 #fi
 
 nginxVersion="$1"
-opensseVersion="1.0.1j"
+opensslVersion="1.0.1j"
 npsVersion=1.9.32.1
+msVersion=2.8.0
 
 touch /failed_nginx_compile
 
@@ -20,26 +21,25 @@ touch /failed_nginx_compile
 ini(){
     cd /src
 
-
     #nginxVersion="1.5.8" # set the value here from nginx website
-    wget -N http://nginx.org/download/nginx-$nginxVersion.tar.gz 2>/dev/null
-    tar -xzf nginx-$nginxVersion.tar.gz 2>/dev/null
-    ln -sf nginx-$nginxVersion nginx
+    wget -N http://nginx.org/download/nginx-${nginxVersion}.tar.gz 2>/dev/null
+    tar -xzf nginx-${nginxVersion}.tar.gz 2>/dev/null
+    ln -sf nginx-${nginxVersion} nginx
     
     cd /src/nginx
 
     # Fetch modsecurity
-    wget -N -O modsecurity-2.8.0.tar.gz https://github.com/SpiderLabs/ModSecurity/releases/download/v2.8.0/modsecurity-2.8.0.tar.gz 2>/dev/null
-    tar -xzf modsecurity-2.8.0.tar.gz
-    cd modsecurity-2.8.0
+    wget -N -O modsecurity-${msVersion}.tar.gz https://github.com/SpiderLabs/ModSecurity/releases/download/v${msVersion}/modsecurity-${msVersion}.tar.gz 2>/dev/null
+    tar -xzf modsecurity-${msVersion}.tar.gz
+    cd modsecurity-${msVersion}
     ./configure --enable-standalone-module
     make && make install
 
     cd /src/nginx
 
     # Fetch openssl
-    wget -N http://www.openssl.org/source/openssl-$opensseVersion.tar.gz 2>/dev/null
-    tar -xzf openssl-$opensseVersion.tar.gz 2>/dev/null
+    wget -N http://www.openssl.org/source/openssl-${opensslVersion}.tar.gz 2>/dev/null
+    tar -xzf openssl-${opensslVersion}.tar.gz 2>/dev/null
 
     #get page speed
     
@@ -83,7 +83,7 @@ ini(){
 --with-http_sub_module \
 --with-http_spdy_module \
 --with-http_ssl_module \
---with-openssl=/src/nginx/openssl-$opensseVersion \
+--with-openssl=/src/nginx/openssl-${opensslVersion} \
 --with-sha1=/usr/include/openssl \
 --with-md5=/usr/include/openssl \
 --with-pcre \
@@ -93,7 +93,7 @@ ini(){
 --without-http_scgi_module \
 --without-http_uwsgi_module \
 --add-module=/src/nginx/ngx_pagespeed-${npsVersion}-beta \
---add-module=/src/nginx/modsecurity-2.8.0/nginx/modsecurity
+--add-module=/src/nginx/modsecurity-${msVersion}/nginx/modsecurity
     make && make install
 }
 

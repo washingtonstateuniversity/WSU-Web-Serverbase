@@ -28,6 +28,7 @@ ini(){
     
     cd /src/nginx
 
+# hidding the tech helps hide which attack to use
 sed -e "s/static char ngx_http_server_string[] = \"Server: nginx\" CRLF;/static char ngx_http_server_string[] = \"Server: WSU server slice\" CRLF;/" > src/http/ngx_http_header_filter_module.c.bak
 mv src/http/ngx_http_header_filter_module.c.bak src/http/ngx_http_header_filter_module.c
 

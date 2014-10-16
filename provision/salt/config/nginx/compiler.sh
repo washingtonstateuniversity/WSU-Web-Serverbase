@@ -37,8 +37,8 @@ ini(){
     cd /src/nginx
 
     # Fetch openssl
-    wget -N http://www.openssl.org/source/openssl-1.0.1h.tar.gz 2>/dev/null
-    tar -xzf openssl-1.0.1h.tar.gz 2>/dev/null
+    wget -N http://www.openssl.org/source/openssl-1.0.1j.tar.gz 2>/dev/null
+    tar -xzf openssl-1.0.1j.tar.gz 2>/dev/null
 
     #get page speed
     wget -N -O ngx_pagespeed-1.8.31.4-beta.zip https://github.com/pagespeed/ngx_pagespeed/archive/v1.8.31.4-beta.zip 2>/dev/null

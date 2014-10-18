@@ -291,7 +291,19 @@ load_app(){
 #===============================================================================
 load_config_data(){
 	file="${provisionpath}config.json"
-	_CONFDATA=`cat $file`
+	if [ -f "${file}" ]
+	then
+	  _CONFDATA=`cat $file`
+	else
+		file="/config.json"
+		if [ -f "${file}" ]
+		then
+		  _CONFDATA=`cat $file`
+		else
+			return 1
+		fi
+	fi
+	return 0
 }
 
 #===  FUNCTION  ================================================================

@@ -76,12 +76,9 @@ declare -A _RANENV=()
 _REPOURL="https://github.com"
 _RAWURL="https://raw.githubusercontent.com"
 
-_server_id=$(hostname --long)
+_server_id=$(hostname)
 echo "${_server_id} is the hostname"
-if [ "${_server_id}" = "hostname: Unknown host" ]; then
-	_server_id=$(hostname) 
-	echo "${_server_id} is the hostname"
-fi
+
 saltpath=/srv/salt/
 provisionpath="${saltpath}base/"
 

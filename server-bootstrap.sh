@@ -326,18 +326,25 @@ init_provision_settings(){
 		echo "The file $confg_file was found, we will begin on ${_server_id}"
 		load_config_data
 	else
-		done=0
-		while [ "x${done}" = x0 ]; do
-			echo "Looking for a file at ${provisionpath}"
-			echo -n "Please enter the path to the config file: "
-				read -p ">>" answer </dev/tty
-			if [ -f "${provisionpath}${answer}" ]; then
-				echo "The file ${answer} was found, we will begin on ${_server_id}"
-				load_config_data
-				done=1
-				
-			fi
-		done
+		confg_file="/config.json"
+		if [ -f "${confg_file}" ]
+		then
+			echo "The file $confg_file was found, we will begin on ${_server_id}"
+			load_config_data
+		else
+			done=0
+			while [ "x${done}" = x0 ]; do
+				echo "Looking for a file at ${provisionpath}"
+				echo -n "Please enter the path to the config file: "
+					read -p ">>" answer </dev/tty
+				if [ -f "${provisionpath}${answer}" ]; then
+					echo "The file ${answer} was found, we will begin on ${_server_id}"
+					load_config_data
+					done=1
+
+				fi
+			done
+		fi
 	fi
 	return 0
 }

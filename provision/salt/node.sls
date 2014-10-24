@@ -1,6 +1,7 @@
 # set up data first
 ###########################################################
 {% set vars = {'isLocal': False} %}
+{% if vars.update({'ip': ''}) %} {% endif %}
 {% for ip in salt['grains.get']('ipv4') if ip.startswith('10.255.255') -%}
     {% if vars.update({'isLocal': True}) %} {% endif %}
 {%- endfor %}

@@ -392,7 +392,7 @@ init_provision(){
 	fi
 	
 	[ -d /etc/salt/minion.d ] || mkdir -p /etc/salt/minion.d
-	sh /srv/salt/base/boot/bootstrap-salt.sh git v2014.1.7
+	sh /srv/salt/base/boot/bootstrap-salt.sh
 	
 
 	if is_localhost;

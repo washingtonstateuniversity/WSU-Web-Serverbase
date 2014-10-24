@@ -274,7 +274,7 @@ load_app(){
 		else
 			gitploy init
 			#bring it in with modgit
-			gitploy -q add ${modname} "https://github.com/${repopath}.git"
+			gitploy add -q ${modname} "https://github.com/${repopath}.git"
 		fi
 		ln -s /var/app/${appname}/provision/salt/ ${sympath} && echostd "linked /var/app/${appname}/provision/salt/ ${sympath}"
 	fi
@@ -377,7 +377,7 @@ init_provision(){
 	
 	#build git command
 	#git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
-	git_cmd="gitploy ${_BRANCH} ${_TAG} serverbase https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
+	git_cmd="gitploy add ${_BRANCH} ${_TAG} serverbase https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
 	cd /src/salt/serverbase
 	
 	gitploy init 2>&1 | grep -qi "already initialized" && echo ""

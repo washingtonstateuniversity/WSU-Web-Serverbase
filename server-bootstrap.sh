@@ -77,7 +77,7 @@ _REPOURL="https://github.com"
 _RAWURL="https://raw.githubusercontent.com"
 
 _server_id=$(hostname --long) 
-if[$_server_id="Unknown host"]then;
+if [$_server_id="Unknown host"]; then
 	_server_id=$(hostname) 
 fi
 saltpath=/srv/salt/

@@ -13,7 +13,7 @@ mariadb-libs:
 remi-rep:
   pkgrepo.managed:
     - humanname: Remi Repository
-    - baseurl: http://mirrors.mediatemple.net/remi/enterprise/6/remi/x86_64/
+    - baseurl: http://mirrors.mediatemple.net/remi/enterprise/7/remi/x86_64/
     - gpgcheck: 0
 
 # Use packages from the CentOS plus repository when applicable.

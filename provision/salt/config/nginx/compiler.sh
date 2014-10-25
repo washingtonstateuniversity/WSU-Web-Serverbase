@@ -30,8 +30,9 @@ ini(){
 
 	#/src/nginx/src/http/ngx_http_header_filter_module.c > src/http/ngx_http_header_filter_module.c.main.bak
 	# hidding the tech helps hide which attack to use
-	sed -i "s|string[] = \"Server: nginx\"|string[] = \"Server: Bare Blank Server\"|" ngx_http_header_filter_module.c
-	sed -i "s|string[] = \"Server: \" NGINX_VER|string[] = \"Server: Bare Blank Server\"|" ngx_http_header_filter_module.c
+	cp ngx_http_header_filter_module.c{,.bak}
+	sed -i 's|string\[\] = "Server: nginx"|string[] = "Server: Bare Blank Server"|' ngx_http_header_filter_module.c
+	sed -i 's|string\[\] = "Server: " NGINX_VER|string[] = "Server: Bare Blank Server"|' ngx_http_header_filter_module.c
 
 	cd /src/nginx/
     # Fetch modsecurity

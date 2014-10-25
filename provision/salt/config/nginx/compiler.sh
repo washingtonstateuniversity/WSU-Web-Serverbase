@@ -19,21 +19,21 @@ touch /failed_nginx_compile
 #set the compiler to be quite
 #then return message only it it's a fail
 ini(){
-    cd /src
+cd /src
 
-    #nginxVersion="1.5.8" # set the value here from nginx website
-    wget -N http://nginx.org/download/nginx-${nginxVersion}.tar.gz 2>/dev/null
-    tar -xzf nginx-${nginxVersion}.tar.gz 2>/dev/null
-    ln -sf nginx-${nginxVersion} nginx
-    
-    cd /src/nginx
+#nginxVersion="1.5.8" # set the value here from nginx website
+wget -N http://nginx.org/download/nginx-${nginxVersion}.tar.gz 2>/dev/null
+tar -xzf nginx-${nginxVersion}.tar.gz 2>/dev/null
+ln -sf nginx-${nginxVersion} nginx
 
+cd /src/nginx
+src/http/ngx_http_header_filter_module.c > src/http/ngx_http_header_filter_module.c.main.bak
 # hidding the tech helps hide which attack to use
-sed -e "s/static char ngx_http_server_string[] = \"Server: nginx\" CRLF;/static char ngx_http_server_string[] = \"Server: WSU server slice\" CRLF;/" > src/http/ngx_http_header_filter_module.c.bak
-mv src/http/ngx_http_header_filter_module.c.bak src/http/ngx_http_header_filter_module.c
+sed -e "s|static char ngx_http_server_string[] = \"Server: nginx\" CRLF;|static char ngx_http_server_string[] = \"Server: WSU server slice\" CRLF;|" src/http/ngx_http_header_filter_module.c > src/http/ngx_http_header_filter_module.c.bak
+mv -f src/http/ngx_http_header_filter_module.c.bak src/http/ngx_http_header_filter_module.c
 
-sed -e "s/static char ngx_http_server_full_string[] = \"Server: \" NGINX_VER CRLF;/static char ngx_http_server_full_string[] = \"Server: WSU server slice\" CRLF;/" > src/http/ngx_http_header_filter_module.c.bak
-mv src/http/ngx_http_header_filter_module.c.bak src/http/ngx_http_header_filter_module.c
+sed -e "s|static char ngx_http_server_full_string[] = \"Server: \" NGINX_VER CRLF;|static char ngx_http_server_full_string[] = \"Server: WSU server slice\" CRLF;|" src/http/ngx_http_header_filter_module.c > src/http/ngx_http_header_filter_module.c.bak
+mv -f src/http/ngx_http_header_filter_module.c.bak src/http/ngx_http_header_filter_module.c
 
 
     # Fetch modsecurity

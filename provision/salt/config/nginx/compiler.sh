@@ -20,7 +20,10 @@ touch /failed_nginx_compile
 #then return message only it it's a fail
 ini(){
 	cd /src
-
+	
+	#clear past installs
+	rm -rf nginx*
+	
 	#nginxVersion="1.5.8" # set the value here from nginx website
 	wget -N http://nginx.org/download/nginx-${nginxVersion}.tar.gz 2>/dev/null
 	tar -xzf nginx-${nginxVersion}.tar.gz 2>/dev/null

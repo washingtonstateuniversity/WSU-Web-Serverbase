@@ -27,13 +27,13 @@ tar -xzf nginx-${nginxVersion}.tar.gz 2>/dev/null
 ln -sf nginx-${nginxVersion} nginx
 
 cd /src/nginx
-src/http/ngx_http_header_filter_module.c > src/http/ngx_http_header_filter_module.c.main.bak
+#/src/nginx/src/http/ngx_http_header_filter_module.c > src/http/ngx_http_header_filter_module.c.main.bak
 # hidding the tech helps hide which attack to use
-sed -e "s|static char ngx_http_server_string[] = \"Server: nginx\" CRLF;|static char ngx_http_server_string[] = \"Server: WSU server slice\" CRLF;|" src/http/ngx_http_header_filter_module.c > src/http/ngx_http_header_filter_module.c.bak
-mv -f src/http/ngx_http_header_filter_module.c.bak src/http/ngx_http_header_filter_module.c
+#sed -e "s|static char ngx_http_server_string[] = \"Server: nginx\" CRLF;|static char ngx_http_server_string[] = \"Server: WSU server slice\" CRLF;|" src/http/ngx_http_header_filter_module.c > src/http/ngx_http_header_filter_module.c.bak
+#mv -f src/http/ngx_http_header_filter_module.c.bak src/http/ngx_http_header_filter_module.c
 
-sed -e "s|static char ngx_http_server_full_string[] = \"Server: \" NGINX_VER CRLF;|static char ngx_http_server_full_string[] = \"Server: WSU server slice\" CRLF;|" src/http/ngx_http_header_filter_module.c > src/http/ngx_http_header_filter_module.c.bak
-mv -f src/http/ngx_http_header_filter_module.c.bak src/http/ngx_http_header_filter_module.c
+#sed -e "s|static char ngx_http_server_full_string[] = \"Server: \" NGINX_VER CRLF;|static char ngx_http_server_full_string[] = \"Server: WSU server slice\" CRLF;|" src/http/ngx_http_header_filter_module.c > src/http/ngx_http_header_filter_module.c.bak
+#mv -f src/http/ngx_http_header_filter_module.c.bak src/http/ngx_http_header_filter_module.c
 
 
     # Fetch modsecurity

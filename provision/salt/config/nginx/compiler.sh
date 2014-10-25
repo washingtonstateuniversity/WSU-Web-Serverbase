@@ -49,10 +49,9 @@ ini(){
     tar -xzf openssl-${opensslVersion}.tar.gz 2>/dev/null
 
     #get page speed
-    
-	wget https://github.com/pagespeed/ngx_pagespeed/archive/release-${npsVersion}-beta.zip 2>/dev/null
-	unzip release-${npsVersion}-beta.zip 2>/dev/null
-	cd ngx_pagespeed-release-${npsVersion}-beta/
+	wget https://github.com/pagespeed/ngx_pagespeed/archive/v${npsVersion}-beta.zip 2>/dev/null
+	unzip v${npsVersion}-beta.zip 2>/dev/null
+	cd ngx_pagespeed-${npsVersion}-beta/
 	wget https://dl.google.com/dl/page-speed/psol/${npsVersion}.tar.gz 2>/dev/null
 	tar -xzvf ${npsVersion}.tar.gz 2>/dev/null # expands to psol/
     

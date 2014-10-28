@@ -2,6 +2,10 @@ PackageKit:
   pkg.removed:
     - name: PackageKit
 
+mariadb-libs:
+  pkg.removed:
+    - name: mariadb-libs
+
 ###########################################################
 ###########################################################
 # Remi Repository 

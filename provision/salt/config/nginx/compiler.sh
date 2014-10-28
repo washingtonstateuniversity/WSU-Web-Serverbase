@@ -11,7 +11,7 @@ name="nginx-compile"
 
 nginxVersion="$1"
 opensslVersion="1.0.1j"
-npsVersion=1.9.32.1
+npsVersion=1.8.31.4
 msVersion=2.8.0
 
 touch /failed_nginx_compile
@@ -19,52 +19,53 @@ touch /failed_nginx_compile
 #set the compiler to be quite
 #then return message only it it's a fail
 ini(){
-    cd /src
+	cd /src
 
-    #nginxVersion="1.5.8" # set the value here from nginx website
-    wget -N http://nginx.org/download/nginx-${nginxVersion}.tar.gz 2>/dev/null
-    tar -xzf nginx-${nginxVersion}.tar.gz 2>/dev/null
-    ln -sf nginx-${nginxVersion} nginx
-    
-    cd /src/nginx
+	#clear past installs
+	rm -rf nginx*
 
-# hidding the tech helps hide which attack to use
-sed -e "s/static char ngx_http_server_string[] = \"Server: nginx\" CRLF;/static char ngx_http_server_string[] = \"Server: WSU server slice\" CRLF;/" > src/http/ngx_http_header_filter_module.c.bak
-mv src/http/ngx_http_header_filter_module.c.bak src/http/ngx_http_header_filter_module.c
+	#nginxVersion="1.5.8" # set the value here from nginx website
+	wget -N http://nginx.org/download/nginx-${nginxVersion}.tar.gz 2>/dev/null
+	tar -xzf nginx-${nginxVersion}.tar.gz 2>/dev/null
+	ln -sf nginx-${nginxVersion} nginx
 
-sed -e "s/static char ngx_http_server_full_string[] = \"Server: \" NGINX_VER CRLF;/static char ngx_http_server_full_string[] = \"Server: WSU server slice\" CRLF;/" > src/http/ngx_http_header_filter_module.c.bak
-mv src/http/ngx_http_header_filter_module.c.bak src/http/ngx_http_header_filter_module.c
+	cd /src/nginx/src/http/
 
+	#/src/nginx/src/http/ngx_http_header_filter_module.c > src/http/ngx_http_header_filter_module.c.main.bak
+	# hidding the tech helps hide which attack to use
+	cp ngx_http_header_filter_module.c{,.bak}
+	sed -i 's|string\[\] = "Server: nginx"|string[] = "Server: Bare Blank Server"|' ngx_http_header_filter_module.c
+	sed -i 's|string\[\] = "Server: " NGINX_VER|string[] = "Server: Bare Blank Server"|' ngx_http_header_filter_module.c
 
-    # Fetch modsecurity
-    wget -N -O modsecurity-${msVersion}.tar.gz https://github.com/SpiderLabs/ModSecurity/releases/download/v${msVersion}/modsecurity-${msVersion}.tar.gz 2>/dev/null
-    tar -xzf modsecurity-${msVersion}.tar.gz
-    cd modsecurity-${msVersion}
-    ./configure --enable-standalone-module
-    make && make install
+	cd /src/nginx/
+	# Fetch modsecurity
+	wget -N -O modsecurity-${msVersion}.tar.gz https://github.com/SpiderLabs/ModSecurity/releases/download/v${msVersion}/modsecurity-${msVersion}.tar.gz 2>/dev/null
+	tar -xzf modsecurity-${msVersion}.tar.gz
+	cd modsecurity-${msVersion}
+	./configure --enable-standalone-module
+	make && make install
 
-    cd /src/nginx
+	cd /src/nginx
 
-    # Fetch openssl
-    wget -N http://www.openssl.org/source/openssl-${opensslVersion}.tar.gz 2>/dev/null
-    tar -xzf openssl-${opensslVersion}.tar.gz 2>/dev/null
+	# Fetch openssl
+	wget -N http://www.openssl.org/source/openssl-${opensslVersion}.tar.gz 2>/dev/null
+	tar -xzf openssl-${opensslVersion}.tar.gz 2>/dev/null
 
-    #get page speed
-    
-	wget https://github.com/pagespeed/ngx_pagespeed/archive/release-${npsVersion}-beta.zip 2>/dev/null
-	unzip release-${npsVersion}-beta.zip 2>/dev/null
-	cd ngx_pagespeed-release-${npsVersion}-beta/
+	#get page speed
+	wget https://github.com/pagespeed/ngx_pagespeed/archive/v${npsVersion}-beta.zip 2>/dev/null
+	unzip v${npsVersion}-beta.zip 2>/dev/null
+	cd ngx_pagespeed-${npsVersion}-beta/
 	wget https://dl.google.com/dl/page-speed/psol/${npsVersion}.tar.gz 2>/dev/null
 	tar -xzvf ${npsVersion}.tar.gz 2>/dev/null # expands to psol/
-    
-    #mkdir /tmp/nginx-modules
-    #cd /tmp/nginx-modules
-    #wget https://github.com/agentzh/headers-more-nginx-module/archive/v0.19.tar.gz
-    #tar -xzvf v0.19.tar.gz 
-    
-    cd /src/nginx
 
-    ./configure \
+	#mkdir /tmp/nginx-modules
+	#cd /tmp/nginx-modules
+	#wget https://github.com/agentzh/headers-more-nginx-module/archive/v0.19.tar.gz
+	#tar -xzvf v0.19.tar.gz 
+
+	cd /src/nginx
+
+	./configure \
 --user=www-data \
 --group=www-data \
 --prefix=/etc/nginx \
@@ -102,18 +103,18 @@ mv src/http/ngx_http_header_filter_module.c.bak src/http/ngx_http_header_filter_
 --without-http_uwsgi_module \
 --add-module=/src/nginx/ngx_pagespeed-${npsVersion}-beta \
 --add-module=/src/nginx/modsecurity-${msVersion}/nginx/modsecurity
-    make && make install
+	make && make install
 }
 
 LOGOUTPUT=$(ini)
 
 if [ $(nginx -v 2>&1 | grep -qi "$nginx_version") ]; then
-    resulting="Just finished installing nginx $nginxVersion"
-    echo "result=True changed=True comment='$resulting'"
-    #echo "{'name': 'nginx-compile', 'changes': {}, 'result': True, 'comment': ''}"
+	resulting="Just finished installing nginx $nginxVersion"
+	echo "result=True changed=True comment='$resulting'"
+	#echo "{'name': 'nginx-compile', 'changes': {}, 'result': True, 'comment': ''}"
 else
-    resulting="Failed installing nginx $nginxVersion, check /failed_nginx_compile for details"
-    echo $LOGOUTPUT >> /failed_nginx_compile
-    echo "result=False changed=False comment='$resulting'"
-    #echo "{'name': 'nginx-compile', 'changes': {}, 'result': False, 'comment': ''}"
+	resulting="Failed installing nginx $nginxVersion, check /failed_nginx_compile for details"
+	echo $LOGOUTPUT >> /failed_nginx_compile
+	echo "result=False changed=False comment='$resulting'"
+	#echo "{'name': 'nginx-compile', 'changes': {}, 'result': False, 'comment': ''}"
 fi

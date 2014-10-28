@@ -76,7 +76,8 @@ declare -A _RANENV=()
 _REPOURL="https://github.com"
 _RAWURL="https://raw.githubusercontent.com"
 
-_server_id=$(hostname --long) 
+_server_id=$(hostname)
+echo "${_server_id} is the hostname"
 
 saltpath=/srv/salt/
 provisionpath="${saltpath}base/"
@@ -274,7 +275,7 @@ load_app(){
 		else
 			gitploy init
 			#bring it in with modgit
-			gitploy -q add ${modname} "https://github.com/${repopath}.git"
+			gitploy add -q ${modname} "https://github.com/${repopath}.git"
 		fi
 		ln -s /var/app/${appname}/provision/salt/ ${sympath} && echostd "linked /var/app/${appname}/provision/salt/ ${sympath}"
 	fi
@@ -291,7 +292,19 @@ load_app(){
 #===============================================================================
 load_config_data(){
 	file="${provisionpath}config.json"
-	_CONFDATA=`cat $file`
+	if [ -f "${file}" ]
+	then
+	  _CONFDATA=`cat $file`
+	else
+		file="/config.json"
+		if [ -f "${file}" ]
+		then
+		  _CONFDATA=`cat $file`
+		else
+			return 1
+		fi
+	fi
+	return 0
 }
 
 #===  FUNCTION  ================================================================
@@ -314,18 +327,25 @@ init_provision_settings(){
 		echo "The file $confg_file was found, we will begin on ${_server_id}"
 		load_config_data
 	else
-		done=0
-		while [ "x${done}" = x0 ]; do
-			echo "Looking for a file at ${provisionpath}"
-			echo -n "Please enter the path to the config file: "
-				read -p ">>" answer </dev/tty
-			if [ -f "${provisionpath}${answer}" ]; then
-				echo "The file ${answer} was found, we will begin on ${_server_id}"
-				load_config_data
-				done=1
-				
-			fi
-		done
+		confg_file="/config.json"
+		if [ -f "${confg_file}" ]
+		then
+			echo "The file $confg_file was found, we will begin on ${_server_id}"
+			load_config_data
+		else
+			done=0
+			while [ "x${done}" = x0 ]; do
+				echo "Looking for a file at ${provisionpath}"
+				echo -n "Please enter the path to the config file: "
+					read -p ">>" answer </dev/tty
+				if [ -f "${provisionpath}${answer}" ]; then
+					echo "The file ${answer} was found, we will begin on ${_server_id}"
+					load_config_data
+					done=1
+
+				fi
+			done
+		fi
 	fi
 	return 0
 }
@@ -358,7 +378,7 @@ init_provision(){
 	
 	#build git command
 	#git_cmd="git clone --depth 1 ${_BRANCH} ${_TAG} https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
-	git_cmd="gitploy ${_BRANCH} ${_TAG} serverbase https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
+	git_cmd="gitploy add ${_BRANCH} ${_TAG} serverbase https://github.com/${_OWNER}/WSU-Web-Serverbase.git"
 	cd /src/salt/serverbase
 	
 	gitploy init 2>&1 | grep -qi "already initialized" && echo ""
@@ -373,7 +393,7 @@ init_provision(){
 	fi
 	
 	[ -d /etc/salt/minion.d ] || mkdir -p /etc/salt/minion.d
-	sh /srv/salt/base/boot/bootstrap-salt.sh git v2014.1.7
+	sh /srv/salt/base/boot/bootstrap-salt.sh
 	
 
 	if is_localhost;

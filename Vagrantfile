@@ -112,7 +112,7 @@ Vagrant.configure("2") do |config|
 
 				# Provisioning: Salt 
 				################################################################
-					vmConfig.vm.provision :shell, :inline => "echo 'export SERVER_TYPE=\"VAGRANT\"' >> /etc/profile"
+					vmConfig.vm.provision :shell, :inline => "echo 'export SERVER_TYPE=\"VAGRANT\"' >> /etc/environment"
 					$provision_script=""
 					$provision_script<<"curl -L https://raw.githubusercontent.com/#{bootstrap_path}/server-bootstrap.sh | sudo sh -s -- "
 					vmConfig.vm.synced_folder "provision/salt/minions", "/srv/salt/base/minions"

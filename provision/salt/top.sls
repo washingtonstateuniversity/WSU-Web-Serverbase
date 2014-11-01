@@ -6,7 +6,7 @@ base:
   '*':
 {% if vars.isLocal %}
     - systemcheck
-{% else %}
+{% endif %}
     - os.centos
     - users
 {% if 'serverbase' in grains.get('roles') %}

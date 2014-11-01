@@ -70,7 +70,7 @@ Vagrant.configure("2") do |config|
 				# Virtualbox specific settings for the virtual machine.
 				################################################################ 
 					vmConfig.vm.provider :virtualbox do |v|
-						v.gui = false
+						v.gui = true
 						v.name = @server_obj[:hostname]
 						v.memory = @server_obj[:memory].to_i
 						cores= @server_obj[:cores].to_i
@@ -111,7 +111,8 @@ Vagrant.configure("2") do |config|
 					end
 
 				# Provisioning: Salt 
-				################################################################              
+				################################################################
+					vmConfig.vm.provision :shell, :inline => "echo 'export SERVER_TYPE=\"VAGRANT\"' >> /etc/profile"
 					$provision_script=""
 					$provision_script<<"curl -L https://raw.githubusercontent.com/#{bootstrap_path}/server-bootstrap.sh | sudo sh -s -- "
 					vmConfig.vm.synced_folder "provision/salt/minions", "/srv/salt/base/minions"

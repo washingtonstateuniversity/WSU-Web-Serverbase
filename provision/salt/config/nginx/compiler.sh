@@ -14,7 +14,8 @@ opensslVersion="1.0.1j"
 npsVersion=1.8.31.4
 msVersion=2.8.0
 
-touch /failed_nginx_compile
+touch /var/log/failed_nginx_compile.log
+touch /var/log/nginx-${nginxVersion}_compile.log
 
 #set the compiler to be quite
 #then return message only it it's a fail

@@ -44,7 +44,7 @@ ini(){
 	tar -xzf modsecurity-${msVersion}.tar.gz
 	cd modsecurity-${msVersion}
 	./configure --enable-standalone-module
-	make && make install
+	make && make install  2>/var/log/nginx-${nginxVersion}_compile.log
 
 	cd /src/nginx
 
@@ -104,7 +104,7 @@ ini(){
 --without-http_uwsgi_module \
 --add-module=/src/nginx/ngx_pagespeed-${npsVersion}-beta \
 --add-module=/src/nginx/modsecurity-${msVersion}/nginx/modsecurity
-	make && make install
+	make && make install  2>/var/log/nginx-${nginxVersion}_compile.log
 }
 
 LOGOUTPUT=$(ini)

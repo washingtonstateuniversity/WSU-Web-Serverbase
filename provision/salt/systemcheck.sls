@@ -9,7 +9,7 @@ check:
     - cwd: /
 
 #simple test check
-check:
+ipcheck:
   cmd.run:
     - name: echo "{{ vars.ip }}"
     - cwd: /

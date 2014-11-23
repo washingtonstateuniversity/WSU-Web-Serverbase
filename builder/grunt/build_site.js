@@ -21,6 +21,28 @@ module.exports = function(grunt) {
 		var wrench = require('wrench'),
 			util = require('util');
 
+		sitemap = grunt.file.readJSON('../sitemap.json');
+		
+		function build_page(page_obj){
+
+			var sourceFile = 'template/'+page_obj.template+'.tmpl';
+			var tmpFile = 'build/deletable.tmp';
+			var targetFile = page_obj.root.trim('/')+'/'+page_obj.page+"html";
+			var content = fs.readFileSync(sourceFile,'utf8')
+
+			grunt.log.writeln("building "+targetFile);
+			var tmpl = new nunjucks.Template(content);
+			grunt.log.writeln(targetFile + "compiled");
+			var res = tmpl.render(page_obj);
+			grunt.log.writeln(targetFile + "renderd");
+		}
+		
+		for (var page_key in sitemap) {
+			var page = sitemap[page_key];
+			build_page(page);
+		}
+		
+		
 		/*
 		var page_vars = {
 			"ip": ip,

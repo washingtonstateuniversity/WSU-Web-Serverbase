@@ -1,0 +1,27 @@
+@@include('../templates/head.html', {})
+<body>
+	<!-- WRAPPING -->
+	<div id="jacket">
+		<div id="binder" class="fluid folio max-1782 xlarge">
+			<!-- CONTENT -->
+			<main>
+			<!-- Responsive Sections -->
+			<section class="row sidebar">
+			
+				<div class="column one">
+					@@include('../pages/<!-- @echo page -->.html', {"page":"<!-- @echo page -->"})
+				</div><!--/column-->
+			
+				<div class="column two">
+					@@include('../blocks/sidebar.html', {})
+				</div><!--/column-->
+			</section>
+			</main>
+			<!-- /CONTENT -->
+			@@include('../blocks/spine.html', {"active":"<!-- @echo page -->"})
+		</div><!--/cover-->
+	</div><!--/jacket-->
+	<!-- /WRAPPING -->
+	@@include('../blocks/analytics.html', {})
+</body>
+</html>

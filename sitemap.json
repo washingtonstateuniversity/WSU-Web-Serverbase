@@ -1,0 +1,30 @@
+{
+	page_defaults:{
+		root:"/site/",
+		template:"main"
+	},
+	pages:{
+		index:{
+			name:"index",
+			root:"../",
+			title:"",
+			vars:{
+				showstuff:true
+			}
+		},
+		development:{
+			name:"development",
+			title:"",
+			vars:{
+				showstuff:true
+			}
+		},
+		development:{
+			name:"production",
+			title:"",
+			vars:{
+				showstuff:true
+			}
+		}
+	}
+}

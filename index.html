@@ -36,7 +36,7 @@
 	<link type="text/html" rel="help" href="http://brand.wsu.edu">
 	
 	<!-- ANALYTICS -->
-
+	<base href="/WSU-Web-Serverbase/"/>
 </head>
 <body>
 	<!-- WRAPPING -->
@@ -124,42 +124,46 @@ Git (<a href="http://windows.github.com/">Windows</a> or <a href="http://mac.git
 			<!-- /CONTENT -->
 				<!-- SPINE -->
 	<div id="spine" class="shelved bleed crimson">
-		<div id="glue" class="clearfix">
+		<div id="glue" class="spine-glue">
 		
-			<header><a href="http://www.wsu.edu/" id="wsu-signature">Washington State University</a></header>
+			<header class="spine-header">
+				<a href="http://www.wsu.edu/" id="wsu-signature" class="spine-signature">Washington State University</a>
+			</header>
 			
 			<!-- ACTIONS -->
-			<section id="wsu-actions">
+			<section id="wsu-actions" class="spine-actions">
 			
 			<!-- Tabs -->
 			<ul id="wsu-actions-tabs" class="spine-tabs clearfix">
-				<li id="wsu-search-tab" class="closed"><button>Search</button></li>
+				<!--<li id="wsu-search-tab" class="closed"><button>Search</button></li>
+				This will be taken out for the mean time, but will add it back in later.
+				-->
 				<li id="wsu-contact-tab" class="closed"><button>Contact</button></li>
 				<li id="wsu-share-tab" class="closed"><button>Share</button></li>
 				<li id="wsu-print-tab" class="closed"><button>Print</button></li>
 			</ul>
 			</section><!--/#wsu-actions-->
 	
-			<nav id="spine-navigation">
-				<nav id="spine-sitenav">
+			<nav id="spine-navigation" class="spine-navigation">
+				<nav id="spine-sitenav" class="spine-sitenav">
 					<ul>
-						<li><a href="/WSU-Web-Serverbase/">WSU Server Environment</a></li>
+						<li><a href="/">WSU Server Environment</a></li>
 						<li>
-							<a href="/WSU-Web-Serverbase/development.html">Development</a>
+							<a href="/site/development.html">Development</a>
 							<ul>
-								<li><a href="/WSU-Web-Serverbase/development.html#devVagrantOptions">Vagrant Options</a></li>
-								<li><a href="/WSU-Web-Serverbase/development.html#devAddApp">Load Web Apps</a></li>
+								<li><a href="/site/development.html#devVagrantOptions">Vagrant Options</a></li>
+								<li><a href="/site/development.html#devAddApp">Load Web Apps</a></li>
 							</ul>
 						</li>
 						<li>
-							<a href="/WSU-Web-Serverbase/production.html">Production</a>
+							<a href="/site/production.html">Production</a>
 							<ul>
-								<li><a href="/WSU-Web-Serverbase/production.html#productionModsLoaded">Whats loaded?</a></li>
+								<li><a href="/site/production.html#productionModsLoaded">Whats loaded?</a></li>
 							</ul>
 						</li>
 					</ul>
 				</nav>
-				<nav id="spine-offsitenav">
+				<nav id="spine-offsitenav" class="spine-offsitenav">
 					<ul>
 						<li><a href="//washingtonstateuniversity.github.io/WSUMAGE-base/">WSU Magento deployment</a></li>
 					</ul>
@@ -167,8 +171,8 @@ Git (<a href="http://windows.github.com/">Windows</a> or <a href="http://mac.git
 			</nav><!-- #navigation -->
 	
 			<!-- Social and Global Links -->
-			<footer>
-				<nav id="wsu-social-channels">
+			<footer class="spine-footer">
+				<nav id="wsu-social-channels" class="spine-social-channels">
 					<ul>
 						<li id="facebook"><a href="http://facebook.com/wsupullman">Facebook</a></li>
 						<li id="twitter"><a href="http://twitter.com/wsupullman">Twitter</a></li>
@@ -181,7 +185,7 @@ Git (<a href="http://windows.github.com/">Windows</a> or <a href="http://mac.git
 						-->
 					</ul>
 				</nav>
-				<nav id="wsu-global-links">
+				<nav id="wsu-global-links" class="spine-global-links">
 					<ul>
 						<li id="zzusis"><a href="http://zzusis.wsu.edu/">Zzu<strong>sis</strong></a></li>
 						<li id="access"><a href="http://access.wsu.edu/">Access</a></li>

@@ -91,7 +91,7 @@ module.exports = function(grunt) {
 		}
 	};
  
-	grunt.util._.extend(config, loadConfig('./tasks/options/'));
+	grunt.util._.extend(config, loadConfig('./grunt/tasks/options/'));
 	grunt.initConfig(config);
 
 	require('load-grunt-tasks')(grunt);

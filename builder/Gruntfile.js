@@ -1,7 +1,31 @@
+
 module.exports = function(grunt) {
-	// Project configuration
-	grunt.initConfig({
+	//lets look for configs
+	function loadConfig(path) {
+	  var glob = require('glob');
+
+	  var object = {};
+	  var key;
+
+	  glob.sync('*', {cwd: path}).forEach(function(option) {
+		key = option.replace(/\.js$/,'');
+		object[key] = require(path + option);
+	  });
+
+	  return object;
+	}
+
+	var pkg,setbase,config;
+
+	pkg = grunt.file.readJSON('package.json');
+	setbase = grunt.option('setbase') || pkg.build_location+'/'+pkg.build_version+'/';
+
+	config = {
 		pkg: grunt.file.readJSON('package.json'),
+		setbase:setbase,
+		config: {
+			build: 'build'
+		},
 		env : {
 			options : {
 				/* Shared Options Hash */
@@ -14,35 +38,6 @@ module.exports = function(grunt) {
 				NODE_ENV : 'PRODUCTION'
 			}
 		},
-		/*concat: {
-			styles: {
-				src: ['styles/skeleton.css','styles/colors.css','styles/spine.css','styles/respond.css'],
-				dest: 'build/<%= pkg.build_version %>/spine.css',
-			},
-			scripts: {
-				src: [
-					'scripts/debug.js',
-				],
-				dest: 'build/<%= pkg.build_version %>/spine.js',
-			},
-		},
-		uglify: {
-			options: {
-				banner: ''
-			},
-			build: {
-				src: 'build/<%= pkg.build_version %>/spine.js',
-				dest: 'build/<%= pkg.build_version %>/spine.min.js'
-			}
-		},
-		cssmin: {
-			combine: {
-				files: {
-					// Hmmm, in reverse order
-					'build/<%= pkg.build_version %>/spine.min.css': ['build/<%= pkg.build_version %>/spine.css']
-				}
-			}
-		},*/
 		copy: {
 			main: {
 				files: [
@@ -94,18 +89,14 @@ module.exports = function(grunt) {
 				}
 			},
 		}
-	});
+	};
+ 
+	grunt.util._.extend(config, loadConfig('./tasks/options/'));
+	grunt.initConfig(config);
 
-	// Load the plugin that provides the "uglify" task.
-	grunt.loadNpmTasks('grunt-env');
-	grunt.loadNpmTasks('grunt-include-replace');
-	grunt.loadNpmTasks('grunt-contrib-less');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-contrib-concat');
-	grunt.loadNpmTasks('grunt-contrib-copy');
-	grunt.loadNpmTasks('grunt-contrib-cssmin');
-	grunt.loadNpmTasks('grunt-preprocess');
+	require('load-grunt-tasks')(grunt);
+	grunt.loadTasks('tasks');
+
 
 	// Default task(s).
 	grunt.registerTask('default', ['jshint']);

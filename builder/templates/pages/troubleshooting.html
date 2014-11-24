@@ -1,0 +1,13 @@
+{% markdown %}
+# Trouble Shooting
+
+### The box will not come up
+If you are on windows, it seems that there can be issues of stablity when the VirtualBox guest version is different then the box version.  There are other things that seem to get in the way so here is how we can root out the cause.
+
+* first thing is to see what the box is doing.  In order to do this we need to have the gui open up.  You can do this by setting the option in the config file for Vagrant.  Currently you'll need to go in to the `Vagrantfile` and alter `v.gui = false` to true.  once this is done you'll be able to watch the box come up.  
+
+* We use a box that currently has a guest version of 4.3.6.  Check the version of VituralBox you have install, it'll most likely be a version newer then 4.3.6.  The best thing to do is uninstall VituralBox and install the older version from the [Old Builds list](https://www.virtualbox.org/wiki/Download_Old_Builds_4_3)
+
+
+As we encounter issues, we'll update this list to help ensure you get the most out of the system.
+{% endmarkdown %}

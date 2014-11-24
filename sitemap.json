@@ -36,6 +36,14 @@
 			"vars":{
 				"showstuff":true
 			}
+		},
+		"troubleshooting":{
+			"name":"troubleshooting",
+			"title":"Trouble Shooting",
+			"nav_title":"Trouble Shooting",
+			"vars":{
+				"showstuff":true
+			}
 		}
 	}
 }

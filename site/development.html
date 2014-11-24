@@ -48,90 +48,54 @@
 			
 				<div class="column one">
 					<article class="wrapper markdown-body">
-					<article>
-	<h1 class="header">WSU Serverbase development guide</h1>
-	<div class="wrapper markdown-body">
-		<h2 class="header">What is this for?</h2>
-		<p>This project is used in aiding your development and web design tasks. To achieve this result of a simple get up and running environment, we use <a href="http://www.vagrantup.com/" target="_blank">Vagrant</a> along with a <a href="http://www.saltstack.com/" target="_blank">Salt</a> provisioner to set up the local server and deploy the web apps.  You have the option to edit the <code>Vagrantfile</code>, it is highly suggested to now alter the file in any way.  To set options for  <code>Vagrant</code> there are properties located in the <code>config.json</code>.  From this <code>config.json</code> you may load up any of the pre configured apps, adjust the way vagrant is run, and which environments are loaded with <code>Salt</code>.  </p>
-		
-	</div>
-
-
-	<section>
-		<a name="#devVagrantOptions"></a>
-		<h3>Vagrant options</h3>
-		<div class="wrapper markdown-body">
-			<p>At the top of the <code>config.json</code>, which is a json file, you have some options that you may use to change your environment that you are loading.</p>
-			<pre><code>{
-    "webserver": {                            //</code><b>Name of the server being set up</b><code>
-        "ip":"10.255.255.2",                  //</code><b>ip of the VirturalBox</b><code>
-        "branch":"master",                    //</code><b>the git branch to use (optional)</b><code>
-        "owner":"washingtonstateuniversity",  //</code><b>the git owner to use (optional)</b><code>
-        "open_ports":"",                      //</code><b>ports to open up for multi server setups</b><code>
-        "hostname":"web_server",              //</code><b>name of the host</b><code>
-        "memory":"6144",                      //</code><b>How much memory would you like to share from your host</b><code>
-        "cores":"2",                          //</code><b>How many processor from the host do you want to share</b><code>
-        "host_64bit":"false",                 //</code><b>If you are on windows and are sharing more then 2 cores set to true</b><code>
-        "install_type":"testing",             //</code><b>Type of install</b><code>
-        "minion":"vagrant",                   //</code><b>Which Salt minion to run</b><code>
-        "verbose_output":"true",              //</code><b>How much do you want to see in the console</b><code>
+					<h1 id="wsu-serverbase-development-guide">WSU Serverbase development guide</h1>
+<h2 id="what-is-this-for-">What is this for?</h2>
+<p>This project is used in aiding your development and web design tasks. To achieve this result of a simple get up and running environment, we use <a href="http://www.vagrantup.com/">Vagrant</a> along with a <a href="http://www.saltstack.com/">Salt</a> provisioner to set up the local server and deploy the web apps.  You have the option to edit the <code>Vagrantfile</code>, it is highly suggested to not alter the file in any way.  To set options for  <code>Vagrant</code> there are properties located in the <code>config.json</code>.  From this <code>config.json</code> you may load up any of the pre configured apps, adjust the way vagrant is run, and which environments are loaded with <code>Salt</code>. </p>
+<h3 id="vagrant-options-">Vagrant options&lt;</h3>
+<p>At the top of the <code>config.json</code>, which is a json file, you have some options that you may use to change your environment that you are loading.</p>
+<pre><code class="lang-json">{
+    &quot;webserver&quot;: {                            //Name of the server being set up
+        &quot;ip&quot;:&quot;10.255.255.2&quot;,                  //ip of the VirturalBox
+        &quot;branch&quot;:&quot;master&quot;,                    //the git branch to use (optional)
+        &quot;owner&quot;:&quot;washingtonstateuniversity&quot;,  //the git owner to use (optional)
+        &quot;open_ports&quot;:&quot;&quot;,                      //ports to open up for multi server setups
+        &quot;hostname&quot;:&quot;web_server&quot;,              //name of the host
+        &quot;memory&quot;:&quot;6144&quot;,                      //How much memory would you like to share from your host
+        &quot;cores&quot;:&quot;2&quot;,                          //How many processor from the host do you want to share
+        &quot;host_64bit&quot;:&quot;false&quot;,                 //If you are on windows and are sharing more then 2 cores set to true
+        &quot;install_type&quot;:&quot;testing&quot;,             //Type of install
+        &quot;minion&quot;:&quot;vagrant&quot;,                   //Which Salt minion to run
+        &quot;verbose_output&quot;:&quot;true&quot;,              //How much do you want to see in the console
     }
-}</code></pre>
-		</div>
-		
+}
+</code></pre>
+<h4 id="-ip-"><code>ip</code></h4>
+<p>Set the ip of the virtual server&#39;s IP address.  Use a IPv4 (0.0.0.0) that can be navigated to.</p>
+<h4 id="-branch-"><code>branch</code></h4>
+<p>Sets the git branch to use for the server base.</p>
+<h4 id="-owner-"><code>owner</code></h4>
+<p>Sets the git owner to use for the server base.</p>
+<h4 id="-open_ports-"><code>open_ports</code></h4>
+<p>Setting ports to open up for multi server setups.  If you want to have two server talk to each other then you can set ports to talk through.</p>
+<h4 id="-hostname-"><code>hostname</code></h4>
+<p>Set the hostname used</p>
+<h4 id="-memory-"><code>memory</code></h4>
+<p>Set memory used from you host.  It is suggested that you use no more then 50% of you host ram.</p>
+<h4 id="-cores-"><code>cores</code></h4>
+<p>Set CPU cores used from you host.  It is suggested that you use no more then 50% of you host&#39;s cores.</p>
+<h4 id="-host_64bit-"><code>host_64bit</code></h4>
+<p>If you are on windows and are sharing more then 2 cores set to true.</p>
+<h4 id="-install_type-"><code>install_type</code></h4>
+<p>Type of install</p>
+<h4 id="-minion-"><code>minion</code></h4>
+<p>The minion to use</p>
+<h4 id="-verbose_output-"><code>verbose_output</code></h4>
+<p>Setting the verbose_output option will set the amount of information output to the console</p>
+<h3 id="how-to-add-a-web-app-">How to add a web app?</h3>
+<p>Loading a web app is very straight forward.  You simply <code>git clone</code> in the app of choice into the <code>app/</code> folder at the root for the server folder.  You may load as many apps as you wish to, but it should be noted if you need to simulate one server talking with another, then you will want to have two instances of this project and load the web app respectively.</p>
+<p><strong>Note:</strong> More to come. Thank you for reading.</p>
 
-	<h4><code>ip</code></h4>
-	<p>Set the ip of the virtual server's IP address.  Use a IPv4 (0.0.0.0) that can be navigated to.</p>
-
-	<h4><code>branch</code></h4>
-	<p>Sets the git branch to use for the server base.</p>
-
-	<h4><code>owner</code></h4>
-	<p>Sets the git owner to use for the server base.</p>
-
-	<h4><code>open_ports</code></h4>
-	<p>Setting ports to open up for multi server setups.  If you want to have two server talk to each other then you can set ports to talk through.</p>
-
-	<h4><code>hostname</code></h4>
-	<p>Set the hostname used</p>
-
-	<h4><code>memory</code></h4>
-	<p>Set memory used from you host.  It is suggested that you use no more then 50% of you host ram.</p>
-
-	<h4><code>cores</code></h4>
-	<p>Set CPU cores used from you host.  It is suggested that you use no more then 50% of you host's cores.</p>
-
-	<h4><code>host_64bit</code></h4>
-	<p>If you are on windows and are sharing more then 2 cores set to true.</p>
-
-	<h4><code>install_type</code></h4>
-	<p>Type of install</p>
-
-	<h4><code>minion</code></h4>
-	<p>The minion to use</p>
-
-	<h4><code>verbose_output</code></h4>
-	<p>Setting the verbose_output option will set the amount of information output to the console</p>
-		
-		
-		
-		
-		
-		
-		
-
-	</section>
-	<section>
-		<a name="#devAddApp"></a>
-		<h3>How to add a web app?</h3>
-		<p>Loading a web app is very straight forward.  You simply <code>git clone</code> in the app of choice into the <code>app/</code> folder at the root for the server folder.  You may load as many apps as you wish to, but it should be noted if you need to simulate one server talking with another, then you will want to have two instances of this project and load the web app respectively.</p>
-		<p><strong>Note:</strong> More to come. Thank you for reading.</p>
-	
-		
-		
-		
-	</section>
-</article></article>
+</article>
 				</div><!--/column-->
 			
 				<div class="column two">

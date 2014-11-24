@@ -1,12 +1,12 @@
 {
 	page_defaults:{
-		root:"../site/",
+		root:"../tmpsite/site/",
 		template:"main"
 	},
 	pages:{
 		index:{
 			name:"index",
-			root:"../",
+			root:"../tmpsite/",
 			title:"WSU Serverbase",
 			vars:{
 				showstuff:true

@@ -2,6 +2,7 @@
 node_modules
 /pub
 /build
+/tmpsite
 #/test
 #!/test/preprocess
 #!/test/preprocess/blocks

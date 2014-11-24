@@ -23,11 +23,17 @@ module.exports = function(grunt) {
 
 		sitemap = grunt.file.readJSON('../sitemap.json');
 		var defaults = sitemap.page_defaults;
+		
+		
+		/*
+		 * This will apply defaults and build the nav
+		 */
 		function build_site_obj(){
 			var nav = {};
 			for (var page_key in sitemap.pages) {
 				grunt.log.writeln("working "+page_key);
-
+				
+				//apply defaults were needed
 				sitemap.pages[page_key].nav_key = page_key;
 				//note extend will not work here, for some reason it'll alter the ref of defaults
 				//we'll have to do it by hand for the moment
@@ -36,11 +42,18 @@ module.exports = function(grunt) {
 						sitemap.pages[page_key][objKey] = defaults[objKey];
 					}
 				}
+				
+				//build nav
 				var tmpobj={};
-				var root = sitemap.pages[page_key].root.replace(new RegExp("[\/]+$", "g"), "");
-				tmpobj[page_key]=root+'/'+sitemap.pages[page_key].nav_key+".html";
+				var root = sitemap.pages[page_key].nav_root.replace(new RegExp("[\/]+$", "g"), "");
+				var linkTitle= sitemap.pages[page_key].title;
+				if(typeof sitemap.pages[page_key].nav_link !== "undefined" ){
+					tmpobj[linkTitle]=sitemap.pages[page_key].nav_link;
+				}else{
+					tmpobj[linkTitle]=root+'/'+sitemap.pages[page_key].nav_key+".html";
+				}
 				if(typeof sitemap.pages[page_key].child_nav !== "undefined"){
-					var r = tmpobj[page_key];
+					var r = tmpobj[linkTitle];
 					var navarray = {};
 					
 					var mainlink= sitemap.pages[page_key].title;
@@ -63,6 +76,10 @@ module.exports = function(grunt) {
 
 		build_site_obj();
 
+		
+		/*
+		 * Construct the static pages
+		 */
 		function build_page(){
 			console.log(sitemap);
 			for (var key in sitemap.pages) {

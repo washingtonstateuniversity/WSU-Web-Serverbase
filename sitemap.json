@@ -1,11 +1,13 @@
 {
 	"page_defaults":{
 		"root":"../tmpsite/site/",
+		"nav_root":"tmpsite/site/",
 		"template":"main"
 	},
 	"pages":{
 		"index":{
 			"name":"index",
+			"nav_link":"",
 			"root":"../tmpsite/",
 			"title":"WSU Serverbase",
 			"vars":{

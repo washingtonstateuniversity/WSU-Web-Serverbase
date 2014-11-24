@@ -100,6 +100,20 @@ vagrant plugin install vagrant-vbguests</code>
 
 <strong>NOTE:</strong> If you would like to do some logging of <code>Vagrant</code> setup, you can use <code> vagrant up | tee log.txt</code> instead.  There will be a log of the whole run located at <code>wsuweb/log.txt</code>.  Also <strong>The default quick run installs Magento as an app of the server.</strong> 
 
+<h3>Windows Users Have one more step before starting</h3>
+<p>Since the sytem handles your dns entries for you, so you don't have to edit your host file all the time, the system must be able to have access to that file.  In order to give the system access you follow these steps:</p>
+
+<ul> 
+<li>Browse to C:\Windows\System32\Drivers\etc </li>
+<li>Right click on the <code>hosts</code> file and select <code>properties</code></li>
+<li>click the Security tab</li>
+<li>Click the <code>Advanced</code> button</li>
+<li>Give the <code>System</code> and <code>Users</code> Full control</li>
+</ul>
+	
+<p>Once this has been done test it by opening the hosts file in an app like notepad.  Add a new line and <code>#</code> (# is a comment) and then save the file.  If the file saves, then you should be ok.</p>
+	
+	
 </li>
 </ol>
 <h3>Configure Local installs</h3>

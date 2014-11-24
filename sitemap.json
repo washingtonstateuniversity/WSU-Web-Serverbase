@@ -1,33 +1,33 @@
 {
-	page_defaults:{
-		root:"../tmpsite/site/",
-		template:"main"
+	"page_defaults":{
+		"root":"../tmpsite/site/",
+		"template":"main"
 	},
-	pages:{
-		index:{
-			name:"index",
-			root:"../tmpsite/",
-			title:"WSU Serverbase",
-			vars:{
-				showstuff:true
+	"pages":{
+		"index":{
+			"name":"index",
+			"root":"../tmpsite/",
+			"title":"WSU Serverbase",
+			"vars":{
+				"showstuff":true
 			}
 		},
-		development:{
-			name:"development",
-			title:"WSU Serverbase development guide",
-			vars:{
-				showstuff:true
+		"development":{
+			"name":"development",
+			"title":"WSU Serverbase development guide",
+			"vars":{
+				"showstuff":true
 			},
-			child_nav:{
+			"child_nav":{
 				"#devVagrantOptions":"Vagrant Options",
 				"#devAddApp":"Load Web Apps"
 			}
 		},
-		production:{
-			name:"production",
-			title:"WSU Server Production Environment",
-			vars:{
-				showstuff:true
+		"production":{
+			"name":"production",
+			"title":"WSU Server Production Environment",
+			"vars":{
+				"showstuff":true
 			}
 		}
 	}

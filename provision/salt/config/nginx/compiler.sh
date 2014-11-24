@@ -14,7 +14,8 @@ opensslVersion="1.0.1j"
 npsVersion=1.8.31.4
 msVersion=2.8.0
 
-touch /failed_nginx_compile
+touch /var/log/failed_nginx_compile.log
+touch /var/log/nginx-${nginxVersion}_compile.log
 
 #set the compiler to be quite
 #then return message only it it's a fail
@@ -25,8 +26,8 @@ ini(){
 	rm -rf nginx*
 
 	#nginxVersion="1.5.8" # set the value here from nginx website
-	wget -N http://nginx.org/download/nginx-${nginxVersion}.tar.gz 2>/dev/null
-	tar -xzf nginx-${nginxVersion}.tar.gz 2>/dev/null
+	wget -N http://nginx.org/download/nginx-${nginxVersion}.tar.gz 2>/var/log/nginx-${nginxVersion}_compile.log
+	tar -xzf nginx-${nginxVersion}.tar.gz 2>/var/log/nginx-${nginxVersion}_compile.log
 	ln -sf nginx-${nginxVersion} nginx
 
 	cd /src/nginx/src/http/
@@ -39,24 +40,24 @@ ini(){
 
 	cd /src/nginx/
 	# Fetch modsecurity
-	wget -N -O modsecurity-${msVersion}.tar.gz https://github.com/SpiderLabs/ModSecurity/releases/download/v${msVersion}/modsecurity-${msVersion}.tar.gz 2>/dev/null
+	wget -N -O modsecurity-${msVersion}.tar.gz https://github.com/SpiderLabs/ModSecurity/releases/download/v${msVersion}/modsecurity-${msVersion}.tar.gz 2>/var/log/nginx-${nginxVersion}_compile.log
 	tar -xzf modsecurity-${msVersion}.tar.gz
 	cd modsecurity-${msVersion}
 	./configure --enable-standalone-module
-	make && make install
+	make && make install  2>/var/log/nginx-${nginxVersion}_compile.log
 
 	cd /src/nginx
 
 	# Fetch openssl
-	wget -N http://www.openssl.org/source/openssl-${opensslVersion}.tar.gz 2>/dev/null
-	tar -xzf openssl-${opensslVersion}.tar.gz 2>/dev/null
+	wget -N http://www.openssl.org/source/openssl-${opensslVersion}.tar.gz 2>/var/log/nginx-${nginxVersion}_compile.log
+	tar -xzf openssl-${opensslVersion}.tar.gz 2>/var/log/nginx-${nginxVersion}_compile.log
 
 	#get page speed
-	wget https://github.com/pagespeed/ngx_pagespeed/archive/v${npsVersion}-beta.zip 2>/dev/null
-	unzip v${npsVersion}-beta.zip 2>/dev/null
+	wget https://github.com/pagespeed/ngx_pagespeed/archive/v${npsVersion}-beta.zip 2>/var/log/nginx-${nginxVersion}_compile.log
+	unzip v${npsVersion}-beta.zip 2>/var/log/nginx-${nginxVersion}_compile.log
 	cd ngx_pagespeed-${npsVersion}-beta/
-	wget https://dl.google.com/dl/page-speed/psol/${npsVersion}.tar.gz 2>/dev/null
-	tar -xzvf ${npsVersion}.tar.gz 2>/dev/null # expands to psol/
+	wget https://dl.google.com/dl/page-speed/psol/${npsVersion}.tar.gz 2>/var/log/nginx-${nginxVersion}_compile.log
+	tar -xzvf ${npsVersion}.tar.gz 2>/var/log/nginx-${nginxVersion}_compile.log # expands to psol/
 
 	#mkdir /tmp/nginx-modules
 	#cd /tmp/nginx-modules
@@ -103,7 +104,7 @@ ini(){
 --without-http_uwsgi_module \
 --add-module=/src/nginx/ngx_pagespeed-${npsVersion}-beta \
 --add-module=/src/nginx/modsecurity-${msVersion}/nginx/modsecurity
-	make && make install
+	make && make install  2>/var/log/nginx-${nginxVersion}_compile.log
 }
 
 LOGOUTPUT=$(ini)

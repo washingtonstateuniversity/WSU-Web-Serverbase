@@ -1,11 +1,12 @@
 {% set vars = {'isLocal': False} %}
-{% if vars.update({'ip': ''}) %} {% endif %}
-{% for ip in salt['grains.get']('ipv4') if ip.startswith('10.255.255') -%}
-    {% if vars.update({'isLocal': True}) %} {% endif %}
-{%- endfor %}
+{% if vars.update({'ip': salt['cmd.run']('ifconfig eth1 | grep "inet " | awk \'{gsub("addr:","",$2);  print $2 }\'') }) %} {% endif %}
+{% if vars.update({'isLocal': salt['cmd.run']('echo $SERVER_TYPE') }) %} {% endif %}
 
 base:
   '*':
+{% if vars.isLocal %}
+    - systemcheck
+{% endif %}
     - os.centos
     - users
 {% if 'serverbase' in grains.get('roles') %}

@@ -66,7 +66,7 @@ module.exports = function(grunt) {
 						}
 						navarray[title] = url;
 					}
-					tmpobj[page_key]=navarray;
+					tmpobj[linkTitle]=navarray;
 				}
 				nav = extend(nav,tmpobj);
 				grunt.log.writeln("worked "+page_key);

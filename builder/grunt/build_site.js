@@ -23,23 +23,37 @@ module.exports = function(grunt) {
 
 		sitemap = grunt.file.readJSON('../sitemap.json');
 		
+		function build_site_obj(){
+			var nav = {};
+			for (var page_key in sitemap.pages) {
+				var page = sitemap.pages[page_key];
+				page.nav_key = page_key;
+				sitemap.pages[page_key] = extend(sitemap.page_defaults,page);
+				var tmpobj={};
+				tmpobj[page_key]=page_obj.root.trim('/')+'/'+page_obj.nav_key+"html";
+				nav = extend(nav,tmpobj);
+			}
+			sitemap.nav = nav;
+		}
+		
+		
 		function build_page(page_obj){
-
 			var sourceFile = 'template/'+page_obj.template+'.tmpl';
 			var tmpFile = 'build/deletable.tmp';
-			var targetFile = page_obj.root.trim('/')+'/'+page_obj.page+"html";
+			var targetFile = page_obj.root.trim('/')+'/'+page_obj.nav_key+"html";
 			var content = fs.readFileSync(sourceFile,'utf8')
-
+			
+			sitemap.current_build=page_obj.nav_key;
 			grunt.log.writeln("building "+targetFile);
 			var tmpl = new nunjucks.Template(content);
 			grunt.log.writeln(targetFile + "compiled");
-			var res = tmpl.render(page_obj);
+			var res = tmpl.render(sitemap);
 			grunt.log.writeln(targetFile + "renderd");
 		}
 		
-		for (var page_key in sitemap) {
-			var page = sitemap[page_key];
-			build_page(page);
+		build_site_obj();
+		for (var page_key in sitemap.pages) {
+			build_page(sitemap.pages[page_key]);
 		}
 		
 		

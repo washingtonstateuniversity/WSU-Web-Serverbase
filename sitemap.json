@@ -1,4 +1,7 @@
 {
+	"globals":{
+		"google_analytics":"UA-41835019-1",
+	},
 	"page_defaults":{
 		"root":"../tmpsite/site/",
 		"nav_root":"tmpsite/site/",

@@ -22,41 +22,25 @@
 			<nav id="spine-navigation" class="spine-navigation">
 				<nav id="spine-sitenav" class="spine-sitenav">
 					<ul>
-						{% for title, link in nav %}
-							{% if link=="[object Object]" %}
-								<li>
-								{% for ctitle, clink in link %}
-									{% if loop.first %}
-										<a href="{{ clink }}">{{ ctitle }}</a>
-										<ul>
-									{% else %}
-										<li><a href="{{ clink }}">{{ ctitle }}</a></li>
-									{% endif -%}
-									{% if loop.last %}
-										</ul>
-									{% endif -%}
-								{% endfor -%}
-								</li>
+				{% for title, link in nav %}
+					{% if link=="[object Object]" %}
+						<li>
+						{% for ctitle, clink in link %}
+							{% if loop.first %}
+								<a href="{{ clink }}">{{ ctitle }}</a>
+								<ul>
 							{% else %}
-								<li><a href="{{ link }}">{{ title }}</a></li>
+								<li><a href="{{ clink }}">{{ ctitle }}</a></li>
+							{% endif -%}
+							{% if loop.last %}
+								</ul>
 							{% endif -%}
 						{% endfor -%}
-						
-						<!--
-						<li><a href="">WSU Server Environment</a></li>
-						<li>
-							<a href="site/development.html">Development</a>
-							<ul>
-								<li><a href="site/development.html#devVagrantOptions">Vagrant Options</a></li>
-								<li><a href="site/development.html#devAddApp">Load Web Apps</a></li>
-							</ul>
 						</li>
-						<li>
-							<a href="site/production.html">Production</a>
-							<ul>
-								<li><a href="site/production.html#productionModsLoaded">Whats loaded?</a></li>
-							</ul>
-						</li>-->
+					{% else %}
+						<li><a href="{{ link }}">{{ title }}</a></li>
+					{% endif -%}
+				{% endfor -%}
 					</ul>
 				</nav>
 				<nav id="spine-offsitenav" class="spine-offsitenav">
@@ -68,19 +52,14 @@
 	
 			<!-- Social and Global Links -->
 			<footer class="spine-footer">
-				<nav id="wsu-social-channels" class="spine-social-channels">
+				<!--<nav id="wsu-social-channels" class="spine-social-channels">
 					<ul>
 						<li id="facebook"><a href="http://facebook.com/wsupullman">Facebook</a></li>
 						<li id="twitter"><a href="http://twitter.com/wsupullman">Twitter</a></li>
 						<li id="youtube"><a href="http://www.youtube.com/washingtonstateuniv">YouTube</a></li>
 						<li id="directory"><a href="http://social.wsu.edu">Social</a></li>
-						<!-- You can replace default social channels with your own. Available channels are:
-							• Facebook, Twitter, Youtube, Google+, Tumblr, Pinterest, Flickr, 
-							• Example: <li id="pinterest"><a href="http://pinterest.com/user">Pinterest</a></li>
-							• Maximum number of channels is four
-						-->
 					</ul>
-				</nav>
+				</nav>-->
 				<nav id="wsu-global-links" class="spine-global-links">
 					<ul>
 						<li id="zzusis"><a href="http://zzusis.wsu.edu/">Zzu<strong>sis</strong></a></li>

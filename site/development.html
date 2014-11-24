@@ -8,7 +8,7 @@
 
 	<meta charset="utf-8">
 	
-	<title>Wsumage-base | Washington State University</title>
+	<title>WSU Serverbase development guide | Washington State University</title>
 	
 	<!-- FAVICON -->
 	<link rel="shortcut icon" href="//repo.wsu.edu/spine/1/favicon.ico" />
@@ -37,8 +37,7 @@
 	
 	<!-- ANALYTICS -->
 	<base href="http://washingtonstateuniversity.github.io/WSU-Web-Serverbase/"/>
-</head>
-<body>
+</head><body>
 	<!-- WRAPPING -->
 	<div id="jacket">
 		<div id="binder" class="fluid max-1782 xlarge">
@@ -48,6 +47,7 @@
 			<section class="row side-right gutter pad short">
 			
 				<div class="column one">
+					<article class="wrapper markdown-body">
 					<article>
 	<h1 class="header">WSU Serverbase development guide</h1>
 	<div class="wrapper markdown-body">
@@ -131,7 +131,7 @@
 		
 		
 	</section>
-</article>
+</article></article>
 				</div><!--/column-->
 			
 				<div class="column two">
@@ -146,8 +146,7 @@
 						<p class="header">This project is maintained by <a class="header name" href="https://github.com/washingtonstateuniversity">Washington State University</a></p>
 						
 					</section>
-				</aside>
-				</div><!--/column-->
+				</aside></div><!--/column-->
 			</section>
 			</main>
 			<!-- /CONTENT -->
@@ -175,20 +174,28 @@
 			<nav id="spine-navigation" class="spine-navigation">
 				<nav id="spine-sitenav" class="spine-sitenav">
 					<ul>
-						<li><a href="">WSU Server Environment</a></li>
+				
+					
+						<li><a href="">WSU Serverbase</a></li>
+					
+					
 						<li>
-							<a href="site/development.html">Development</a>
-							<ul>
+						
+							
+								<a href="site/development.html">Development</a>
+								<ul>
+							
+							
 								<li><a href="site/development.html#devVagrantOptions">Vagrant Options</a></li>
+							
+							
 								<li><a href="site/development.html#devAddApp">Load Web Apps</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="site/production.html">Production</a>
-							<ul>
-								<li><a href="site/production.html#productionModsLoaded">Whats loaded?</a></li>
-							</ul>
-						</li>
+							
+								</ul>
+							</li>
+					
+					
+						<li><a href="site/production.html">Production</a></li>
 					</ul>
 				</nav>
 				<nav id="spine-offsitenav" class="spine-offsitenav">
@@ -200,19 +207,14 @@
 	
 			<!-- Social and Global Links -->
 			<footer class="spine-footer">
-				<nav id="wsu-social-channels" class="spine-social-channels">
+				<!--<nav id="wsu-social-channels" class="spine-social-channels">
 					<ul>
 						<li id="facebook"><a href="http://facebook.com/wsupullman">Facebook</a></li>
 						<li id="twitter"><a href="http://twitter.com/wsupullman">Twitter</a></li>
 						<li id="youtube"><a href="http://www.youtube.com/washingtonstateuniv">YouTube</a></li>
 						<li id="directory"><a href="http://social.wsu.edu">Social</a></li>
-						<!-- You can replace default social channels with your own. Available channels are:
-							• Facebook, Twitter, Youtube, Google+, Tumblr, Pinterest, Flickr, 
-							• Example: <li id="pinterest"><a href="http://pinterest.com/user">Pinterest</a></li>
-							• Maximum number of channels is four
-						-->
 					</ul>
-				</nav>
+				</nav>-->
 				<nav id="wsu-global-links" class="spine-global-links">
 					<ul>
 						<li id="zzusis"><a href="http://zzusis.wsu.edu/">Zzu<strong>sis</strong></a></li>
@@ -227,20 +229,18 @@
 		</div><!--/glue-->
 	</div><!--/spine-->
 	<!-- /SPINE -->
-
-		</div><!--/cover-->
+</div><!--/cover-->
 	</div><!--/jacket-->
 	<!-- /WRAPPING -->
 	<!--[if !IE]><script>fixScale(document);</script><![endif]-->
-<script type="text/javascript">
-	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-	try {
-		var pageTracker = _gat._getTracker("UA-41835019-1");
-		pageTracker._trackPageview();
-	} catch(err) {}
-</script>
-</body>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-41835019-1', 'auto');
+  ga('send', 'pageview');
+
+</script></body>
 </html>

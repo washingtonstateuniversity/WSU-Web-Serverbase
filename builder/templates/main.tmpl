@@ -1,4 +1,5 @@
-{% include "head.html" %}
+{% set page = pages[current_build] -%}
+{% include "head.html" -%}
 <body>
 	<!-- WRAPPING -->
 	<div id="jacket">
@@ -9,19 +10,21 @@
 			<section class="row side-right gutter pad short">
 			
 				<div class="column one">
-					{% include "pages/"+current_build+".html" %}
+					<article class="wrapper markdown-body">
+					{% include "pages/"+current_build+".html" -%}
+					</article>
 				</div><!--/column-->
 			
 				<div class="column two">
-					{% include "blocks/sidebar.html" %}
+					{% include "blocks/sidebar.html" -%}
 				</div><!--/column-->
 			</section>
 			</main>
 			<!-- /CONTENT -->
-			{% include "blocks/spine.html" %}
+			{% include "blocks/spine.html" -%}
 		</div><!--/cover-->
 	</div><!--/jacket-->
 	<!-- /WRAPPING -->
-	{% include "blocks/analytics.html" %}
+	{% include "blocks/analytics.html" -%}
 </body>
 </html>

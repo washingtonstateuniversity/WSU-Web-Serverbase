@@ -17,6 +17,7 @@
 		"development":{
 			"name":"development",
 			"title":"WSU Serverbase development guide",
+			"nav_title":"Development",
 			"vars":{
 				"showstuff":true
 			},
@@ -28,6 +29,7 @@
 		"production":{
 			"name":"production",
 			"title":"WSU Server Production Environment",
+			"nav_title":"Production",
 			"vars":{
 				"showstuff":true
 			}

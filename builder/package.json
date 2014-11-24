@@ -25,6 +25,8 @@
 		"extend":"~2.0.0",
 		"wrench":"~1.5.8",
 		"nunjucks":"~1.1.0",
+		"marked":"~0.3.2",
+		"pygmentize-bundled":"~2.3.0",
 		"nunjucks-markdown" : "~0.5.2"
 	}
 }

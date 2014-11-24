@@ -1,4 +1,4 @@
-{% include "../templates/head.html" %}
+{% include "head.html" %}
 <body>
 	<!-- WRAPPING -->
 	<div id="jacket">
@@ -9,19 +9,19 @@
 			<section class="row side-right gutter pad short">
 			
 				<div class="column one">
-					{% include "../pages/"+page+".html" %}
+					{% include "pages/"+current_build+".html" %}
 				</div><!--/column-->
 			
 				<div class="column two">
-					{% include "../templates/blocks/sidebar.html" %}
+					{% include "blocks/sidebar.html" %}
 				</div><!--/column-->
 			</section>
 			</main>
 			<!-- /CONTENT -->
-			{% include "../templates/blocks/spine.html" %}
+			{% include "blocks/spine.html" %}
 		</div><!--/cover-->
 	</div><!--/jacket-->
 	<!-- /WRAPPING -->
-	{% include "../templates/blocks/analytics.html" %}
+	{% include "blocks/analytics.html" %}
 </body>
 </html>

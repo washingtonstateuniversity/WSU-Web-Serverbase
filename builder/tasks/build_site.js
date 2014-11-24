@@ -11,7 +11,7 @@ module.exports = function(grunt) {
 		
 		var nunjucks = require('nunjucks'),
 			markdown = require('nunjucks-markdown');
-		var env = nunjucks.configure('views');
+		var env = nunjucks.configure('templates');
 			markdown.register(env);
 		
 		
@@ -22,39 +22,74 @@ module.exports = function(grunt) {
 			util = require('util');
 
 		sitemap = grunt.file.readJSON('../sitemap.json');
-		
+		var defaults = sitemap.page_defaults;
 		function build_site_obj(){
 			var nav = {};
 			for (var page_key in sitemap.pages) {
-				var page = sitemap.pages[page_key];
-				page.nav_key = page_key;
-				sitemap.pages[page_key] = extend(sitemap.page_defaults,page);
+				grunt.log.writeln("working "+page_key);
+
+				sitemap.pages[page_key].nav_key = page_key;
+				//note extend will not work here, for some reason it'll alter the ref of defaults
+				//we'll have to do it by hand for the moment
+				for (var objKey in defaults){
+					if(typeof sitemap.pages[page_key][objKey] === "undefined"){
+						sitemap.pages[page_key][objKey] = defaults[objKey];
+					}
+				}
 				var tmpobj={};
-				tmpobj[page_key]=page_obj.root.trim('/')+'/'+page_obj.nav_key+"html";
+				var root = sitemap.pages[page_key].root.replace(new RegExp("[\/]+$", "g"), "");
+				tmpobj[page_key]=root+'/'+sitemap.pages[page_key].nav_key+".html";
+				if(typeof sitemap.pages[page_key].child_nav !== "undefined"){
+					var r = tmpobj[page_key];
+					var navarray = {};
+					
+					var mainlink= sitemap.pages[page_key].title;
+					navarray[mainlink] = r;
+					for (var link in sitemap.pages[page_key].child_nav){
+						var url = link;
+						var title = sitemap.pages[page_key].child_nav[link];
+						if(link.indexOf('#')==0){
+							url=r+link;
+						}
+						navarray[title] = url;
+					}
+					tmpobj[page_key]=navarray;
+				}
 				nav = extend(nav,tmpobj);
+				grunt.log.writeln("worked "+page_key);
 			}
 			sitemap.nav = nav;
 		}
-		
-		
-		function build_page(page_obj){
-			var sourceFile = 'template/'+page_obj.template+'.tmpl';
-			var tmpFile = 'build/deletable.tmp';
-			var targetFile = page_obj.root.trim('/')+'/'+page_obj.nav_key+"html";
-			var content = fs.readFileSync(sourceFile,'utf8')
-			
-			sitemap.current_build=page_obj.nav_key;
-			grunt.log.writeln("building "+targetFile);
-			var tmpl = new nunjucks.Template(content);
-			grunt.log.writeln(targetFile + "compiled");
-			var res = tmpl.render(sitemap);
-			grunt.log.writeln(targetFile + "renderd");
-		}
-		
+
 		build_site_obj();
-		for (var page_key in sitemap.pages) {
-			build_page(sitemap.pages[page_key]);
+
+		function build_page(){
+			console.log(sitemap);
+			for (var key in sitemap.pages) {
+
+				var site_obj = sitemap;
+				var page_obj = site_obj.pages[key];
+				var sourceFile = 'templates/'+page_obj.template+'.tmpl';
+				//var tmpFile = 'build/deletable.tmp';
+				var root = page_obj.root.replace(new RegExp("[\/]+$", "g"), "");
+				var targetFile = root+'/'+page_obj.nav_key+".html";
+				var content = fs.readFileSync(sourceFile,'utf8')
+
+				site_obj.current_build=page_obj.nav_key;
+				grunt.log.writeln("building "+targetFile);
+				var tmpl = new nunjucks.Template(content,env);
+				grunt.log.writeln(targetFile + " compiled");
+				var res = tmpl.render(site_obj);
+				grunt.log.writeln(targetFile + " renderd");
+				fs.writeFile(targetFile, res, function(err){
+					grunt.log.writeln("wrote to file "+targetFile);
+				});
+
+			}
 		}
+		build_page();
+		
+		
 		
 		
 		/*

@@ -2,10 +2,10 @@
 # WSU Serverbase development guide
 
 ## What is this for?
-This project is used in aiding your development and web design tasks. To achieve this result of a simple get up and running environment, we use [Vagrant](http://www.vagrantup.com/) along with a [Salt](http://www.saltstack.com/) provisioner to set up the local server and deploy the web apps.  You have the option to edit the `Vagrantfile`, it is highly suggested to not alter the file in any way.  To set options for  `Vagrant` there are properties located in the `config.json`.  From this `config.json` you may load up any of the pre configured apps, adjust the way vagrant is run, and which environments are loaded with `Salt`. 
+This project is used in aiding your development and web design tasks. To achieve this result of a simple get up and running environment, we use [Vagrant](http://www.vagrantup.com/) along with a [Salt](http://www.saltstack.com/) provisioner to set up the local server and deploy the web apps.  You have the option to edit the `Vagrantfile`, it is highly suggested to not alter the file in any way.  To set options for  `Vagrant` there are properties located in the `config.json`.  From this `config.json` you may load up any of the pre-configured apps, adjust the way vagrant is run, and which environments are loaded with `Salt`. 
 		
 
-### Vagrant options<
+### Vagrant options
 At the top of the `config.json`, which is a json file, you have some options that you may use to change your environment that you are loading.
 ```json
 {
@@ -24,7 +24,7 @@ At the top of the `config.json`, which is a json file, you have some options tha
     }
 }```
 
-		
+
 
 #### `ip`
 Set the ip of the virtual server's IP address.  Use a IPv4 (0.0.0.0) that can be navigated to.
@@ -42,13 +42,13 @@ Setting ports to open up for multi server setups.  If you want to have two serve
 Set the hostname used
 
 #### `memory`
-Set memory used from you host.  It is suggested that you use no more then 50% of you host ram.
+Set memory used from you host.  It is suggested that you use no more than 50% of you host ram.
 
 #### `cores`
-Set CPU cores used from you host.  It is suggested that you use no more then 50% of you host's cores.
+Set CPU cores used from you host.  It is suggested that you use no more than 50% of you host's cores.
 
 #### `host_64bit`
-If you are on windows and are sharing more then 2 cores set to true.
+If you are on windows and are sharing more than 2 cores set to true.
 
 #### `install_type`
 Type of install
@@ -64,6 +64,66 @@ Setting the verbose_output option will set the amount of information output to t
 		
 ###How to add a web app?
 Loading a web app is very straight forward.  You simply `git clone` in the app of choice into the `app/` folder at the root for the server folder.  You may load as many apps as you wish to, but it should be noted if you need to simulate one server talking with another, then you will want to have two instances of this project and load the web app respectively.
+
+## Sample working file
+This is the file used by the main repo maintainer for general development of the `Magento` app for WSU.
+```json
+{
+	"web_server": {
+		"ip":"2",
+		"branch":"ssl_updates",
+		"owner":"jeremyBass",
+		"open_ports":"",
+		"hostname":"web_server",
+		"memory":"16000",
+		"vram":"8",
+		"cores":"4",
+		"host_64bit":"true",
+		"install_type":"testing",
+		"minion":"vagrant",
+		"verbose_output":"true",
+		"remote_env":[
+			"serverbase",
+			"database",
+			"security",
+			"web",
+			"webcaching"
+		],
+		"local_env":[
+			"serverbase",
+			"database",
+			"security",
+			"web",
+			"webcaching"
+		],
+		"shared_folders":{
+			"/var/app":{
+				"dest":"/var/app",
+				"from":"app",
+				"user":"uid=510,gid=510",
+				"dmode":"dmode=775",
+				"fmode":"fmode=774"
+			}
+		},
+		"apps": {
+			"store.wsu.edu": {
+				"repo":"-b master https://github.com/jeremyBass/WSUMAGE-base.git",
+				"repoid":"jeremyBass/WSUMAGE-base",
+				"database_host":"10.255.255.3",
+				"hosts":[
+					"store.mage.dev",
+					"events.store.mage.dev",
+					"student.store.mage.dev",
+					"general.store.mage.dev",
+					"store.admin.mage.dev",
+					"tech.store.mage.dev"
+				]
+			}
+		}
+	}
+}
+```
+
 
 **Note:** More to come. Thank you for reading.
 	

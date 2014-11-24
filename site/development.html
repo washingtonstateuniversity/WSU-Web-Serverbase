@@ -92,7 +92,23 @@
 <h4 id="-verbose_output-"><code>verbose_output</code></h4>
 <p>Setting the verbose_output option will set the amount of information output to the console</p>
 <h3 id="how-to-add-a-web-app-">How to add a web app?</h3>
-<p>Loading a web app is very straight forward.  You simply <code>git clone</code> in the app of choice into the <code>app/</code> folder at the root for the server folder.  You may load as many apps as you wish to, but it should be noted if you need to simulate one server talking with another, then you will want to have two instances of this project and load the web app respectively.</p>
+<p>Loading a web app is very straight forward.  You define the app in the config file and the system will do the rest for you.  Look to the smaple for the <code>Magento</code> app set up.  The baiscs of the current process is that you define a app blocks you wish to load.  In the next version the app block will be much simplar and allow for more power.  Currently you&#39;ll define the app you want to load like this</p>
+<pre><code class="lang-json">        &quot;apps&quot;: {
+            &quot;store.wsu.edu&quot;: {
+                &quot;repo&quot;:&quot;https://github.com/washingtonstateuniversity/WSUMAGE-base.git&quot;,
+                &quot;repoid&quot;:&quot;washingtonstateuniversity/WSUMAGE-base&quot;,
+                &quot;database_host&quot;:&quot;10.255.255.3&quot;,
+                &quot;hosts&quot;:[
+                    &quot;store.mage.dev&quot;,
+                    &quot;events.store.mage.dev&quot;,
+                    &quot;student.store.mage.dev&quot;,
+                    &quot;general.store.mage.dev&quot;,
+                    &quot;store.admin.mage.dev&quot;,
+                    &quot;tech.store.mage.dev&quot;
+                ]
+            }
+        }
+</code></pre>
 <h2 id="sample-working-file">Sample working file</h2>
 <p>This is the file used by the main repo maintainer for general development of the <code>Magento</code> app for WSU.</p>
 <pre><code class="lang-json">{

@@ -58,12 +58,30 @@ The minion to use
 
 #### `verbose_output`
 Setting the verbose_output option will set the amount of information output to the console
-		
-		
-		
-		
+
+
 ###How to add a web app?
-Loading a web app is very straight forward.  You simply `git clone` in the app of choice into the `app/` folder at the root for the server folder.  You may load as many apps as you wish to, but it should be noted if you need to simulate one server talking with another, then you will want to have two instances of this project and load the web app respectively.
+Loading a web app is very straight forward.  You define the app in the config file and the system will do the rest for you.  Look to the smaple for the `Magento` app set up.  The baiscs of the current process is that you define a app blocks you wish to load.  In the next version the app block will be much simplar and allow for more power.  Currently you'll define the app you want to load like this
+
+```json
+		"apps": {
+			"store.wsu.edu": {
+				"repo":"https://github.com/washingtonstateuniversity/WSUMAGE-base.git",
+				"repoid":"washingtonstateuniversity/WSUMAGE-base",
+				"database_host":"10.255.255.3",
+				"hosts":[
+					"store.mage.dev",
+					"events.store.mage.dev",
+					"student.store.mage.dev",
+					"general.store.mage.dev",
+					"store.admin.mage.dev",
+					"tech.store.mage.dev"
+				]
+			}
+		}
+```
+
+
 
 ## Sample working file
 This is the file used by the main repo maintainer for general development of the `Magento` app for WSU.

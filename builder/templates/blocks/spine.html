@@ -22,25 +22,25 @@
 			<nav id="spine-navigation" class="spine-navigation">
 				<nav id="spine-sitenav" class="spine-sitenav">
 					<ul>
-				{% for title, link in nav %}
-					{% if link=="[object Object]" %}
+					{% for title, link in nav -%}
+					{% if link=="[object Object]" -%}
 						<li>
-						{% for ctitle, clink in link %}
-							{% if loop.first %}
+						{% for ctitle, clink in link -%}
+							{% if loop.first -%}
 								<a href="{{ clink }}" {% if clink|indexof(current_page)>-1 -%} class="active" {% endif -%}>{{ ctitle }}</a>
 								<ul>
-							{% else %}
+							{% else -%}
 								<li><a href="{{ clink }}">{{ ctitle }}</a></li>
 							{% endif -%}
-							{% if loop.last %}
+							{%- if loop.last %}
 								</ul>
 							{% endif -%}
-						{% endfor -%}
+						{%- endfor %}
 						</li>
 					{% else %}
 						<li><a href="{{ link }}" {% if link|indexof(current_page)>-1 -%} class="active" {% endif -%}>{{ title }}</a></li>
-					{% endif -%}
-				{% endfor -%}
+					{%- endif %}
+					{% endfor -%}
 					</ul>
 				</nav>
 				<nav id="spine-offsitenav" class="spine-offsitenav">

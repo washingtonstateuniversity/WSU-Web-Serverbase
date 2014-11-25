@@ -25,7 +25,7 @@
 				"showstuff":true
 			},
 			"child_nav":{
-				"#vagrant-options-":"Vagrant Options",
+				"#vagrant-options":"Vagrant Options",
 				"#how-to-add-a-web-app-":"Load Web Apps",
 				"#sample-working-file":"Sample Config"
 			}

@@ -12,6 +12,9 @@ module.exports = function(grunt) {
 		var nunjucks = require('nunjucks'),
 			markdown = require('nunjucks-markdown');
 		var env = nunjucks.configure('templates');
+		env.addFilter('indexof', function(str, cmpstr) {
+			return str.indexOf(cmpstr);
+		});
 		var marked = require('marked');
 			// Async highlighting with pygmentize-bundled
 			marked.setOptions({
@@ -115,9 +118,12 @@ module.exports = function(grunt) {
 				var sourceFile = 'templates/'+page_obj.template+'.tmpl';
 				//var tmpFile = 'build/deletable.tmp';
 				var root = page_obj.root.replace(new RegExp("[\/]+$", "g"), "");
-				var targetFile = root+'/'+page_obj.nav_key+".html";
+				
+				var page = page_obj.nav_key+".html";
+				var targetFile = root+'/'+page;
 				var content = fs.readFileSync(sourceFile,'utf8')
-
+				
+				site_obj.current_page=page;
 				site_obj.current_build=page_obj.nav_key;
 				grunt.log.writeln("building "+targetFile);
 				var tmpl = new nunjucks.Template(content,env);

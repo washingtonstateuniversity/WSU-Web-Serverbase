@@ -23,7 +23,11 @@ By default opcache is loaded in the base install and turned on.  When you are do
     opcache_reset();
 ```
 
+Also you can use the `opcache` command to flush all of the cache
 
+```bash
+touch /var/ngx_pagespeed_cache/cache.flush
+```
 
 
 As we encounter issues, we'll update this list to help ensure you get the most out of the system.

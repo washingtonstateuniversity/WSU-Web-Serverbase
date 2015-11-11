@@ -27,3 +27,9 @@
     background: transparent;
     font-family:Monospace;
 }
+a{
+	color: #4078c0;
+}
+a:hover{
+	text-decoration: underline;
+}

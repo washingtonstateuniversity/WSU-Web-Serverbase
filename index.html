@@ -48,78 +48,51 @@
 			
 				<div class="column one">
 					<article class="wrapper markdown-body">
-									<article>
-            <h1>WSU Serverbase</h1>
-            <h2 class="header">Github : <a name="wsumage-base" href="https://github.com/washingtonstateuniversity/WSU-Web-Serverbase">WSU-Web-Serverbase</a></h2>
-            <div class="wrapper markdown-body">
-              <section>
-                  <h3>Overview</h3>
-                  <p>This is a project that is meant to create a server environment in one of two locations.  One is with a Vagrant controlling a headless VirtualBox, and the other is on a Centos 6.5 server.  You can look through the <a href="https://github.com/washingtonstateuniversity/WSU-Web-Serverbase">WSU-Web-Serverbase repo</a> for details but this mirco site is meant to give you a simple overview of how to use and what is done.  This project may be loaded with web apps such as <code>Magento</code>,<code>Elasticsearch</code>,<code>Wordpress</code>, or any other app that has be set up to be provisioned.  To get the LEMP setup running for the first time, there are only a few step needed. </p>
-                  
-                  
-<h3>For Local deveploment</h3>
-<h4>Quick install:</h4>
-                  <ol>
-<li>Install required applications:
-
-	<ol>
-		<li>
-		Git (<a href="http://windows.github.com/">Windows</a> or <a href="http://mac.github.com/">OSX</a>) More infomation on <a href="http://git-scm.com/">Git</a> and <a href="http://git-scm.com/downloads">other client downloads</a>
-		</li>
-		<li><a href="http://www.vagrantup.com/">Vagrant</a></li>
-		<li><a href="https://www.virtualbox.org/">VirtualBox</a></li>
-	</ol>
-		<strong>NOTE:</strong> There has been versions of Vagrant and VirtualBox that do play well with each other.  We will try to keep up a list of combinations that had been noted to not work. 
+					<h1 id="wsu-serverbase">WSU Serverbase</h1>
+<h2 id="github-wsu-web-serverbase-https-github-com-washingtonstateuniversity-wsu-web-serverbase-">Github : <a href="https://github.com/washingtonstateuniversity/WSU-Web-Serverbase">WSU-Web-Serverbase</a></h2>
+<h3 id="overview">Overview</h3>
+<p>This is a project that is meant to create a server environment in one of two locations.  One is with a Vagrant controlling a headless VirtualBox, and the other is on a Centos 6.5 server.  You can look through the <a href="https://github.com/washingtonstateuniversity/WSU-Web-Serverbase">WSU-Web-Serverbase repo</a> for details but this mirco site is meant to give you a simple overview of how to use and what is done.  This project may be loaded with web apps such as <code>Magento</code>,<code>Elasticsearch</code>,<code>Wordpress</code>, or any other app that has be set up to be provisioned.  To get the LEMP setup running for the first time, there are only a few step needed. </p>
+<h3 id="for-local-deveploment">For Local deveploment</h3>
+<h4 id="quick-install-">Quick install:</h4>
+<ol>
+<li><p>Install required applications:</p>
+<ul>
+<li>Git (<a href="http://windows.github.com/">Windows</a> or <a href="http://mac.github.com/">OSX</a>) More infomation on <a href="http://git-scm.com">Git</a> and <a href="http://git-scm.com/downloads">other client downloads</a></li>
+<li><a href="http://www.vagrantup.com">Vagrant</a></li>
+<li><p><a href="https://www.virtualbox.org/">VirtualBox</a></p>
+<p><strong>NOTE:</strong> There has been versions of Vagrant and VirtualBox that do play well with each other.  We will try to keep up a list of combinations that had been noted to not work. </p>
 </li>
-
-
-
-
-<li>Clone the WSU Web Serverbase repository to a directory on your local machine.
-
-<pre>
-<code>git clone git@github.com:washingtonstateuniversity/WSU-Web-Serverbase.git wsuweb
-cd wsuweb</code>
-</pre>
+</ul>
 </li>
-					  
-<li><strong>Prep your local machine.</strong>
-	<p>In order to gain all the advantages of this you'll need to install a few plugins that will magange you host file and VirtualBox guest additions.</p>
-<pre>
-<code>vagrant plugin install vagrant-hosts
-vagrant plugin install vagrant-hostsupdater
-vagrant plugin install vagrant-vbguests</code>
-</pre>
+<li><p>Clone the WSU Web Serverbase repository to a directory on your local machine.</p>
+<pre><code class="lang-bash"> git clone git@github.com:washingtonstateuniversity/WSU-Web-Serverbase.git wsuweb
+ cd wsuweb
+</code></pre>
 </li>
-
-<li>
-<p>Start the local server:</p>
-<pre>
-<code>vagrant up</code>
-</pre>
-
-<strong>NOTE:</strong> If you would like to do some logging of <code>Vagrant</code> setup, you can use <code> vagrant up | tee log.txt</code> instead.  There will be a log of the whole run located at <code>wsuweb/log.txt</code>.  Also <strong>The default quick run installs Magento as an app of the server.</strong> 
-
-<h3>Windows Users Have one more step before starting</h3>
-<p>Since the sytem handles your dns entries for you, so you don't have to edit your host file all the time, the system must be able to have access to that file.  In order to give the system access you follow these steps:</p>
-
-<ul> 
-<li>Browse to C:\Windows\System32\Drivers\etc </li>
+<li><p><strong>Prepping your local machine.</strong> In order to gain all the advantages of this you&#39;ll need to install a few plugins that will magange you host file and VirtualBox guest additions.</p>
+<pre><code class="lang-bash"> vagrant plugin install vagrant-hosts
+ vagrant plugin install vagrant-hostsupdater
+ vagrant plugin install vagrant-vbguests
+</code></pre>
+</li>
+<li>Start the local server: <pre><code class="lang-bash">vagrant up
+</code></pre>
+</li>
+</ol>
+<p><strong>NOTE:</strong> If you would like to do some logging of <code>Vagrant</code> setup, you can use <code>vagrant up | tee log.txt</code> instead.  There will be a log of the whole run located at <code>wsuweb/log.txt</code>.  Also <strong>the default quick run installs Magento as an app of the server.</strong></p>
+<h3 id="windows-users-have-one-more-step-before-starting">Windows Users Have one more step before starting</h3>
+<p>Since the sytem handles your dns entries for you, so you don&#39;t have to edit your host file all the time, the system must be able to have access to that file.  In order to give the system access you follow these steps:</p>
+<ol>
+<li>Browse to <code>C:\Windows\System32\Drivers\etc</code></li>
 <li>Right click on the <code>hosts</code> file and select <code>properties</code></li>
 <li>click the Security tab</li>
 <li>Click the <code>Advanced</code> button</li>
 <li>Give the <code>System</code> and <code>Users</code> Full control</li>
-</ul>
-	
-<p>Once this has been done test it by opening the hosts file in an app like notepad.  Add a new line and <code>#</code> (# is a comment) and then save the file.  If the file saves, then you should be ok.</p>
-	
-	
-</li>
 </ol>
-<h3>Configure Local installs</h3>
-<p>There are many options you can set for the whole process.  Since the whole process is comprised of `Vagrant` and `Salt` with a few other, instead of requiring you to edit each in the respective locations, there is one config file to edit.  Read more on how to change settings and add more apps <a href="">here</a></p>
-					</section>
-				</article></article>
+<p>Once this has been done test it by opening the hosts file in an app like notepad.  Add a new line and <code>#</code> (# is a comment) and then save the file.  If the file saves, then you should be ok.</p>
+<h3 id="configure-local-installs-h3-">Configure Local installs</h3></h3>
+<p>There are many options you can set for the whole process.  Since the whole process is comprised of <code>Vagrant</code> and <code>Salt</code> with a few other, instead of requiring you to edit each in the respective locations, there is one config file to edit.  Read more on how to change settings and add more apps <a href="#">here</a></p>
+</article>
 				</div><!--/column-->
 			
 				<div class="column two">
@@ -216,7 +189,24 @@ vagrant plugin install vagrant-vbguests</code>
 </div><!--/cover-->
 	</div><!--/jacket-->
 	<!-- /WRAPPING -->
-	<!--[if !IE]><script>fixScale(document);</script><![endif]-->
+	<!-- CONTACT INFO: Adjust the sample contact info below to reflect appropriate contact information. -->
+<div id="contact-details" itemscope itemtype="http://schema.org/Organization"> 
+    <span itemprop="department"  content="University Communications"></span> 
+    <span itemprop="name" content="Washington State University"></span> 
+    <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+        <span itemprop="location" content="ITB"></span>
+        <span itemprop="streetAddress" content="ITB"></span>
+        <span itemprop="addressLocality" content="Pullman"></span>
+        <span itemprop="addressRegion" content="WA"></span>
+        <span itemprop="postalCode" content="99164"></span>
+    </div>
+    <span itemprop="telephone" content="(509) 335-2700"></span>
+    <span itemprop="email" content="web.support@wsu.edu"></span>
+    <span itemprop="contactPoint" content="https://ucomm.wsu.edu/contact/"></span>
+    <span itemprop="url" content="https://github.com/washingtonstateuniversity"></span>
+</div>
+
+<!--[if !IE]><script>fixScale(document);</script><![endif]-->
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
